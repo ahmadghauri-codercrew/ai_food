@@ -118,48 +118,52 @@ class AppButton {
       TextOverflow? overflow,
       double? letterSpacing,
       IconData? icons,
+    Function()? onTap,
       String? imagePath,
       bool underLine = false,
       bool fontFamily = false,
       bool? border}) {
-    return Container(
-      padding: padding,
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(50),
-          border: border == false
-              ? null
-              : Border.all(
-                  color: AppTheme.appColor,
-                  width: 2,
-                )),
-      child: Row(
-        children: [
-          const SizedBox(
-            width: 20,
-          ),
-          Image(
-            image: AssetImage(imagePath!),
-            height: 25,
-            width: 25,
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-          AppText.appText(text,
-              fontFamily: fontFamily,
-              fontSize: fontSize,
-              textAlign: textAlign,
-              fontWeight: fontWeight,
-              textColor: textColor,
-              overflow: overflow,
-              letterSpacing: letterSpacing,
-              textBaseline: textBaseline,
-              fontStyle: fontStyle,
-              underLine: underLine),
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: padding,
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(50),
+            border: border == false
+                ? null
+                : Border.all(
+                    color: AppTheme.appColor,
+                    width: 2,
+                  )),
+        child: Row(
+          children: [
+            const SizedBox(
+              width: 20,
+            ),
+            Image(
+              image: AssetImage(imagePath!),
+              height: 25,
+              width: 25,
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            AppText.appText(text,
+                fontFamily: fontFamily,
+                fontSize: fontSize,
+                textAlign: textAlign,
+                fontWeight: fontWeight,
+                textColor: textColor,
+                overflow: overflow,
+                letterSpacing: letterSpacing,
+                textBaseline: textBaseline,
+                fontStyle: fontStyle,
+                underLine: underLine),
+          ],
+        ),
       ),
     );
   }

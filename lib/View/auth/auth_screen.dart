@@ -336,17 +336,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   );
                 },
               ),
-                      // Center(
-                      //   child: AppButton.appButtonWithLeadingImage(
-                      //     "Continue with Google",
-                      //     fontSize: 20,
-                      //     fontWeight: FontWeight.w400,
-                      //     textColor: AppTheme.appColor,
-                      //     height: 48,
-                      //     width: 79.w,
-                      //     imagePath: "assets/images/google_logo.png",
-                      //   ),
-                      // ),
+                     
                       const SizedBox(
                         height: 10,
                       ),
