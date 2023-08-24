@@ -1,7 +1,6 @@
 import 'package:ai_food/Utils/resources/res/app_assets.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/View/auth/GoogleSignIn/authentication.dart';
-import 'package:ai_food/View/auth/GoogleSignIn/user_info_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -34,21 +33,27 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                   setState(() {
                     _isSigningIn = true;
                   });
-                  User? user =
-                      await Authentication.signInWithGoogle(context: context);
 
-                  setState(() {
-                    _isSigningIn = false;
-                  });
+                  try {
+                    await Authentication.initializeFirebase(context: context);
+                    User? user =
+                        await Authentication.signInWithGoogle(context: context);
 
-                  if (user != null) {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => UserProfileScreen(
-                            // user: user,
-                            ),
-                      ),
-                    );
+                    setState(() {
+                      _isSigningIn = false;
+                    });
+
+                    if (user != null) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => UserProfileScreen(
+                              // user: user,
+                              ),
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    print("fbjkbfjeblfbekb$e");
                   }
                 },
                 fontSize: 20,

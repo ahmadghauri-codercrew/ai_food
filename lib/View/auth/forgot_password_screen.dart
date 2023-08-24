@@ -1,10 +1,12 @@
+import 'package:ai_food/Model/auth_methods.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
+import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
-import 'package:ai_food/Utils/widgets/others/app_card_background.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_card.dart';
 import 'package:ai_food/View/auth/otp_screen.dart';
+import 'package:ai_food/View/auth/set_password_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -19,9 +21,11 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final _phoneNumberController = TextEditingController();
+  final _textController = TextEditingController();
   bool _verificationInProgress = false;
   String? verificationIdCheck;
+  final _formKey = GlobalKey<FormState>();
+
   Future<void> _verifyPhoneNumber(String phoneNumber) async {
     setState(() {
       _verificationInProgress = true;
@@ -126,16 +130,79 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     }
   }
 
+  void resetYourPassword(String controller) async {
+    setState(() {
+      _verificationInProgress = true;
+    });
+    String res = await AuthMethods().forgotPassword(
+      sendEmail: controller,
+    );
+
+    if (res == 'success') {
+      showSnackBar(context, res);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Reset Password'),
+            content:
+                const Text('Kindly check your email to reset your password!'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => SetPasswordSreen())),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      setState(() {
+        _verificationInProgress = false;
+      });
+    } else {
+      if (controller.isEmpty) {
+        showSnackBar(context, "Email Address cannot be Empty!");
+        setState(() {
+          _verificationInProgress = false;
+        });
+      }
+      // reg expression for email validation
+      else if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+          .hasMatch(controller)) {
+        showSnackBar(context, "Please Enter a valid Email");
+        setState(() {
+          _verificationInProgress = false;
+        });
+      } else if (controller != FirebaseAuth.instance) {
+        showSnackBar(context, "Email doesn't exist!");
+        setState(() {
+          _verificationInProgress = false;
+        });
+      }
+      print('Error!');
+    }
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   @override
   void dispose() {
-    _phoneNumberController.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return
+        //
+        Scaffold(
       appBar: CustomAppBar.appBar(
           leading: InkWell(
             onTap: () => Navigator.of(context).pop(),
@@ -159,62 +226,95 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           leadingWidth: screenWidth),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 25, right: 25, top: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AppText.appText("Forgot Password",
-                  fontSize: 25.sp,
+          padding: const EdgeInsets.only(
+            left: 25,
+            right: 25,
+          ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppText.appText("Forgot Password",
+                    fontSize: 25.sp,
+                    textColor: AppTheme.appColor,
+                    fontWeight: FontWeight.w600),
+                AppText.appText(
+                  "Enter email or number",
+                  fontSize: 12.sp,
                   textColor: AppTheme.appColor,
-                  fontWeight: FontWeight.w600),
-              AppText.appText(
-                "Enter email or number",
-                fontSize: 12.sp,
-                textColor: AppTheme.appColor,
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              Customcard(
-                  childWidget: Column(
-                children: [
-                  const SizedBox(
-                    height: 80,
-                  ),
-                  CustomAppFormField(
+                ),
+                const SizedBox(
+                  height: 60,
+                ),
+                Customcard(
+                    childWidget: Column(
+                  children: [
+                    const SizedBox(
+                      height: 80,
+                    ),
+                    CustomAppFormField(
+                      onTap: () {
+                        _formKey.currentState!.reset();
+                      },
                       texthint: "Email or Mobile number",
-                      controller: _phoneNumberController),
-                  const SizedBox(
-                    height: 190,
-                  ),
-                  _verificationInProgress
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            color: AppTheme.appColor,
-                            strokeWidth: 4,
-                          ),
-                        )
-                      : AppButton.appButton("Send OTP", onTap: () {
-                          if (!_verificationInProgress) {
-                            String phoneNumber =
-                                _phoneNumberController.text.trim();
-                            if (phoneNumber.isNotEmpty) {
-                              print(
-                                  "Check_phone ${phoneNumber} and verification id $verificationIdCheck");
-                              _verifyPhoneNumber(phoneNumber);
+                      controller: _textController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter your email or mobile number";
+                        }
+                        final isEmailValid =
+                            RegExp(r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
+                                .hasMatch(value);
+                        final isMobileValid =
+                            RegExp(r'^\d{10}$').hasMatch(value);
+
+                        if (!isEmailValid && !isMobileValid) {
+                          return "Please enter a valid email or mobile number";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 225,
+                    ),
+                    _verificationInProgress
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              color: AppTheme.appColor,
+                              strokeWidth: 4,
+                            ),
+                          )
+                        : AppButton.appButton("Send OTP", onTap: () {
+                            String inputText = _textController.text.trim();
+                            final emailRegExp = RegExp(
+                                r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+
+                            if (_formKey.currentState!.validate()) {
+                              if (emailRegExp.hasMatch(inputText)) {
+                                resetYourPassword(inputText);
+                              } else {
+                                if (!_verificationInProgress) {
+                                  if (inputText.isNotEmpty) {
+                                    _verifyPhoneNumber(inputText);
+                                    print(
+                                        "Check_phone ${inputText} and verification id $verificationIdCheck");
+                                  }
+                                }
+                              }
                             }
-                          }
-                        },
-                          width: 43.w,
-                          height: 5.5.h,
-                          border: false,
-                          backgroundColor: AppTheme.appColor,
-                          textColor: AppTheme.whiteColor,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600)
-                ],
-              )),
-            ],
+                          },
+                            width: 43.w,
+                            height: 5.5.h,
+                            border: false,
+                            backgroundColor: AppTheme.appColor,
+                            textColor: AppTheme.whiteColor,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600)
+                  ],
+                )),
+              ],
+            ),
           ),
         ),
       ),

@@ -26,30 +26,9 @@ class _SetPasswordSreenState extends State<SetPasswordSreen> {
     var screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: CustomAppBar.appBar(
-          leading: InkWell(
-            onTap: () => Navigator.of(context).pop(),
-            child: Row(
-              children: [
-                const SizedBox(
-                  width: 24,
-                ),
-                Icon(Icons.arrow_back_ios, color: AppTheme.appColor),
-                AppText.appText(
-                  "Back",
-                  underLine: true,
-                  textColor: AppTheme.appColor,
-                  fontSize: 20,
-                ),
-              ],
-            ),
-          ),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          leadingWidth: screenWidth),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 25, right: 25, top: 20),
+          padding: const EdgeInsets.only(left: 25, right: 25, top: 70),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

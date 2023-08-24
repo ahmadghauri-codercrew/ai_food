@@ -1,4 +1,3 @@
-import 'package:ai_food/View/auth/GoogleSignIn/user_info_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';

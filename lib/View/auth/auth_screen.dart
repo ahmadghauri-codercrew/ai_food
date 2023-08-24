@@ -5,6 +5,8 @@ import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_card.dart';
 import 'package:ai_food/View/auth/GoogleSignIn/authentication.dart';
 import 'package:ai_food/View/auth/forgot_password_screen.dart';
+import 'package:ai_food/View/auth/set_password_screen.dart';
+import 'package:ai_food/View/profile/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -19,8 +21,16 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   bool login = true;
-  final _formKey = GlobalKey<FormState>();
-  AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
+
+  //final _formKey = GlobalKey<FormState>();
+  final _formKeyName = GlobalKey<FormState>();
+  final _formKeyEmail = GlobalKey<FormState>();
+  final _formKeyLoginEmail = GlobalKey<FormState>();
+  final _formKeyPhone = GlobalKey<FormState>();
+  final _formKeyPassword = GlobalKey<FormState>();
+  final _formKeyLoginPassword = GlobalKey<FormState>();
+  final _formKeyConfirmPassword = GlobalKey<FormState>();
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _loginEmailController = TextEditingController();
@@ -34,7 +44,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("object$_autoValidateMode");
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -53,33 +62,22 @@ class _AuthScreenState extends State<AuthScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 1.0),
-                    child: login == true
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AppText.appText("Sign In",
-                                  textColor: AppTheme.appColor,
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w600),
-                              AppText.appText("Sign In to Continue",
-                                  textColor: AppTheme.appColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600)
-                            ],
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AppText.appText("Sign Up",
-                                  textColor: AppTheme.appColor,
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w600),
-                              AppText.appText("Create your Account",
-                                  textColor: AppTheme.appColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600)
-                            ],
-                          ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppText.appText(login == true ? "Sign In" : "Sign Up",
+                            textColor: AppTheme.appColor,
+                            fontSize: 40,
+                            fontWeight: FontWeight.w600),
+                        AppText.appText(
+                            login == true
+                                ? "Sign In to Continue"
+                                : "Create your Account",
+                            textColor: AppTheme.appColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600)
+                      ],
+                    ),
                   ),
                   Customcard(
                       childWidget: Column(
@@ -157,9 +155,30 @@ class _AuthScreenState extends State<AuthScreen> {
                         login == true
                             ? Column(
                                 children: [
-                                  CustomAppFormField(
-                                      texthint: "Email or Mobile number",
-                                      controller: _loginEmailController),
+                                  Form(
+                                    key: _formKeyLoginEmail,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    child: CustomAppFormField(
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return "Please enter your email or mobile number";
+                                          }
+                                          final isEmailValid = RegExp(
+                                                  r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
+                                              .hasMatch(value);
+                                          final isMobileValid =
+                                              RegExp(r'^\d{10}$')
+                                                  .hasMatch(value);
+
+                                          if (!isEmailValid && !isMobileValid) {
+                                            return "Please enter a valid email or mobile number";
+                                          }
+                                          return null;
+                                        },
+                                        texthint: "Email or Mobile number",
+                                        controller: _loginEmailController),
+                                  ),
                                   CustomAppPasswordfield(
                                     texthint: "Enter Password",
                                     controller: _loginPasswordController,
@@ -189,28 +208,28 @@ class _AuthScreenState extends State<AuthScreen> {
                                   )
                                 ],
                               )
-                            : Form(
-                                key: _formKey,
-                                autovalidateMode: _autoValidateMode,
-                                child: Column(
-                                  children: [
-                                    CustomAppFormField(
+                            : Column(
+                                children: [
+                                  Form(
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    key: _formKeyName,
+                                    child: CustomAppFormField(
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please enter your mobile number';
+                                            return 'Please enter your name';
                                           }
                                           return null; // Validation passed
-                                        },
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _autoValidateMode =
-                                                AutovalidateMode.disabled;
-                                          });
                                         },
                                         height: 50,
                                         texthint: "Enter full name",
                                         controller: _nameController),
-                                    CustomAppFormField(
+                                  ),
+                                  Form(
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    key: _formKeyEmail,
+                                    child: CustomAppFormField(
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Please enter your email';
@@ -222,86 +241,95 @@ class _AuthScreenState extends State<AuthScreen> {
                                         }
                                         return null;
                                       },
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _autoValidateMode =
-                                              AutovalidateMode.disabled;
-                                        });
-                                      },
                                       height: 50,
                                       texthint: "Enter email",
                                       controller: _emailController,
                                     ),
-                                    CustomAppFormField(
+                                  ),
+                                  Form(
+                                    key: _formKeyPhone,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    child: CustomAppFormField(
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'Please enter your mobile number';
                                           }
+                                          final isMobileValid = RegExp(
+                                                  r'^\+?\d{1,3}[-.\s]?\d{1,12}$')
+                                              .hasMatch(value);
+
+                                          if (!isMobileValid) {
+                                            return "Please enter a valid email or mobile number";
+                                          }
                                           return null; // Validation passed
-                                        },
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _autoValidateMode =
-                                                AutovalidateMode.disabled;
-                                          });
                                         },
                                         texthint: "Enter mobile number",
                                         controller: _phoneController),
-                                    CustomAppPasswordfield(
+                                  ),
+                                  Form(
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    key: _formKeyPassword,
+                                    child: CustomAppPasswordfield(
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please enter your mobile number';
+                                          return 'Please enter your password';
                                         }
                                         return null; // Validation passed
-                                      },
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _autoValidateMode =
-                                              AutovalidateMode.disabled;
-                                        });
                                       },
                                       texthint: "Enter password",
                                       controller: _passwordController,
                                     ),
-                                    CustomAppPasswordfield(
+                                  ),
+                                  Form(
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    key: _formKeyConfirmPassword,
+                                    child: CustomAppPasswordfield(
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please enter your mobile number';
+                                          return 'Please enter your confirm Password';
                                         }
                                         return null; // Validation passed
-                                      },
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _autoValidateMode =
-                                              AutovalidateMode.disabled;
-                                        });
                                       },
                                       texthint: "Confirm password",
                                       controller: _confirmPasswordController,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                        login == true
-                            ? AppButton.appButton("Sign In",
-                                backgroundColor: AppTheme.appColor,
-                                textColor: Colors.white,
-                                width: 44.w,
-                                height: 40,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600)
-                            : AppButton.appButton("Sign Up", onTap: () {
-                                if (_formKey.currentState!.validate()) {
-                                  // Form is valid, proceed with sign-up logic
-                                  // ...
-                                }
-                              },
-                                backgroundColor: AppTheme.appColor,
-                                textColor: Colors.white,
-                                width: 44.w,
-                                height: 40,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600)
+                        AppButton.appButton(onTap: () {
+                          if (login == true) {
+                            if (_formKeyLoginEmail.currentState!.validate()) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const UserProfileScreen(),
+                                ),
+                              );
+                            }
+                          } else {
+                            if (_formKeyName.currentState!.validate() &&
+                                _formKeyEmail.currentState!.validate() &&
+                                _formKeyPhone.currentState!.validate() &&
+                                _formKeyPassword.currentState!.validate() &&
+                                _formKeyConfirmPassword.currentState!
+                                    .validate()) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ForgotPasswordScreen(),
+                                ),
+                              );
+                            }
+                          }
+                        }, login == true ? "Sign In" : "Sign Up",
+                            backgroundColor: AppTheme.appColor,
+                            textColor: Colors.white,
+                            width: 44.w,
+                            height: 40,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600)
                       ])),
                   Column(
                     mainAxisSize: MainAxisSize.min,
@@ -320,74 +348,41 @@ class _AuthScreenState extends State<AuthScreen> {
                       const SizedBox(
                         height: 6,
                       ),
-
-                         FutureBuilder(
-                future: Authentication.initializeFirebase(context: context),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text('Error initializing Firebase');
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    return const GoogleSignInButton();
-                  }
-                  return const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                    Colors.black,
-                    ),
-                  );
-                },
-              ),
-                     
+                      const GoogleSignInButton(),
                       const SizedBox(
                         height: 10,
                       ),
-                      login == true
-                          ? InkWell(
-                              onTap: () {
-                                setState(() {
-                                  login = false;
-                                });
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  AppText.appText("Don't have an Account? ",
-                                      textColor: AppTheme.appColor,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500),
-                                  AppText.appText("Sign Up",
-                                      textColor: AppTheme.appColor,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      underLine: true),
-                                ],
-                              ),
-                            )
-                          : InkWell(
-                              onTap: () {
-                                setState(() {
-                                  login = true;
-                                });
-                              },
-                              child: Container(
-                                height: 20,
-                                width: 200,
-                                color: Colors.amber,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    AppText.appText("Already have an Account? ",
-                                        textColor: AppTheme.appColor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500),
-                                    AppText.appText("Sign In",
-                                        textColor: AppTheme.appColor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                        underLine: true),
-                                  ],
-                                ),
-                              ),
-                            )
+                      InkWell(
+                        onTap: () {
+                          if (login == true) {
+                            setState(() {
+                              login = false;
+                            });
+                          } else if (login == false) {
+                            setState(() {
+                              login = true;
+                            });
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AppText.appText(
+                                login == true
+                                    ? "Don't have an Account? "
+                                    : "Already have an Account? ",
+                                textColor: AppTheme.appColor,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500),
+                            AppText.appText(
+                                login == true ? "Sign Up" : "Sign In",
+                                textColor: AppTheme.appColor,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                underLine: true),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ],
