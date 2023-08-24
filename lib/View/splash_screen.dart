@@ -16,13 +16,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 4), () {
-      pushReplacement(context, const RecipeInfo());
+      pushReplacement(context, const AuthScreen());
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: AppTheme.appColor,
       body: Center(

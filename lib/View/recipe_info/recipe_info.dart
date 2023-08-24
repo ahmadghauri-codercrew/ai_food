@@ -1,6 +1,5 @@
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
-import 'package:ai_food/Utils/widgets/others/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -14,8 +13,6 @@ class RecipeInfo extends StatefulWidget {
 class _RecipeInfoState extends State<RecipeInfo>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _currentIndex = 0;
-
   final List<Widget> _tabs = [
     AppText.appText("Preparation",
         textColor: AppTheme.appColor,
@@ -39,7 +36,7 @@ class _RecipeInfoState extends State<RecipeInfo>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: 30,
               itemBuilder: (context, index) {
@@ -49,7 +46,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppText.appText("${index + 1}.", fontSize: 14),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Expanded(
@@ -64,19 +61,14 @@ class _RecipeInfoState extends State<RecipeInfo>
         ),
       ),
     ),
-    Center(child: Text('Tab 2 content')),
-    Center(child: Text('Tab 3 content')),
+    const Center(child: Text('Tab 2 content')),
+    const Center(child: Text('Tab 3 content')),
   ];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: _tabs.length, vsync: this);
-    _tabController.addListener(() {
-      setState(() {
-        _currentIndex = _tabController.index;
-      });
-    });
   }
 
   @override
@@ -89,67 +81,69 @@ class _RecipeInfoState extends State<RecipeInfo>
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        leading: InkWell(
-          onTap: () {},
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, top: 20),
-            child: Container(
-                height: 10,
-                width: 10,
-                decoration: BoxDecoration(
-                    color: AppTheme.appColor,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Icon(Icons.arrow_back_ios, color: AppTheme.whiteColor),
-                )),
-          ),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, top: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              padding: const EdgeInsets.only(left: 20.0, right: 20, top: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppText.appText("Recipe Name",
-                      textColor: AppTheme.appColor,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700),
+                  InkWell(
+                    onTap: () {},
+                    child: Container(
+                        height: 45,
+                        width: 45,
+                        decoration: BoxDecoration(
+                            color: AppTheme.appColor,
+                            borderRadius: BorderRadius.circular(25)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Icon(Icons.arrow_back_ios,
+                              color: AppTheme.whiteColor),
+                        )),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                          height: 45,
-                          width: 45,
-                          decoration: BoxDecoration(
-                              color: AppTheme.appColor,
-                              borderRadius: BorderRadius.circular(25)),
-                          child: Icon(Icons.shopping_cart_outlined,
-                              color: AppTheme.whiteColor)),
-                      SizedBox(width: 10),
-                      Container(
-                          height: 45,
-                          width: 45,
-                          decoration: BoxDecoration(
-                              color: AppTheme.appColor,
-                              borderRadius: BorderRadius.circular(25)),
-                          child: Icon(Icons.favorite_border_outlined,
-                              color: AppTheme.whiteColor)),
+                      AppText.appText("Recipe Name",
+                          textColor: AppTheme.appColor,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700),
+                      Row(
+                        children: [
+                          Container(
+                              height: 45,
+                              width: 45,
+                              decoration: BoxDecoration(
+                                  color: AppTheme.appColor,
+                                  borderRadius: BorderRadius.circular(25)),
+                              child: Icon(Icons.shopping_cart_outlined,
+                                  color: AppTheme.whiteColor)),
+                          const SizedBox(width: 10),
+                          Container(
+                              height: 45,
+                              width: 45,
+                              decoration: BoxDecoration(
+                                  color: AppTheme.appColor,
+                                  borderRadius: BorderRadius.circular(25)),
+                              child: Icon(Icons.favorite_border_outlined,
+                                  color: AppTheme.whiteColor)),
+                        ],
+                      )
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Container(
+            SizedBox(
               height: 400,
               width: screenWidth,
               child: Stack(children: [
@@ -173,10 +167,18 @@ class _RecipeInfoState extends State<RecipeInfo>
                     height: 250,
                     width: 70.w,
                     decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2), // Shadow color
+                            spreadRadius:4, // Spread radius of the shadow
+                            blurRadius: 5, // Blur radius of the shadow
+                            offset: Offset(0, 3), // Offset of the shadow
+                          ),
+                        ],
                         color: Colors.amber,
                         borderRadius: BorderRadius.circular(20),
                         image: const DecorationImage(
-                            image: AssetImage("assets/images/logo.png"))),
+                            image: AssetImage("assets/images/recipe Small.jpeg"),fit: BoxFit.fill)),
                   ),
                 ),
                 Positioned(
@@ -192,7 +194,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                               color: AppTheme.appColor,
                             ),
                             const SizedBox(
-                              width: 5, 
+                              width: 5,
                             ),
                             AppText.appText("25-30 min",
                                 textColor: AppTheme.appColor,
@@ -219,7 +221,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                     )),
               ]),
             ),
-            Container(
+            SizedBox(
               height: 350,
               child: Column(
                 children: [
@@ -233,8 +235,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                   ),
                   Expanded(
                     child: TabBarView(
-                      children: _tabViews,
                       controller: _tabController,
+                      children: _tabViews,
                     ),
                   ),
                 ],

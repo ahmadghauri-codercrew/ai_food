@@ -9,6 +9,7 @@ import 'package:ai_food/View/auth/otp_screen.dart';
 import 'package:ai_food/View/auth/set_password_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Utils/widgets/others/custom_app_bar.dart';
@@ -49,8 +50,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       setState(() {
         _verificationInProgress = false;
       });
-      print("exception_code ${authException.code}");
-      print("exception_message ${authException.message}");
       if (authException.code == 'invalid-phone-number' &&
           authException.message!.contains('TOO_SHORT')) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -94,8 +93,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       setState(() {
         verificationIdCheck = verificationId;
         _verificationInProgress = false;
-        print(
-            "Check_phone $phoneNumber and verification id $verificationIdCheck");
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -109,8 +106,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     codeAutoRetrievalTimeout(String verificationId) {
       setState(() {
         verificationIdCheck = verificationId;
-        print(
-            "Check_phone $phoneNumber and verification id $verificationIdCheck");
       });
     }
 
@@ -150,7 +145,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => SetPasswordSreen())),
+                    builder: (context) => const SetPasswordSreen())),
                 child: const Text('OK'),
               ),
             ],
@@ -200,121 +195,123 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
-    return
-        //
-        Scaffold(
-      appBar: CustomAppBar.appBar(
-          leading: InkWell(
-            onTap: () => Navigator.of(context).pop(),
-            child: Row(
-              children: [
-                const SizedBox(
-                  width: 24,
-                ),
-                Icon(Icons.arrow_back_ios, color: AppTheme.appColor),
-                AppText.appText(
-                  "Back",
-                  underLine: true,
-                  textColor: AppTheme.appColor,
-                  fontSize: 20,
-                ),
-              ],
-            ),
-          ),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          leadingWidth: screenWidth),
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
+    return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(
             left: 25,
             right: 25,
           ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppText.appText("Forgot Password",
-                    fontSize: 25.sp,
-                    textColor: AppTheme.appColor,
-                    fontWeight: FontWeight.w600),
-                AppText.appText(
-                  "Enter email or number",
-                  fontSize: 12.sp,
-                  textColor: AppTheme.appColor,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: InkWell(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(Icons.arrow_back_ios, color: AppTheme.appColor),
+                      AppText.appText(
+                        "Back",
+                        underLine: true,
+                        textColor: AppTheme.appColor,
+                        fontSize: 20,
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(
-                  height: 60,
-                ),
-                Customcard(
-                    childWidget: Column(
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: 80,
+                    AppText.appText("Forgot Password",
+                        fontSize: 25.sp,
+                        textColor: AppTheme.appColor,
+                        fontWeight: FontWeight.w600),
+                    AppText.appText(
+                      "Enter email or number",
+                      fontSize: 12.sp,
+                      textColor: AppTheme.appColor,
                     ),
-                    CustomAppFormField(
-                      onTap: () {
-                        _formKey.currentState!.reset();
-                      },
-                      texthint: "Email or Mobile number",
-                      controller: _textController,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Please enter your email or mobile number";
-                        }
-                        final isEmailValid =
-                            RegExp(r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
+                    const SizedBox(
+                      height: 60,
+                    ),
+                    Customcard(
+                        childWidget: Column(
+                      children: [
+                        const SizedBox(
+                          height: 80,
+                        ),
+                        CustomAppFormField(
+                          onTap: () {
+                            _formKey.currentState!.reset();
+                          },
+                          texthint: "Email or Mobile number",
+                          controller: _textController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter your email or mobile number";
+                            }
+                            final isEmailValid = RegExp(
+                                    r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
                                 .hasMatch(value);
-                        final isMobileValid =
-                            RegExp(r'^\d{10}$').hasMatch(value);
+                            final isMobileValid =
+                                RegExp(r'^\d{10}$').hasMatch(value);
 
-                        if (!isEmailValid && !isMobileValid) {
-                          return "Please enter a valid email or mobile number";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 225,
-                    ),
-                    _verificationInProgress
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              color: AppTheme.appColor,
-                              strokeWidth: 4,
-                            ),
-                          )
-                        : AppButton.appButton("Send OTP", onTap: () {
-                            String inputText = _textController.text.trim();
-                            final emailRegExp = RegExp(
-                                r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+                            if (!isEmailValid && !isMobileValid) {
+                              return "Please enter a valid email or mobile number";
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 225,
+                        ),
+                        _verificationInProgress
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  color: AppTheme.appColor,
+                                  strokeWidth: 4,
+                                ),
+                              )
+                            : AppButton.appButton("Send OTP", onTap: () {
+                                String inputText = _textController.text.trim();
+                                final emailRegExp = RegExp(
+                                    r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
 
-                            if (_formKey.currentState!.validate()) {
-                              if (emailRegExp.hasMatch(inputText)) {
-                                resetYourPassword(inputText);
-                              } else {
-                                if (!_verificationInProgress) {
-                                  if (inputText.isNotEmpty) {
-                                    _verifyPhoneNumber(inputText);
-                                    print(
-                                        "Check_phone ${inputText} and verification id $verificationIdCheck");
+                                if (_formKey.currentState!.validate()) {
+                                  if (emailRegExp.hasMatch(inputText)) {
+                                    resetYourPassword(inputText);
+                                  } else {
+                                    if (!_verificationInProgress) {
+                                      if (inputText.isNotEmpty) {
+                                        _verifyPhoneNumber(inputText);
+                                      }
+                                    }
                                   }
                                 }
-                              }
-                            }
-                          },
-                            width: 43.w,
-                            height: 5.5.h,
-                            border: false,
-                            backgroundColor: AppTheme.appColor,
-                            textColor: AppTheme.whiteColor,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w600)
+                              },
+                                width: 43.w,
+                                height: 5.5.h,
+                                border: false,
+                                backgroundColor: AppTheme.appColor,
+                                textColor: AppTheme.whiteColor,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600)
+                      ],
+                    )),
                   ],
-                )),
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
