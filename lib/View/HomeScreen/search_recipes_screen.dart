@@ -209,7 +209,6 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
         width: width,
-        // color: Colors.blueGrey,
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -561,6 +560,8 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                   },
                 ),
               ),
+              // ignore: prefer_const_constructors
+              SizedBox(height: 20,),
             ],
           ),
         ),
@@ -704,20 +705,5 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
       ),
     );
   }
-
-  // BorderRadiusGeometry customBorderRadius() {
-  //   if (foodStyle.length == 1) {
-  //     return const BorderRadius.only(
-  //       topLeft: Radius.circular(10),
-  //       topRight: Radius.circular(10),
-  //     );
-  //   } else if (foodStyle.length == 12) {
-  //     return const BorderRadius.only(
-  //       bottomLeft: Radius.circular(10),
-  //       bottomRight: Radius.circular(10),
-  //     );
-  //   }
-  //   return const BorderRadius.only();
-  // }
 
 }

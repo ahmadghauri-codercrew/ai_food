@@ -376,7 +376,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       response = await dio.get(path: apiUrl);
       if (response.statusCode == 200) {
         print("jfdjbjeb${responseData}");
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => BottomNavView(
             responseData: response.data["recipes"],
           ),

@@ -62,27 +62,28 @@ class _ShoppingListState extends State<ShoppingList> {
         return Column(
           children: [
             Container(
-              height:screenHeight,
               child: Stack(
                 children: [
                   Container(
                     height: 210,
                     width: screenWidth,
                     decoration: BoxDecoration(
+                        color: Colors.amber,
                         image: DecorationImage(
                             image: NetworkImage("${widget.image}"),
                             fit: BoxFit.cover)),
                   ),
                   Positioned(
-                    top: 150,
+                    top: 10,
                     child: Container(
+                      height: 500,
                       width: screenWidth,
                       decoration: BoxDecoration(
                           border:
                               Border.all(color: AppTheme.appColor, width: 2),
                           borderRadius: const BorderRadius.only(
                               topRight: Radius.circular(70)),
-                          color: AppTheme.whiteColor),
+                          color: Colors.amber),
                       child: Padding(
                         padding: const EdgeInsets.only(
                             left: 20.0, top: 25, right: 40),
@@ -108,69 +109,6 @@ class _ShoppingListState extends State<ShoppingList> {
                                 ],
                               ),
                             ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            SizedBox(
-                              height:screenHeight-150,
-                              width: screenWidth,
-                              child: SingleChildScrollView(
-                                physics: ScrollPhysics(),
-                                child: Column(
-                                  children: List.generate(
-                                    widget.ingredient.length,
-                                    (index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(bottom:8.0),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Expanded(
-                                                  child: Container(
-                                                    child: Text(
-                                                      capitalize(
-                                                          widget.ingredient[index]
-                                                              ["originalName"]),
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color:
-                                                              AppTheme.appColor),
-                                                      textAlign:
-                                                          TextAlign.justify,
-                                                      softWrap: true,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Container(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              height: 2,
-                                              color: AppTheme.appColor,
-                                            ),
-                                            SizedBox(
-                                              height: 16,
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            )
                           ],
                         ),
                       ),

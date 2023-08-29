@@ -2,6 +2,7 @@ import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/HomeScreen/search_recipes_screen.dart';
+import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -79,60 +80,65 @@ class _HomeScreenState extends State<HomeScreen> {
                       width / (2.26 * 238), // Width-to-height ratio
                 ),
                 shrinkWrap: true,
-                itemCount: 11,
+                itemCount: widget.responseData.length,
                 itemBuilder: (context, int index) {
-                  return Container(
-                    width: width / 2.26,
-                    height: 238,
-                    decoration: BoxDecoration(
-                      color: AppTheme.appColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RecipeInfo(recipeData: widget.responseData[index],),
+                      ));
+                    },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                              padding:
-                                  const EdgeInsets.only(top: 12, bottom: 8),
-                              child: Center(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit.cover,
-                                    imageUrl:
-                                        "${widget.responseData[index]["image"]}",
-                                    height: 130,
-                                    width: width,
-                                    // placeholder: (context, url) => CircularProgressIndicator(), // Placeholder widget while loading
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons
-                                            .error), // Error widget if the image fails to load
+                      width: width / 2.26,
+                      height: 238,
+                      decoration: BoxDecoration(
+                        color: AppTheme.appColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 8),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                                padding:
+                                    const EdgeInsets.only(top: 12, bottom: 8),
+                                child: Center(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      imageUrl:
+                                          "${widget.responseData[index]["image"]}",
+                                      height: 130,
+                                      width: width,
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
+                                    ),
                                   ),
-                                ),
-                              )),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10.0),
-                            child: AppText.appText(
-                                "${widget.responseData[index]["title"]}",
-                                textAlign: TextAlign.left,
-                                overflow: TextOverflow.ellipsis,
-                                textColor: AppTheme.whiteColor,
-                                fontWeight: FontWeight.w800),
-                          ),
-                          Text(
-                            textAlign: TextAlign.justify,
-                            maxLines: 3,
-                            "This is Product. This is Product. This is Product. This is Product. This is Product.",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: AppTheme.whiteColor,
+                                )),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: AppText.appText(
+                                  "${widget.responseData[index]["title"]}",
+                                  textAlign: TextAlign.left,
+                                  overflow: TextOverflow.ellipsis,
+                                  textColor: AppTheme.whiteColor,
+                                  fontWeight: FontWeight.w800),
                             ),
-                          ),
-                        ],
+                            Text(
+                              textAlign: TextAlign.justify,
+                              maxLines: 3,
+                              "This is Product. This is Product. This is Product. This is Product. This is Product.",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: AppTheme.whiteColor,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
