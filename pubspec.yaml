@@ -44,12 +44,16 @@ dependencies:
   connectivity: ^3.0.6
   cached_network_image: ^3.2.3
   url_launcher: ^6.1.11
-  persistent_bottom_nav_bar: ^5.0.2
   firebase_core: ^2.15.1
+  intl: ^0.17.0
   firebase_auth: ^4.7.3
   google_sign_in: ^6.1.4
   flutter_otp_text_field: ^1.1.1
+  google_nav_bar: ^5.0.6
   sizer: ^2.0.15
+  image_picker: ^1.0.2
+  crypto: ^3.0.3
+  sign_in_with_apple: ^5.0.0
 #  flutter_html: ^2.1.2
 
 dev_dependencies:

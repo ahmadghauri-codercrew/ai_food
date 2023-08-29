@@ -1,11 +1,17 @@
+import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/AppAssetsImage.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/auth/GoogleSignIn/authentication.dart';
 import 'package:ai_food/View/auth/auth_screen.dart';
+import 'package:ai_food/View/recipe_info/recipe_info.dart';
+import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -19,11 +25,13 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+  late AppDio dio;
+  AppLogger logger = AppLogger();
   final _userNameController = TextEditingController();
   List<int> numberListShow = [];
   bool showMenu = false;
   bool _isSigningOut = false;
-
+  var responseData;
   List allergies = [
     "Dairy",
     "Peanut",
@@ -57,6 +65,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   List<String> addDietaryRestrictions = [];
 
   @override
+  void initState() {
+    dio = AppDio(context);
+    logger.init();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _userNameController.dispose();
     super.dispose();
@@ -80,7 +96,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  child: Image(
+                  child: const Image(
                     image: AssetImage(
                       AppAssetsImage.profile_text_background,
                     ),
@@ -240,16 +256,21 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   height: 30,
                 ),
                 Center(
-                  child: AppButton.appButton("Save",
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      textColor: Colors.white,
-                      height: 50,
-                      width: 180,
-                      backgroundColor: AppTheme.appColor, onTap: () {
-                    push(context, ForgotPasswordScreen());
-                    // push(context, const ForgotPasswordPage());
-                  }),
+                  child: AppButton.appButton(
+                    "Save",
+                    onTap: () {
+                      print(
+                          "allergies:$addAllergies  and restrictions: $addDietaryRestrictions");
+                      getSuggestedRecipes(
+                          allergies: addAllergies, context: context);
+                    },
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    textColor: Colors.white,
+                    height: 50,
+                    width: 180,
+                    backgroundColor: AppTheme.appColor,
+                  ),
                 ),
                 const SizedBox(height: 30),
                 Center(
@@ -279,7 +300,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           },
                         ),
                 ),
-                const SizedBox(height: 30),
               ],
             ),
           ),
@@ -345,6 +365,102 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ),
     );
   }
+
+  getSuggestedRecipes({allergies, context}) async {
+    const apiKey = 'd9186e5f351240e094658382be62d948';
+    final apiUrl =
+        'https://api.spoonacular.com/recipes/random?number=8&intolerances=$allergies&apiKey=$apiKey';
+
+    try {
+      var response;
+      response = await dio.get(path: apiUrl);
+      if (response.statusCode == 200) {
+        print("jfdjbjeb${responseData}");
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => BottomNavView(
+            responseData: response.data["recipes"],
+          ),
+        ));
+        responseData = response.data["recipes"];
+      } else {
+        showSnackBar(context, "Something Went Wrong!");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Widget recipeContainer({name, pic, index}) {
+  //   return InkWell(
+  //     onTap: () {
+  //       Navigator.of(context).push(MaterialPageRoute(
+  //         builder: (context) => RecipeInfo(
+  //           recipeData: responseData[index],
+  //         ),
+  //       ));
+  //     },
+  //     child: ClipRRect(
+  //       borderRadius: BorderRadius.circular(10),
+  //       child: Container(
+  //         decoration: BoxDecoration(
+  //           color: Color.fromARGB(255, 235, 225, 225),
+  //           boxShadow: const [
+  //             BoxShadow(
+  //               offset: Offset(-2, -2),
+  //               blurRadius: 12,
+  //               color: Color.fromRGBO(0, 0, 0, 0.05),
+  //             ),
+  //             BoxShadow(
+  //               offset: Offset(2, 2),
+  //               blurRadius: 5,
+  //               color: Color.fromRGBO(0, 0, 0, 0.10),
+  //             )
+  //           ],
+  //           borderRadius: BorderRadius.circular(10),
+  //         ),
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           mainAxisAlignment: MainAxisAlignment.end,
+  //           children: [
+  //             ClipRRect(
+  //               borderRadius: const BorderRadius.only(
+  //                   topLeft: Radius.circular(10),
+  //                   topRight: Radius.circular(10)),
+  //               child: Container(
+  //                 height: 120,
+  //                 foregroundDecoration: const BoxDecoration(
+  //                   borderRadius: BorderRadius.only(
+  //                     topLeft: Radius.circular(10),
+  //                     topRight: Radius.circular(10),
+  //                   ),
+  //                 ),
+  //                 width: double.infinity,
+  //                 child: CachedNetworkImage(
+  //                   key: ValueKey<int>(index),
+  //                   imageUrl: "$pic",
+  //                   fit: BoxFit.cover,
+  //                 ),
+  //               ),
+  //             ),
+  //             const SizedBox(
+  //               height: 10,
+  //             ),
+  //             Container(
+  //               padding: const EdgeInsets.all(4),
+  //               child: Text(
+  //                 "$name",
+  //                 maxLines: 2,
+  //                 overflow: TextOverflow.ellipsis,
+  //                 style: const TextStyle(
+  //                     fontWeight: FontWeight.bold, fontSize: 12),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
 
 class CustomContainer extends StatelessWidget {

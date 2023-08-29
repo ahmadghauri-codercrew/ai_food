@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
@@ -7,8 +10,11 @@ import 'package:ai_food/View/auth/GoogleSignIn/authentication.dart';
 import 'package:ai_food/View/auth/forgot_password_screen.dart';
 import 'package:ai_food/View/auth/set_password_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:sizer/sizer.dart';
+import 'package:crypto/crypto.dart';
 
 import 'GoogleSignIn/google_sign_in_button.dart';
 
@@ -41,6 +47,22 @@ class _AuthScreenState extends State<AuthScreen> {
 
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  //sign in with apple code
+  String generateNonce([int length = 32]) {
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
+  }
+
+  /// Returns the sha256 hash of [input] in hex notation.
+  String sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+//ends
 
   @override
   Widget build(BuildContext context) {
@@ -338,6 +360,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       Center(
                         child: AppButton.appButtonWithLeadingIcon(
                             "Continue with Apple",
+                            onTap: () {},
                             fontSize: 20,
                             fontWeight: FontWeight.w400,
                             textColor: AppTheme.appColor,
@@ -392,5 +415,37 @@ class _AuthScreenState extends State<AuthScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> handleAppleSignIn() async {
+    try {
+      final rawNonce = generateNonce();
+      final nonce = sha256ofString(rawNonce);
+
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: nonce,
+      );
+
+      final oauthCredential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        rawNonce: rawNonce,
+      );
+
+      final result =
+          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
+      print(result.user!.displayName.toString());
+      print(result.user!.email.toString());
+      print(result.user!.uid.toString());
+      print(result.additionalUserInfo!.username.toString());
+    } catch (e, stackTrace) {
+      // Handle exceptions here
+      print("Error during Apple Sign-In: $e");
+      print("Stack trace: $stackTrace");
+    }
   }
 }

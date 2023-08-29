@@ -1,9 +1,14 @@
 import 'package:ai_food/Utils/resources/res/app_assets.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
+import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/auth/auth_screen.dart';
+import 'package:ai_food/View/profile/user_profile_screen.dart';
 import 'package:ai_food/View/recipe_info/recipe_info.dart';
+import 'package:ai_food/View/recipe_info/shopping_list.dart';
 import 'package:flutter/material.dart';
+
+import 'HomeScreen/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -16,14 +21,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 4), () {
-      pushReplacement(context, const AuthScreen());
+      pushReplacement(context, AuthScreen());
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: AppTheme.appColor,
       body: Center(

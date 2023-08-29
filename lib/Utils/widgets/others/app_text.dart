@@ -9,13 +9,14 @@ class AppText {
       FontStyle? fontStyle,
       TextBaseline? textBaseline,
       TextOverflow? overflow,
+      int? maxlines,
       double? letterSpacing,
       bool underLine = false,
       bool fontFamily = false}) {
     return Text(
       text,
       textAlign: textAlign,
-      maxLines: null,
+      maxLines: maxlines,
       style: TextStyle(
           color: textColor,
           fontSize: fontSize,
