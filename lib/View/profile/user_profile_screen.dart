@@ -25,13 +25,10 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  late AppDio dio;
-  AppLogger logger = AppLogger();
   final _userNameController = TextEditingController();
   List<int> numberListShow = [];
   bool showMenu = false;
   bool _isSigningOut = false;
-  var responseData;
   List allergies = [
     "Dairy",
     "Peanut",
@@ -65,14 +62,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   List<String> addDietaryRestrictions = [];
 
   @override
-  void initState() {
-    dio = AppDio(context);
-    logger.init();
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _userNameController.dispose();
     super.dispose();
@@ -80,17 +69,18 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          Future.delayed(const Duration(milliseconds: 200), () {
-            setState(() {
-              showMenu = false;
-            });
+    return GestureDetector(
+      onTap: () {
+        Future.delayed(const Duration(milliseconds: 200), () {
+          setState(() {
+            showMenu = false;
           });
-        },
-        child: Scaffold(
-          body: SingleChildScrollView(
+        });
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top:30.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -104,8 +94,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 25.0, right: 25, top: 20),
+                  padding: const EdgeInsets.only(left: 25.0, right: 25, top: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -153,8 +142,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         width: 110,
                         decoration: BoxDecoration(
                           border: Border(
-                            bottom: BorderSide(
-                                width: 1.0, color: AppTheme.appColor),
+                            bottom:
+                                BorderSide(width: 1.0, color: AppTheme.appColor),
                           ),
                         ),
                       ),
@@ -178,10 +167,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 spacing: 10,
                                 children: allergies.map((allergy) {
                                   return CustomContainer(
-                                    containerColor:
-                                        addAllergies.contains(allergy)
-                                            ? AppTheme.appColor
-                                            : Colors.white,
+                                    borderColor: AppTheme.appColor,
+                                    containerColor: addAllergies.contains(allergy)
+                                        ? AppTheme.appColor
+                                        : Colors.white,
                                     text: allergy,
                                     textColor: addAllergies.contains(allergy)
                                         ? Colors.white
@@ -213,9 +202,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               Wrap(
                                 spacing: 10,
                                 runSpacing: 10,
-                                children:
-                                    dietaryRestrictions.map((restriction) {
+                                children: dietaryRestrictions.map((restriction) {
                                   return CustomContainer(
+                                    borderColor: AppTheme.appColor,
                                     containerColor: addDietaryRestrictions
                                             .contains(restriction)
                                         ? AppTheme.appColor
@@ -234,8 +223,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                           print(
                                               "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
                                         } else {
-                                          addDietaryRestrictions
-                                              .add(restriction);
+                                          addDietaryRestrictions.add(restriction);
                                           print(
                                               "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
                                         }
@@ -259,10 +247,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   child: AppButton.appButton(
                     "Save",
                     onTap: () {
-                      print(
-                          "allergies:$addAllergies  and restrictions: $addDietaryRestrictions");
-                      getSuggestedRecipes(
-                          allergies: addAllergies, context: context);
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => BottomNavView(),
+                      ));
                     },
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
@@ -276,8 +263,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 Center(
                   child: _isSigningOut
                       ? const CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                         )
                       : AppButton.appButton(
                           "SignOut",
@@ -295,7 +281,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             setState(() {
                               _isSigningOut = false;
                             });
-
+          
                             push(context, const AuthScreen());
                           },
                         ),
@@ -364,30 +350,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         ),
       ),
     );
-  }
-
-  getSuggestedRecipes({allergies, context}) async {
-    const apiKey = 'd9186e5f351240e094658382be62d948';
-    final apiUrl =
-        'https://api.spoonacular.com/recipes/random?number=8&intolerances=$allergies&apiKey=$apiKey';
-
-    try {
-      var response;
-      response = await dio.get(path: apiUrl);
-      if (response.statusCode == 200) {
-        print("jfdjbjeb${responseData}");
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => BottomNavView(
-            responseData: response.data["recipes"],
-          ),
-        ));
-        responseData = response.data["recipes"];
-      } else {
-        showSnackBar(context, "Something Went Wrong!");
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 
   // Widget recipeContainer({name, pic, index}) {
@@ -468,12 +430,15 @@ class CustomContainer extends StatelessWidget {
   final Function() onTap;
   final Color textColor;
   final Color containerColor;
+  final Color borderColor;
+
   const CustomContainer(
       {super.key,
       this.text,
       required this.onTap,
       required this.textColor,
-      required this.containerColor});
+      required this.containerColor,
+      required this.borderColor});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -483,7 +448,7 @@ class CustomContainer extends StatelessWidget {
         decoration: BoxDecoration(
             color: containerColor,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppTheme.appColor, width: 2)),
+            border: Border.all(color: borderColor, width: 2)),
         child: AppText.appText(
           text,
           textColor: textColor,

@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class BottomNavView extends StatefulWidget {
-  final responseData;
-
-  BottomNavView({super.key, this.responseData});
+  BottomNavView({
+    super.key,
+  });
 
   @override
   State<BottomNavView> createState() => _BottomNavViewState();
@@ -24,7 +24,7 @@ class _BottomNavViewState extends State<BottomNavView> {
   void initState() {
     super.initState();
     _widgetOptions = [
-      HomeScreen(responseData: widget.responseData),
+      HomeScreen(),
       const FavouriteScreen(),
       const AskMaidaScreen(),
       const SettingScreen(),

@@ -1,4 +1,5 @@
 import 'package:ai_food/Constants/app_logger.dart';
+import 'package:ai_food/Controller/provider/login_provider.dart';
 import 'package:ai_food/View/auth/forgot_password_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
 import 'package:ai_food/View/splash_screen.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 Future<void> main() async {
@@ -23,14 +25,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return Sizer(builder: (context, orientation, deviceType) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'AIFood',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<FilterListProvider>(
+              create: (_) => FilterListProvider()),
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'AIFood',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          // home: BottomNavView(),
+          home: SplashScreen(),
         ),
-        // home: BottomNavView(),
-        home:  SplashScreen(),
       );
     });
   }

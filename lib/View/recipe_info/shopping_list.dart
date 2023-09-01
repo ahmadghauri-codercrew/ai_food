@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
-
 import '../../Utils/resources/res/app_theme.dart';
+import 'package:flutter/material.dart';
 import '../../Utils/widgets/others/app_text.dart';
 
 class ShoppingList extends StatefulWidget {
@@ -18,6 +16,7 @@ class ShoppingList extends StatefulWidget {
 class _ShoppingListState extends State<ShoppingList> {
   @override
   Widget build(BuildContext context) {
+    print("kejfbjkfbe${widget.ingredient.length}");
     return Scaffold(
       backgroundColor: AppTheme.whiteColor,
       appBar: AppBar(
@@ -62,28 +61,28 @@ class _ShoppingListState extends State<ShoppingList> {
         return Column(
           children: [
             Container(
+              height: MediaQuery.of(context).size.height-91.7,
+              // color: Colors.black,
               child: Stack(
                 children: [
                   Container(
                     height: 210,
                     width: screenWidth,
                     decoration: BoxDecoration(
-                        color: Colors.amber,
                         image: DecorationImage(
                             image: NetworkImage("${widget.image}"),
                             fit: BoxFit.cover)),
                   ),
                   Positioned(
-                    top: 10,
+                    top: 150,
                     child: Container(
-                      height: 500,
                       width: screenWidth,
                       decoration: BoxDecoration(
                           border:
                               Border.all(color: AppTheme.appColor, width: 2),
                           borderRadius: const BorderRadius.only(
                               topRight: Radius.circular(70)),
-                          color: Colors.amber),
+                          color: AppTheme.whiteColor),
                       child: Padding(
                         padding: const EdgeInsets.only(
                             left: 20.0, top: 25, right: 40),
@@ -109,6 +108,74 @@ class _ShoppingListState extends State<ShoppingList> {
                                 ],
                               ),
                             ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            Container(
+                              height: screenHeight -305,
+                              child: SingleChildScrollView(
+                                physics: ScrollPhysics(),
+                                child: Column(
+                                  children: List.generate(
+                                    widget.ingredient.length,
+                                    (index) {
+                                      return Column(
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${index + 1}. ",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: AppTheme.appColor),
+                                                textAlign: TextAlign.justify,
+                                                softWrap: true,
+                                              ),
+                                              Expanded(
+                                                child: Container(
+                                                  child: Text(
+                                                    capitalize(
+                                                        widget.ingredient[index]
+                                                            ["originalName"]),
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color:
+                                                            AppTheme.appColor),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                    softWrap: true,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: 2,
+                                            color: AppTheme.appColor,
+                                          ),
+                                          SizedBox(
+                                            height: 25,
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),
