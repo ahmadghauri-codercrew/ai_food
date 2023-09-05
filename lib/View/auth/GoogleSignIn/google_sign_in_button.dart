@@ -2,8 +2,10 @@ import 'package:ai_food/Utils/resources/res/app_assets.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/View/auth/GoogleSignIn/authentication.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
+import 'package:ai_food/providers/google_signin_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../Utils/widgets/others/app_button.dart';
@@ -16,13 +18,14 @@ class GoogleSignInButton extends StatefulWidget {
 }
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
-  bool _isSigningIn = false;
+  // bool _isSigningIn = false;
 
   @override
   Widget build(BuildContext context) {
+    final googleSignInProvider = Provider.of<GoogleSignInProvider>(context, listen: true);
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
-      child: _isSigningIn
+      child: googleSignInProvider.isSigningIn
           ? const CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Color(0xffB38ADE)),
             )
@@ -30,29 +33,31 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
               child: AppButton.appButtonWithLeadingImage(
                 "Continue with Google",
                 onTap: () async {
-                  setState(() {
-                    _isSigningIn = true;
-                  });
+                  googleSignInProvider.setSigningIn(true);
+                  // setState(() {
+                  //   _isSigningIn = true;
+                  // });
 
                   try {
                     await Authentication.initializeFirebase(context: context);
-                    User? user =
+                    // User? user =
                         await Authentication.signInWithGoogle(context: context);
-
-                    setState(() {
-                      _isSigningIn = false;
-                    });
-
-                    if (user != null) {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => UserProfileScreen(
-                              // user: user,
-                              ),
-                        ),
-                      );
-                    }
+                    googleSignInProvider.setSigningIn(false);
+                    // setState(() {
+                    //   _isSigningIn = false;
+                    // });
+                    //
+                    // if (user != null) {
+                    //   Navigator.of(context).pushReplacement(
+                    //     MaterialPageRoute(
+                    //       builder: (context) => UserProfileScreen(
+                    //           // user: user,
+                    //           ),
+                    //     ),
+                    //   );
+                    // }
                   } catch (e) {
+                    googleSignInProvider.setSigningIn(false);
                     print("fbjkbfjeblfbekb$e");
                   }
                 },

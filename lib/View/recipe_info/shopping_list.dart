@@ -55,138 +55,138 @@ class _ShoppingListState extends State<ShoppingList> {
       ),
       body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-        var screenHeight = constraints.maxHeight;
-        var screenWidth = constraints.maxWidth;
+            var screenHeight = constraints.maxHeight;
+            var screenWidth = constraints.maxWidth;
 
-        return Column(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height-91.7,
-              // color: Colors.black,
-              child: Stack(
-                children: [
-                  Container(
-                    height: 210,
-                    width: screenWidth,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage("${widget.image}"),
-                            fit: BoxFit.cover)),
-                  ),
-                  Positioned(
-                    top: 150,
-                    child: Container(
-                      width: screenWidth,
-                      decoration: BoxDecoration(
-                          border:
+            return Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height-91.7,
+                  // color: Colors.black,
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 210,
+                        width: screenWidth,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: NetworkImage("${widget.image}"),
+                                fit: BoxFit.cover)),
+                      ),
+                      Positioned(
+                        top: 150,
+                        child: Container(
+                          width: screenWidth,
+                          decoration: BoxDecoration(
+                              border:
                               Border.all(color: AppTheme.appColor, width: 2),
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(70)),
-                          color: AppTheme.whiteColor),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20.0, top: 25, right: 40),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              width: screenWidth,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  AppText.appText("${widget.name} Ingredients",
-                                      textColor: AppTheme.appColor,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w600),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  AppText.appText(
-                                      "Gather these components for culinary excellence",
-                                      textColor: AppTheme.appColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400)
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            Container(
-                              height: screenHeight -305,
-                              child: SingleChildScrollView(
-                                physics: ScrollPhysics(),
-                                child: Column(
-                                  children: List.generate(
-                                    widget.ingredient.length,
-                                    (index) {
-                                      return Column(
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "${index + 1}. ",
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: AppTheme.appColor),
-                                                textAlign: TextAlign.justify,
-                                                softWrap: true,
-                                              ),
-                                              Expanded(
-                                                child: Container(
-                                                  child: Text(
-                                                    capitalize(
-                                                        widget.ingredient[index]
-                                                            ["originalName"]),
-                                                    style: TextStyle(
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color:
-                                                            AppTheme.appColor),
-                                                    textAlign:
-                                                        TextAlign.justify,
-                                                    softWrap: true,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            height: 2,
-                                            color: AppTheme.appColor,
-                                          ),
-                                          SizedBox(
-                                            height: 25,
-                                          ),
-                                        ],
-                                      );
-                                    },
+                              borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(70)),
+                              color: AppTheme.whiteColor),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20.0, top: 25, right: 40),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: screenWidth,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      AppText.appText("${widget.name} Ingredients",
+                                          textColor: AppTheme.appColor,
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w600),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      AppText.appText(
+                                          "Gather these components for culinary excellence",
+                                          textColor: AppTheme.appColor,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400)
+                                    ],
                                   ),
                                 ),
-                              ),
-                            )
-                          ],
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                Container(
+                                  height: screenHeight -305,
+                                  child: SingleChildScrollView(
+                                    physics: const ScrollPhysics(),
+                                    child: Column(
+                                      children: List.generate(
+                                        widget.ingredient.length,
+                                            (index) {
+                                          return Column(
+                                            children: [
+                                              Row(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "${index + 1}. ",
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight: FontWeight.w500,
+                                                        color: AppTheme.appColor),
+                                                    textAlign: TextAlign.justify,
+                                                    softWrap: true,
+                                                  ),
+                                                  Expanded(
+                                                    child: Container(
+                                                      child: Text(
+                                                        capitalize(
+                                                            widget.ingredient[index]
+                                                            ["originalName"]),
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                            FontWeight.w500,
+                                                            color:
+                                                            AppTheme.appColor),
+                                                        textAlign:
+                                                        TextAlign.justify,
+                                                        softWrap: true,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                height: 2,
+                                                color: AppTheme.appColor,
+                                              ),
+                                              const SizedBox(
+                                                height: 25,
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        );
-      }),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            );
+          }),
     );
   }
 

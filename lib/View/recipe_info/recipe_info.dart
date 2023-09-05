@@ -233,9 +233,10 @@ class _RecipeInfoState extends State<RecipeInfo>
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500)
                           ],
-                        )
+                        ),
                       ],
-                    )),
+                    ),
+                ),
               ]),
             ),
             SizedBox(

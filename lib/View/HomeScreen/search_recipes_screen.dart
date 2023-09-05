@@ -1,13 +1,9 @@
-import 'package:ai_food/Controller/provider/login_provider.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
-import 'package:ai_food/View/HomeScreen/filters_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-
-import 'package:provider/provider.dart';
 
 class SearchRecipesScreen extends StatefulWidget {
   const SearchRecipesScreen({Key? key}) : super(key: key);
@@ -22,6 +18,7 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
   bool showFoodStyle = false;
   bool showServingSize = false;
 
+  //start food style
   List foodStyle = [
     'Italian cuisine',
     'Mexican cuisine',
@@ -37,9 +34,9 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
     'Thai cuisine',
   ];
   List<String> addFoodStyle = [];
-//ends of food style
+  //ends of food style
 
-//start serving size
+  //start serving size
   List servingSize = [
     '1-2 Persons',
     '2-3 Persons',
@@ -49,19 +46,108 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
     '6+ Persons',
   ];
   List<String> addServingSize = [];
-//ends of serving size
-  @override
-  void initState() {
-    print("Usama is a pro developer ");
-    super.initState();
-  }
+  //ends of serving size
+
+  //start of allergies
+  List allergies = [
+    "Dairy",
+    "Peanut",
+    "Seafood",
+    "Sesame",
+    "Wheat",
+    "Soy",
+    "Sulfite",
+    "Gluten",
+    "Egg",
+    "Grain",
+    "Tree nut",
+    "Shellfish",
+  ];
+  List<String> addAllergies = [];
+  //ends of allergies
+  //start of dietary Restrictions
+  List dietaryRestrictions = [
+    "Gluten free",
+    "ketogenic",
+    "Vegetarian",
+    "Lacto-Vegetarian",
+    "Ovo-Vegetarian",
+    "Vegan",
+    "Pescetarian",
+    "Paleo",
+    "Primal",
+    "Low FODMAP",
+    "Whole30",
+    "Shellfish",
+  ];
+  List<String> addDietaryRestrictions = [];
+  //ends of dietary Restrictions
+
+  //start of Preferred Protein
+  List<String> preferredProtein = [
+    "Fish",
+    "Seafood",
+    "Lean beef",
+    "Skim milk",
+    "Skim yogurt",
+    "Eggs",
+    "Lean port",
+    "Low-fat cheese",
+    "Beans",
+    "Skinless, white meat-poultry",
+  ];
+  List<String> addPreferredProtein = [];
+  //ends of Preferred Protein
+
+  //start of Regional Delicacy
+  List<String> regionalDelicacy = [
+    'Italian Pizza',
+    'Mexican Tacos',
+    'Japanese Sushi',
+    'Chinese Dumplings',
+    'Indian Curry',
+    'French Baguette',
+    'Italian Pasta',
+    'Thai Pad Thai',
+    'Greek Souvlaki',
+    'American Burger',
+  ];
+  List<String> addRegionalDelicacy = [];
+  //ends of Regional Delicacy
+
+  //start of Kitchen Resources
+  List<String> kitchenResources = [
+    'Blender',
+    'Colander',
+    'Chef\'s knife',
+    'Cutting board',
+    'Frying pan',
+    'Knife',
+    'Immersion blender',
+    'Salad Spinner',
+    'Peeler',
+    'Parchment paper',
+    'Stock pot',
+    'Spoon',
+    'Sheet pan',
+    'Measuring cup',
+    'Measuring spoon',
+    'Whisk',
+    'Tongs',
+    'Wooden spoon',
+    'Bowl',
+    'Oven',
+    'Microwave',
+    'Food processor',
+    'Slow cooker',
+  ];
+  List<String> addKitchenResources = [];
+  //ends of Kitchen Resources
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final provider = Provider.of<FilterListProvider>(context, listen: false);
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -147,37 +233,39 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                           setState(() {});
                         },
                         child: Container(
-                          height: 55,
+                          height: 48,
                           width: 227,
                           decoration: BoxDecoration(
-                              // color: Colors.redAccent,
+                            // color: Colors.redAccent,
                               borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                  color: AppTheme.appColor, width: 2)),
+                              border: Border.all(color: AppTheme.appColor,width: 2)
+                          ),
                           child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 AppText.appText(
                                     addFoodStyle.isEmpty
                                         ? "Food Style"
-                                        : addFoodStyle[0].toString(),
+                                        : addFoodStyle[0]
+                                        .toString(),
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500,
                                     textColor: AppTheme.appColor),
                                 !showFoodStyle
                                     ? Icon(
-                                        Icons.keyboard_arrow_down_outlined,
-                                        color: AppTheme.appColor,
-                                        size: 30,
-                                      )
+                                  Icons
+                                      .keyboard_arrow_down_outlined,
+                                  color: AppTheme.appColor,
+                                  size: 30,
+                                )
                                     : Icon(
-                                        Icons.keyboard_arrow_up_outlined,
-                                        color: AppTheme.appColor,
-                                        size: 30,
-                                      ),
+                                  Icons
+                                      .keyboard_arrow_up_outlined,
+                                  color: AppTheme.appColor,
+                                  size: 30,
+                                ),
                               ],
                             ),
                           ),
@@ -191,78 +279,288 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                           setState(() {});
                         },
                         child: Container(
-                          height: 55,
+                          height: 48,
                           width: 227,
                           decoration: BoxDecoration(
-                              // color: Colors.redAccent,
+                            // color: Colors.redAccent,
                               borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                  color: AppTheme.appColor, width: 2)),
+                              border: Border.all(color: AppTheme.appColor,width: 2)
+                          ),
                           child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 AppText.appText(
                                     addServingSize.isEmpty
                                         ? "Serving Size"
-                                        : addServingSize[0].toString(),
+                                        : addServingSize[0]
+                                        .toString(),
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500,
                                     textColor: AppTheme.appColor),
                                 !showServingSize
                                     ? Icon(
-                                        Icons.keyboard_arrow_down_outlined,
-                                        color: AppTheme.appColor,
-                                        size: 30,
-                                      )
+                                  Icons
+                                      .keyboard_arrow_down_outlined,
+                                  color: AppTheme.appColor,
+                                  size: 30,
+                                )
                                     : Icon(
-                                        Icons.keyboard_arrow_up_outlined,
-                                        color: AppTheme.appColor,
-                                        size: 30,
-                                      ),
+                                  Icons
+                                      .keyboard_arrow_up_outlined,
+                                  color: AppTheme.appColor,
+                                  size: 30,
+                                ),
                               ],
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
+                      const SizedBox(height: 20),
+                      AppText.appText(
+                        "Allergies:",
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        textColor: AppTheme.appColor,
                       ),
-                      customFilterRow(name: "Allergies", index: 0),
-                      const SizedBox(
-                        height: 20,
+                      const SizedBox(height: 10),
+                      Wrap(
+                        runSpacing: 10,
+                        spacing: 10,
+                        children: allergies.map((allergy) {
+                          return CustomContainer(
+                            borderColor: addAllergies.contains(allergy)
+                                ? AppTheme.whiteColor
+                                : AppTheme.appColor,
+                            containerColor:
+                            addAllergies.contains(allergy)
+                                ? AppTheme.appColor
+                                : Colors.white,
+                            text: allergy,
+                            textColor:
+                            addAllergies.contains(allergy)
+                                ? Colors.white
+                                : AppTheme.appColor,
+                            onTap: () {
+                              setState(() {
+                                if (addAllergies
+                                    .contains(allergy)) {
+                                  addAllergies.remove(allergy);
+                                  print(
+                                      "allergy_is ${allergy} an list ${addAllergies.toString().substring(1, addAllergies.toString().length - 1)}");
+                                } else {
+                                  addAllergies.add(allergy);
+                                  print(
+                                      "allergy_is ${allergy} an list ${addAllergies.toString().substring(1, addAllergies.toString().length - 1)}");
+                                }
+                              });
+                            },
+                          );
+                        }).toList(),
                       ),
-                      customFilterRow(name: "Dietry restrictions", index: 1),
-                      const SizedBox(
-                        height: 20,
+                      //allergies ends
+                      const SizedBox(height: 20),
+                      AppText.appText(
+                        "Dietary restrictions:",
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        textColor: AppTheme.appColor,
                       ),
-                      customFilterRow(name: "Preffered Protein", index: 2),
-                      const SizedBox(
-                        height: 20,
+                      const SizedBox(height: 10),
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children:
+                        dietaryRestrictions.map((restriction) {
+                          return CustomContainer(
+                            borderColor: addDietaryRestrictions.contains(restriction)
+                                ? AppTheme.whiteColor
+                                : AppTheme.appColor,
+                            containerColor: addDietaryRestrictions
+                                .contains(restriction)
+                                ? AppTheme.appColor
+                                : Colors.white,
+                            textColor: addDietaryRestrictions
+                                .contains(restriction)
+                                ? Colors.white
+                                : AppTheme.appColor,
+                            text: restriction,
+                            onTap: () {
+                              setState(() {
+                                if (addDietaryRestrictions
+                                    .contains(restriction)) {
+                                  addDietaryRestrictions
+                                      .remove(restriction);
+                                  print(
+                                      "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
+                                } else {
+                                  addDietaryRestrictions
+                                      .add(restriction);
+                                  print(
+                                      "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
+                                }
+                              });
+                            },
+                          );
+                        }).toList(),
                       ),
-                      customFilterRow(name: "Regional delicacy", index: 3),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      customFilterRow(name: "Kitchen resources", index: 4)
+                      //dietary restrictions ends
                     ],
                   ),
                   showServingSize
                       ? Padding(
-                          padding: const EdgeInsets.only(top: 123.0),
-                          child: customServingSize(),
-                        )
+                    padding: const EdgeInsets.only(top: 123.0),
+                    child: customServingSize(),
+                  )
                       : const SizedBox.shrink(),
                   showFoodStyle
                       ? Padding(
-                          padding: const EdgeInsets.only(top: 55.0),
-                          child: customFoodStyle(),
-                        )
+                    padding: const EdgeInsets.only(top: 55.0),
+                    child: customFoodStyle(),
+                  )
                       : const SizedBox.shrink(),
                 ],
               ),
+              const SizedBox(height: 20),
+              AppText.appText(
+                "Preferred Protein:",
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                textColor: AppTheme.appColor,
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children:
+                preferredProtein.map((protein) {
+                  return CustomContainer(
+                    borderColor: addPreferredProtein.contains(protein)
+                        ? AppTheme.whiteColor
+                        : AppTheme.appColor,
+                    containerColor: addPreferredProtein
+                        .contains(protein)
+                        ? AppTheme.appColor
+                        : Colors.white,
+                    textColor: addPreferredProtein
+                        .contains(protein)
+                        ? Colors.white
+                        : AppTheme.appColor,
+                    text: protein,
+                    onTap: () {
+                      setState(() {
+                        if (addPreferredProtein
+                            .contains(protein)) {
+                          addPreferredProtein
+                              .remove(protein);
+                          print(
+                              "preferredProtein_is ${protein} an list ${addPreferredProtein.toString().substring(1, addPreferredProtein.toString().length - 1)}");
+                        } else {
+                          addPreferredProtein
+                              .add(protein);
+                          print(
+                              "preferredProtein_is ${protein} an list ${addPreferredProtein.toString().substring(1, addPreferredProtein.toString().length - 1)}");
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+              //preferred proteins ends
+              const SizedBox(height: 20),
+              AppText.appText(
+                "Regional Delicacy:",
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                textColor: AppTheme.appColor,
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children:
+                regionalDelicacy.map((delicacy) {
+                  return CustomContainer(
+                    borderColor: addRegionalDelicacy.contains(delicacy)
+                        ? AppTheme.whiteColor
+                        : AppTheme.appColor,
+                    containerColor: addRegionalDelicacy
+                        .contains(delicacy)
+                        ? AppTheme.appColor
+                        : Colors.white,
+                    textColor: addRegionalDelicacy
+                        .contains(delicacy)
+                        ? Colors.white
+                        : AppTheme.appColor,
+                    text: delicacy,
+                    onTap: () {
+                      setState(() {
+                        if (addRegionalDelicacy
+                            .contains(delicacy)) {
+                          addRegionalDelicacy
+                              .remove(delicacy);
+                          print(
+                              "regionalDelicacy_is ${delicacy} an list ${addRegionalDelicacy.toString().substring(1, addRegionalDelicacy.toString().length - 1)}");
+                        } else {
+                          addRegionalDelicacy
+                              .add(delicacy);
+                          print(
+                              "regionalDelicacy_is ${delicacy} an list ${addRegionalDelicacy.toString().substring(1, addRegionalDelicacy.toString().length - 1)}");
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+              //regional delicacy ends
+              const SizedBox(height: 20),
+              AppText.appText(
+                "Kitchen resources:",
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                textColor: AppTheme.appColor,
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children:
+                kitchenResources.map((resources) {
+                  return CustomContainer(
+                    borderColor: addKitchenResources
+                        .contains(resources)
+                        ? AppTheme.whiteColor
+                        : AppTheme.appColor,
+                    containerColor: addKitchenResources
+                        .contains(resources)
+                        ? AppTheme.appColor
+                        : Colors.white,
+                    textColor: addKitchenResources
+                        .contains(resources)
+                        ? Colors.white
+                        : AppTheme.appColor,
+                    text: resources,
+                    onTap: () {
+                      setState(() {
+                        if (addKitchenResources
+                            .contains(resources)) {
+                          addKitchenResources
+                              .remove(resources);
+                          print(
+                              "regionalDelicacy_is ${resources} an list ${addKitchenResources.toString().substring(1, addKitchenResources.toString().length - 1)}");
+                        } else {
+                          addKitchenResources
+                              .add(resources);
+                          print(
+                              "regionalDelicacy_is ${resources} an list ${addKitchenResources.toString().substring(1, addKitchenResources.toString().length - 1)}");
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+              //kitchen resources ends
               const SizedBox(height: 30),
               Center(
                 child: AppButton.appButton(
@@ -274,66 +572,18 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
                   width: 180,
                   backgroundColor: AppTheme.appColor,
                   onTap: () {
-                    provider.dellAllergy();
-                  },
-                ),
-              ),
-
-              Container(
-                height: 200,
-                color: Colors.amber,
-                child: ListView.builder(
-                  itemCount: 1,
-                  itemBuilder: (context, index) {
-                    final provider =
-                        Provider.of<FilterListProvider>(context, listen: true);
-
-                    return Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        children: [
-                          AppText.appText("${provider.addAllergies}",
-                              textColor: AppTheme.appColor, fontSize: 20),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          AppText.appText("${provider.addDietaryRestrictions}",
-                              textColor: AppTheme.appColor, fontSize: 20),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          AppText.appText("${provider.addPreferredProtein}",
-                              textColor: AppTheme.appColor, fontSize: 20),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          AppText.appText("${provider.addRegionalDelicacy}",
-                              textColor: AppTheme.appColor, fontSize: 20),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          AppText.appText("${provider.addKitchenResources}",
-                              textColor: AppTheme.appColor, fontSize: 20),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      ),
-                    );
+                    // push(context, ForgotPasswordScreen());
                   },
                 ),
               ),
               // ignore: prefer_const_constructors
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 20,),
             ],
           ),
         ),
       ),
     );
   }
-
   Widget customFoodStyle() {
     return Card(
       color: AppTheme.appColor,
@@ -472,40 +722,4 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
     );
   }
 
-  Widget customFilterRow({name, index}) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => FilterScreen(
-            index: index,
-          ),
-        ));
-      },
-      child: Container(
-        height: 55,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-            // color: Colors.redAccent,
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(color: AppTheme.appColor, width: 2)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AppText.appText("$name",
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  textColor: AppTheme.appColor),
-              Icon(
-                Icons.keyboard_arrow_right,
-                color: AppTheme.appColor,
-                size: 30,
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }

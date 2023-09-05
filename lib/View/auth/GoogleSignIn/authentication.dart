@@ -1,9 +1,15 @@
+import 'package:ai_food/Utils/utils.dart';
+import 'package:ai_food/View/AskMaida/ask_maida_screen.dart';
+import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
+import 'package:ai_food/View/auth/auth_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
+import 'package:ai_food/providers/google_signin_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:provider/provider.dart';
 
 class Authentication {
   static SnackBar customSnackBar({required String content}) {
@@ -22,7 +28,7 @@ class Authentication {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
 
     User? user = FirebaseAuth.instance.currentUser;
-
+    // print("usr_id ${user?.uid}  ${user.uid}");
     if (user != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -71,6 +77,14 @@ class Authentication {
               await auth.signInWithCredential(credential);
 
           user = userCredential.user;
+
+          // Check if the user already exists
+          // if (userCredential.additionalUserInfo!.isNewUser) {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserProfileScreen()));
+          // } else {
+          //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavView()));
+          // }
+
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -108,6 +122,7 @@ class Authentication {
         await googleSignIn.signOut();
       }
       await FirebaseAuth.instance.signOut();
+      push(context, const AuthScreen());
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         Authentication.customSnackBar(

@@ -28,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   AppLogger logger = AppLogger();
   final _userNameController = TextEditingController();
   List<int> numberListShow = [];
-  List<String> measuringUnitListShow = ["US","USD"];
+  List<String> measuringUnitListShow = ["Grams","Ounce", "Pound"];
   String updatedvalueM = "";
   bool showMenu = false;
   bool measuringUnit = false;
@@ -304,8 +304,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ],
                         ),
                         showMenu ? customMenu() : const SizedBox.shrink(),
-                        Positioned(right:0,child:  measuringUnit ? customMeasuringUnit() : const SizedBox.shrink(),),
-
+                        // Positioned(right: 0,child:  measuringUnit ? customMeasuringUnit() : const SizedBox.shrink(),),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: measuringUnit ? customMeasuringUnit() : const SizedBox.shrink(),
+                        ),
                       ],
                     ),
                   ],
@@ -392,9 +395,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Here is the code of custom menu
   Widget customMenu() {
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: SizedBox(
-        width: 130,
+        width: 114,
         height: 230,
         child: GestureDetector(
           onTap: () {
@@ -448,10 +455,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
   Widget customMeasuringUnit() {
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: SizedBox(
-        width: 130,
-        height: 120,
+        width: 170,
+        height: 160,
         child: Center(
           child: GestureDetector(
             onTap: () {
