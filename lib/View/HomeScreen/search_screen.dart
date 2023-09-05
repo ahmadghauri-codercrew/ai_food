@@ -66,48 +66,56 @@ class _SearchScreenState extends State<SearchScreen> {
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: SizedBox(
-                    width: width * 0.65,
-                    child: TextFormField(
-                      controller: _searchController,
-                      autofocus: true,
-                      cursorColor: AppTheme.appColor,
-                      style: TextStyle(color: AppTheme.appColor),
-                      decoration: InputDecoration.collapsed(
-                        hintText: 'Search',
-                        hintStyle: TextStyle(color: AppTheme.whiteColor),
+            Container(
+              width: width,
+              height: 50,
+              decoration: BoxDecoration(
+                color: const Color(0xffd9c4ef),
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: SizedBox(
+                      width: width * 0.65,
+                      child: TextFormField(
+                        controller: _searchController,
+                        autofocus: true,
+                        cursorColor: AppTheme.appColor,
+                        style: TextStyle(color: AppTheme.appColor),
+                        decoration: InputDecoration.collapsed(
+                          hintText: 'Search',
+                          hintStyle: TextStyle(color: AppTheme.whiteColor),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a recipe';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            _autoValidateMode = AutovalidateMode.disabled;
+                          });
+                        },
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a recipe';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          _autoValidateMode = AutovalidateMode.disabled;
-                        });
-                      },
                     ),
                   ),
-                ),
-                Container(
-                  width: 60,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    color: Color(0xffb38ade),
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(100),
-                        bottomRight: Radius.circular(100)),
+                  Container(
+                    width: 60,
+                    height: 50,
+                    decoration: const BoxDecoration(
+                      color: Color(0xffb38ade),
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(100),
+                          bottomRight: Radius.circular(100)),
+                    ),
+                    child: const Icon(Icons.search_outlined, size: 40),
                   ),
-                  child: const Icon(Icons.search_outlined, size: 40),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(
               height: 30,
