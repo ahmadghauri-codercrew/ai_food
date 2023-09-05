@@ -7,6 +7,7 @@ import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -16,11 +17,10 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  late AppDio dio;
-  AppLogger logger = AppLogger();
   final _userNameController = TextEditingController();
   List<int> numberListShow = [];
   bool showMenu = false;
+  DateTime? selectedDate = DateTime.now();
   var responseData;
   //allergies
   List allergies = [
@@ -54,18 +54,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   List<String> addAllergies = [];
   List<String> addDietaryRestrictions = [];
-
-  @override
-  void initState() {
-    dio = AppDio(context);
-    logger.init();
-    super.initState();
-  }
-
   @override
   void dispose() {
     _userNameController.dispose();
     super.dispose();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: AppTheme.appColor, // Change the primary color
+            colorScheme: ColorScheme.light(
+                primary: AppTheme.appColor), // Change overall color scheme
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
   }
 
   @override
@@ -106,8 +123,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
-                      showMenu = !showMenu;
-                      setState(() {});
+                      _selectDate(context);
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width - 90,
@@ -115,7 +131,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 12.0, top: 4),
-                            child: AppText.appText("DOB:YYYY-MM-DD",
+                            child: AppText.appText(
+                                "${selectedDate?.toLocal()}".split(' ')[0],
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 textColor: AppTheme.appColor),
@@ -164,12 +181,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   setState(() {
                                     if (addAllergies.contains(allergy)) {
                                       addAllergies.remove(allergy);
-                                      print(
-                                          "allergy_is ${allergy} an list ${addAllergies.toString().substring(1, addAllergies.toString().length - 1)}");
                                     } else {
                                       addAllergies.add(allergy);
-                                      print(
-                                          "allergy_is ${allergy} an list ${addAllergies.toString().substring(1, addAllergies.toString().length - 1)}");
                                     }
                                   });
                                 },
@@ -237,10 +250,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 onTap: () {
                   print(
                       "allergies:$addAllergies  and restrictions: $addDietaryRestrictions");
-                  getSuggestedRecipes(
-                      allergies: addAllergies,
-                      dietaryRestrictions: addDietaryRestrictions,
-                      context: context);
+                  pushReplacement(
+                      context,
+                      BottomNavView(
+                        allergies: addAllergies,
+                        dietaryRestrictions: addDietaryRestrictions,
+                      ));
                 },
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
@@ -251,33 +266,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
             ),
             const SizedBox(height: 30),
-            // Center(
-            //   child: _isSigningOut
-            //       ? const CircularProgressIndicator(
-            //           valueColor:
-            //               AlwaysStoppedAnimation<Color>(Colors.white),
-            //         )
-            //       : AppButton.appButton(
-            //           "SignOut",
-            //           fontSize: 20,
-            //           fontWeight: FontWeight.w800,
-            //           textColor: Colors.white,
-            //           height: 50,
-            //           width: 180,
-            //           backgroundColor: AppTheme.appColor,
-            //           onTap: () async {
-            //             setState(() {
-            //               _isSigningOut = true;
-            //             });
-            //             await Authentication.signOut(context: context);
-            //             setState(() {
-            //               _isSigningOut = false;
-            //             });
-            //
-            //             push(context, const AuthScreen());
-            //           },
-            //         ),
-            // ),
           ],
         ),
       ),
@@ -349,30 +337,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ),
     );
   }
-
-  getSuggestedRecipes({allergies, dietaryRestrictions, context}) async {
-    const apiKey = 'd9186e5f351240e094658382be62d948';
-    final apiUrl =
-        'https://api.spoonacular.com/recipes/random?number=8&tags=${allergies.toString().substring(1, allergies.toString().length - 1)},${dietaryRestrictions.toString().substring(1, dietaryRestrictions.toString().length - 1)}&apiKey=$apiKey';
-
-    try {
-      var response;
-      response = await dio.get(path: apiUrl);
-      if (response.statusCode == 200) {
-        print("jfdjbjeb${responseData}");
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => BottomNavView(
-            responseData: response.data["recipes"],
-          ),
-        ));
-        responseData = response.data["recipes"];
-      } else {
-        showSnackBar(context, "Something Went Wrong!");
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
 }
 
 class CustomContainer extends StatelessWidget {
@@ -381,7 +345,7 @@ class CustomContainer extends StatelessWidget {
   final Color textColor;
   final Color containerColor;
   final borderColor;
-  const CustomContainer(
+  CustomContainer(
       {super.key,
       this.text,
       required this.onTap,

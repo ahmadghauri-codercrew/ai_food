@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           // home: BottomNavView(),
-          home:  UserProfileScreen(),
+          home:  const SplashScreen(),
         ),
       );
     });
