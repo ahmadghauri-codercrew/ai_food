@@ -3,15 +3,10 @@ import 'package:ai_food/Utils/resources/res/AppAssetsImage.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
-import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
-import 'package:ai_food/View/auth/GoogleSignIn/authentication.dart';
-import 'package:ai_food/View/auth/auth_screen.dart';
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -91,8 +86,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 25.0, right: 25, top: 20),
+              padding: const EdgeInsets.only(left: 25.0, right: 25, top: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -121,8 +115,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 12.0, top: 4),
-                            child: AppText.appText(
-                                "DOB:YYYY-MM-DD",
+                            child: AppText.appText("DOB:YYYY-MM-DD",
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 textColor: AppTheme.appColor),
@@ -160,10 +153,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     addDietaryRestrictions.contains(allergy)
                                         ? AppTheme.whiteColor
                                         : AppTheme.appColor,
-                                containerColor:
-                                    addAllergies.contains(allergy)
-                                        ? AppTheme.appColor
-                                        : Colors.white,
+                                containerColor: addAllergies.contains(allergy)
+                                    ? AppTheme.appColor
+                                    : Colors.white,
                                 text: allergy,
                                 textColor: addAllergies.contains(allergy)
                                     ? Colors.white
@@ -195,21 +187,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           Wrap(
                             spacing: 10,
                             runSpacing: 10,
-                            children:
-                                dietaryRestrictions.map((restriction) {
+                            children: dietaryRestrictions.map((restriction) {
                               return CustomContainer(
-                                borderColor: addDietaryRestrictions
-                                        .contains(restriction)
-                                    ? AppTheme.whiteColor
-                                    : AppTheme.appColor,
-                                containerColor: addDietaryRestrictions
-                                        .contains(restriction)
-                                    ? AppTheme.appColor
-                                    : Colors.white,
-                                textColor: addDietaryRestrictions
-                                        .contains(restriction)
-                                    ? Colors.white
-                                    : AppTheme.appColor,
+                                borderColor:
+                                    addDietaryRestrictions.contains(restriction)
+                                        ? AppTheme.whiteColor
+                                        : AppTheme.appColor,
+                                containerColor:
+                                    addDietaryRestrictions.contains(restriction)
+                                        ? AppTheme.appColor
+                                        : Colors.white,
+                                textColor:
+                                    addDietaryRestrictions.contains(restriction)
+                                        ? Colors.white
+                                        : AppTheme.appColor,
                                 text: restriction,
                                 onTap: () {
                                   setState(() {
@@ -220,8 +211,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                       print(
                                           "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
                                     } else {
-                                      addDietaryRestrictions
-                                          .add(restriction);
+                                      addDietaryRestrictions.add(restriction);
                                       print(
                                           "restriction_is ${restriction} an list ${addDietaryRestrictions.toString().substring(1, addDietaryRestrictions.toString().length - 1)}");
                                     }
