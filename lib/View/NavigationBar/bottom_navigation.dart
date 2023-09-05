@@ -64,7 +64,7 @@ class _BottomNavViewState extends State<BottomNavView> {
                   text: 'Home',
                 ),
                 GButton(
-                  icon: Icons.favorite_border_outlined,
+                  icon: Icons.favorite,
                   text: 'Favourite',
                 ),
                 GButton(

@@ -63,90 +63,97 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16),
         width: width,
         // color: Colors.blueGrey,
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              AppText.appText("Recommended:",
-                  fontSize: 20, textColor: AppTheme.appColor, fontWeight: FontWeight.bold),
-              GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio:
-                      width / (2.26 * 238),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: AppText.appText("Recommended:",
+                      fontSize: 20,
+                      textColor: AppTheme.appColor,
+                      fontWeight: FontWeight.w600),
                 ),
-                shrinkWrap: true,
-                itemCount: widget.responseData.length,
-                itemBuilder: (context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => RecipeInfo(recipeData: widget.responseData[index],),
-                      ));
-                    },
-                    child: Container(
-                      width: width / 2.26,
-                      height: 238,
-                      decoration: BoxDecoration(
-                        color: AppTheme.appColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 8),
+                GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: width / (2.26 * 238),
+                  ),
+                  shrinkWrap: true,
+                  itemCount: widget.responseData.length,
+                  itemBuilder: (context, int index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RecipeInfo(
+                            recipeData: widget.responseData[index],
+                          ),
+                        ));
+                      },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                padding:
-                                    const EdgeInsets.only(top: 12, bottom: 8),
-                                child: Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl:
-                                          "${widget.responseData[index]["image"]}",
-                                      height: 130,
-                                      width: width,
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
+                        width: width / 2.26,
+                        height: 238,
+                        decoration: BoxDecoration(
+                          color: AppTheme.appColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 8),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  padding:
+                                      const EdgeInsets.only(top: 12, bottom: 8),
+                                  child: Center(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: CachedNetworkImage(
+                                        fit: BoxFit.cover,
+                                        imageUrl:
+                                            "${widget.responseData[index]["image"]}",
+                                        height: 130,
+                                        width: width,
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.error),
+                                      ),
                                     ),
-                                  ),
-                                )),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: AppText.appText(
-                                  "${widget.responseData[index]["title"]}",
-                                  textAlign: TextAlign.left,
-                                  overflow: TextOverflow.ellipsis,
-                                  textColor: AppTheme.whiteColor,
-                                  fontWeight: FontWeight.w800),
-                            ),
-                            Text(
-                              textAlign: TextAlign.justify,
-                              maxLines: 3,
-                              "This is Product. This is Product. This is Product. This is Product. This is Product.",
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: AppTheme.whiteColor,
+                                  )),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10.0),
+                                child: AppText.appText(
+                                    "${widget.responseData[index]["title"]}",
+                                    textAlign: TextAlign.left,
+                                    overflow: TextOverflow.ellipsis,
+                                    textColor: AppTheme.whiteColor,
+                                    fontWeight: FontWeight.w800),
                               ),
-                            ),
-                          ],
+                              Text(
+                                textAlign: TextAlign.justify,
+                                maxLines: 3,
+                                "This is Product. This is Product. This is Product. This is Product. This is Product.",
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: AppTheme.whiteColor,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              )
-            ],
+                    );
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),
