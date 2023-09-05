@@ -95,7 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16),
         width: width,
         // color: Colors.blueGrey,
         child: SingleChildScrollView(

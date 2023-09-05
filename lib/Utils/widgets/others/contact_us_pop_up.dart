@@ -11,7 +11,7 @@ showCustomAlert(BuildContext context, {controller}) {
     context: context,
     builder: (BuildContext context) {
       return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         child: SingleChildScrollView(
           child: Container(
             // width: 100,
@@ -25,9 +25,13 @@ showCustomAlert(BuildContext context, {controller}) {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: AppTheme.whiteColor,
+                    color: AppTheme.appColor,
                     // color: Color(0xFFB38ADE),
-                    borderRadius: BorderRadius.circular(8),
+                    // borderRadius: BorderRadius.only(
+                    //     topLeft: Radius.circular(
+                    //       8.0,
+                    //     ),
+                    //     topRight: Radius.circular(8.0)),
                   ),
                   height: 56,
                   width: 300,
@@ -37,7 +41,7 @@ showCustomAlert(BuildContext context, {controller}) {
                       style: TextStyle(
                         color: AppTheme.appColor,
                         fontSize: 24,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w600,
                       ),
                       textAlign: TextAlign.center,
                     ),
