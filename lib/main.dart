@@ -1,4 +1,5 @@
 import 'package:ai_food/Constants/app_logger.dart';
+import 'package:ai_food/View/Landing_page/Landing_page.dart';
 import 'package:ai_food/View/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         // home: BottomNavView(),
-        home: SplashScreen(),
+        home: LandingPage(),
       );
     });
   }

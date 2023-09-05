@@ -86,12 +86,12 @@ class _CustomAppFormFieldState extends State<CustomAppFormField> {
                   const UnderlineInputBorder(borderSide: BorderSide.none),
               focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                color: AppTheme.appColor,
+                color: AppTheme.whiteColor,
               )),
               border: UnderlineInputBorder(
-                  borderSide: BorderSide(color: AppTheme.appColor)),
+                  borderSide: BorderSide(color: AppTheme.whiteColor)),
               hintText: "${widget.texthint}",
-              hintStyle: TextStyle(color: AppTheme.appColor)),
+              hintStyle: TextStyle(color: AppTheme.whiteColor)),
         ));
   }
 }
@@ -162,7 +162,6 @@ class _CustomAppPasswordfieldState extends State<CustomAppPasswordfield> {
           height: 37,
           width: widget.width,
           child: TextFormField(
-            
             textAlignVertical: TextAlignVertical.center,
             onChanged: widget.onChanged,
             onTap: widget.onTap,
