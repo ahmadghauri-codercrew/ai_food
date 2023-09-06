@@ -1,9 +1,13 @@
+import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/View/HomeScreen/home_screen.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/chat_bot_provider.dart';
+import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +23,12 @@ class AskMaidaScreen extends StatefulWidget {
 class _AskMaidaScreenState extends State<AskMaidaScreen> {
   final TextEditingController _messageController = TextEditingController();
   late ScrollController _scrollController;
-
+  late AppDio dio;
+  AppLogger logger = AppLogger();
   @override
   void initState() {
+    dio = AppDio(context);
+    logger.init();
     _scrollController = ScrollController();
     super.initState();
   }
@@ -46,12 +53,16 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   Widget build(BuildContext context) {
     final loadingProvider = Provider.of<ChatBotProvider>(context, listen: true);
     return Scaffold(
+      // floatingActionButton: FloatingActionButton(onPressed: () {
+      //   getRecipeInformation(id:);
+      // }),
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
           "Ask Maida",
-          style: TextStyle(color: AppTheme.appColor, fontWeight: FontWeight.bold),
+          style:
+              TextStyle(color: AppTheme.appColor, fontWeight: FontWeight.bold),
         ),
       ),
       body: Column(
@@ -103,12 +114,14 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                 Expanded(
                   child: Column(
                     children: [
-                      loadingProvider.isLoading ? Image.asset(
-                        "assets/images/loader.gif",
-                        // width: 100,
-                        height: 50,
-                        color: AppTheme.appColor,
-                      ) : const SizedBox.shrink(),
+                      loadingProvider.isLoading
+                          ? Image.asset(
+                              "assets/images/loader.gif",
+                              // width: 100,
+                              height: 50,
+                              color: AppTheme.appColor,
+                            )
+                          : const SizedBox.shrink(),
                       TextField(
                         controller: _messageController,
                         cursorColor: AppTheme.whiteColor,
@@ -117,21 +130,27 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                         maxLines: 3,
                         style: TextStyle(color: AppTheme.whiteColor),
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 30.0, top: 4, bottom: 4),
+                          contentPadding: const EdgeInsets.only(
+                              left: 30.0, top: 4, bottom: 4),
                           fillColor: AppTheme.appColor,
                           filled: true,
                           hintText: "Enter query...",
-                          hintStyle: const TextStyle(color: Color(0x80FFFFFF),),
+                          hintStyle: const TextStyle(
+                            color: Color(0x80FFFFFF),
+                          ),
                           border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(80.0)),
                           ),
                           focusedBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(80)),
-                            borderSide: BorderSide(width: 1, color: Colors.white),
+                            borderSide:
+                                BorderSide(width: 1, color: Colors.white),
                           ),
                           enabledBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(80)),
-                            borderSide: BorderSide(width: 1, color: Colors.white),
+                            borderSide:
+                                BorderSide(width: 1, color: Colors.white),
                           ),
                           suffixIcon: Padding(
                             padding: const EdgeInsets.only(right: 15.0),
@@ -140,8 +159,8 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                                 if (_messageController.text.isNotEmpty) {
                                   chatBotTalk();
                                 } else {
-                                  showSnackBar(
-                                      context, "Please ask a question to maida!");
+                                  showSnackBar(context,
+                                      "Please ask a question to maida!");
                                 }
                               },
                               child: Icon(
@@ -184,10 +203,13 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                   Align(
                     alignment: Alignment.topRight,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 8),
                       child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 14),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
                         decoration: BoxDecoration(
                           color: AppTheme.appColor,
                           borderRadius: const BorderRadius.only(
@@ -197,18 +219,21 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                             topRight: Radius.circular(0),
                           ),
                         ),
-                        child: AppText.appText(_messageController.text,textColor: AppTheme.whiteColor),
+                        child: AppText.appText(_messageController.text,
+                            textColor: AppTheme.whiteColor),
                       ),
                     ),
                   ),
                 ],
               ),
-
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
                 child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   decoration: BoxDecoration(
                     color: AppTheme.appColor,
                     borderRadius: const BorderRadius.only(
@@ -258,13 +283,50 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
-                                      final webUrl = "${item['link']}";
-                                      if (await canLaunch(webUrl)) {
-                                        await launch(webUrl);
+                                      // final webUrl = "${item['link']}";
+                                      // if (await canLaunch(webUrl)) {
+                                      //   await launch(webUrl);
+                                      // } else {
+                                      //   throw 'Could not launch $webUrl';
+                                      // }
+
+                                      var inputString = item['link'];
+
+                                      RegExp urlRegex = RegExp(
+                                          r'https:\/\/spoonacular\.com\/recipes\/(.+)-(\d+)');
+
+// Use RegExp.firstMatch to find the first match in the inputString
+                                      final match =
+                                          urlRegex.firstMatch(inputString);
+
+                                      if (match != null) {
+                                        // Extract the two captured groups: the substring and the digits
+                                        String? substring = match.group(1);
+                                        String? digits = match.group(2);
+                                        getRecipeInformation(id: digits);
+
+                                        // Print the results
+                                        print(
+                                            "Substring: $substring"); // Output: Substring: chickpea-burgers-with-spinach
+                                        print(
+                                            "Digits: $digits"); // Output: Digits: 720738
                                       } else {
-                                        throw 'Could not launch $webUrl';
+                                        print("No match found");
                                       }
                                     },
+                                    // child: Container(
+                                    //   height: 50,
+                                    //   width: 150,
+                                    //   decoration: BoxDecoration(
+                                    //       color: AppTheme.appColor,
+                                    //       borderRadius:
+                                    //           BorderRadius.circular(10)),
+                                    //   child: Center(
+                                    //     child: AppText.appText("Recipe Details",
+                                    //         fontSize: 18,
+                                    //         textColor: AppTheme.whiteColor),
+                                    //   ),
+                                    // ),
                                     child: SizedBox(
                                       width: 300,
                                       child: Center(
@@ -294,6 +356,24 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
     } else {
       print('API request failed with status code: ${response.statusCode}');
       chatsProvider.messageLoading(false);
+    }
+  }
+
+  getRecipeInformation({id}) async {
+    print("gurirug23r3rhi3hrihior");
+    const apiKey = '1acf1e54a67342b3bfa0f3d0b7888c6e';
+    var url =
+        "https://api.spoonacular.com/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";
+    final response = await dio.get(path: url);
+
+    if (response.statusCode == 200) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RecipeInfo(
+          recipeData: response.data,
+        ),
+      ));
+    } else {
+      print('API request failed with status code: ${response.statusCode}');
     }
   }
 }
