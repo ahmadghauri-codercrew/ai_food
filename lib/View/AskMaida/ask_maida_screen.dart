@@ -169,7 +169,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
     const apiKey = '50c97694758d413ba8021361c1a6aff8';
     // const apiKey = '56806fa3f874403c8794d4b7e491c937';
     final apiUrl =
-        'https://api.spoonacular.com/food/converse?text=${_messageController.text}&contextId=654321&apiKey=$apiKey';
+        'https://api.spoonacular.com/food/converse?text=${_messageController.text}&apiKey=$apiKey';
     final response = await AppDio(context).get(path: apiUrl);
     if (response.statusCode == 200) {
       final resData = response.data;

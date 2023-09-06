@@ -34,21 +34,13 @@ class MyApp extends StatelessWidget {
     return Sizer(builder: (context, orientation, deviceType) {
       return MultiProvider(
         providers: [
-          ChangeNotifierProvider<GoogleSignInProvider>(
-              create: (_) =>
-                  GoogleSignInProvider()), // Your GoogleSignInProvider
-          ChangeNotifierProvider<AllergiesProvider>(
-              create: (_) => AllergiesProvider()),
-          ChangeNotifierProvider<DietaryRestrictionsProvider>(
-              create: (_) => DietaryRestrictionsProvider()),
-          ChangeNotifierProvider<PreferredProteinProvider>(
-              create: (_) => PreferredProteinProvider()),
-          ChangeNotifierProvider<RegionalDelicacyProvider>(
-              create: (_) => RegionalDelicacyProvider()),
-          ChangeNotifierProvider<KitchenResourcesProvider>(
-              create: (_) => KitchenResourcesProvider()),
-          ChangeNotifierProvider<ChatBotProvider>(
-              create: (_) => ChatBotProvider()),
+          ChangeNotifierProvider<GoogleSignInProvider>(create: (_) => GoogleSignInProvider()), // Your GoogleSignInProvider
+          ChangeNotifierProvider<AllergiesProvider>(create: (_) => AllergiesProvider()),
+          ChangeNotifierProvider<DietaryRestrictionsProvider>(create: (_) => DietaryRestrictionsProvider()),
+          ChangeNotifierProvider<PreferredProteinProvider>(create: (_) => PreferredProteinProvider()),
+          ChangeNotifierProvider<RegionalDelicacyProvider>(create: (_) => RegionalDelicacyProvider()),
+          ChangeNotifierProvider<KitchenResourcesProvider>(create: (_) => KitchenResourcesProvider()),
+          ChangeNotifierProvider<ChatBotProvider>(create: (_) => ChatBotProvider()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -57,10 +49,8 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           // home: BottomNavView(),
-          home: UserProfileScreen(),
+          home:  const SplashScreen(),
         ),
-        // home: BottomNavView(),
-        // home: LandingPage(),
       );
     });
   }
