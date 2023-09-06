@@ -8,6 +8,7 @@ import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final _userNameController = TextEditingController();
   List<int> numberListShow = [];
   bool showMenu = false;
-  DateTime? selectedDate = DateTime.now();
+  DateTime? selectedDate;
   var responseData;
   //allergies
   List allergies = [
@@ -132,7 +133,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 12.0, top: 4),
                             child: AppText.appText(
-                                "${selectedDate?.toLocal()}".split(' ')[0],
+                                "DOB: ${selectedDate == null ? "MM-DD-YYYY" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 textColor: AppTheme.appColor),

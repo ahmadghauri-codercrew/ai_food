@@ -103,16 +103,21 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                   ),
-                  Container(
-                    width: 60,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      color: Color(0xffb38ade),
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(100),
-                          bottomRight: Radius.circular(100)),
+                  GestureDetector(
+                    onTap: () {
+                      getFood();
+                    },
+                    child: Container(
+                      width: 60,
+                      height: 50,
+                      decoration: const BoxDecoration(
+                        color: Color(0xffb38ade),
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(100),
+                            bottomRight: Radius.circular(100)),
+                      ),
+                      child: const Icon(Icons.search_outlined, size: 40),
                     ),
-                    child: const Icon(Icons.search_outlined, size: 40),
                   ),
                 ],
               ),
@@ -125,7 +130,7 @@ class _SearchScreenState extends State<SearchScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    push(context, const RecipeParamScreen());
+                    pushReplacement(context, const RecipeParamScreen());
                   },
                   child: Container(
                       width: 180,
