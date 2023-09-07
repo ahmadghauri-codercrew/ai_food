@@ -97,19 +97,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: EdgeInsets.only(left: 20.0),
                   child: Text(
                     "Search",
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                   ),
                 ),
                 Container(
                   width: 60,
                   height: 50,
                   decoration: const BoxDecoration(
-                    color: Color(0xffb38ade),
+                    color: Color(0xFFB38ADE),
                     borderRadius: BorderRadius.only(
                         topRight: Radius.circular(100),
                         bottomRight: Radius.circular(100)),
                   ),
-                  child: const Icon(Icons.search_outlined, size: 40),
+                  child:  Icon(Icons.search_outlined, size: 35, color: Color(0xffFFFFFF),),
                 ),
               ],
             ),
@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // color: Colors.blueGrey,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
@@ -133,10 +133,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         AppText.appText(
-                            type == 0 ? "Recommended:" : "Search Result",
+                            type == 0 ? "Recommended:" : "Search results",
                             fontSize: 20,
                             textColor: AppTheme.appColor,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.w600),
                         // REGENERATE RECIPE BUTTON
                         type == 1
                             ? InkWell(
@@ -345,7 +345,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 textAlign: TextAlign.left,
                                                 overflow: TextOverflow.ellipsis,
                                                 textColor: AppTheme.whiteColor,
-                                                fontWeight: FontWeight.w800),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600),
                                           ),
                                           Text(
                                             textAlign: TextAlign.justify,

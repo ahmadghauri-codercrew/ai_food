@@ -94,8 +94,10 @@ class _SearchScreenState extends State<SearchScreen> {
                               style: TextStyle(color: AppTheme.appColor),
                               decoration: InputDecoration.collapsed(
                                 hintText: 'Search',
-                                hintStyle:
-                                    TextStyle(color: AppTheme.whiteColor),
+                                hintStyle: TextStyle(
+                                    color: AppTheme.whiteColor,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500),
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -126,14 +128,18 @@ class _SearchScreenState extends State<SearchScreen> {
                                   topRight: Radius.circular(100),
                                   bottomRight: Radius.circular(100)),
                             ),
-                            child: const Icon(Icons.search_outlined, size: 40),
+                            child: const Icon(
+                              Icons.search_outlined,
+                              size: 35,
+                              color: Color(0xffFFFFFF),
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 24,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -143,25 +149,29 @@ class _SearchScreenState extends State<SearchScreen> {
                           pushReplacement(context, const RecipeParamScreen());
                         },
                         child: Container(
-                            width: 180,
-                            height: 45,
+                            width: 130,
+                            height: 40,
                             decoration: BoxDecoration(
                               color: AppTheme.appColor,
                               borderRadius: BorderRadius.circular(50),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(12.0),
+                              padding: const EdgeInsets.symmetric(horizontal:10.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Icon(
-                                    Icons.filter_list,
-                                    color: AppTheme.whiteColor,
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom:3.0),
+                                    child: Icon(
+                                      Icons.filter_list,
+                                      color: AppTheme.whiteColor,
+                                      size: 22,
+                                    ),
                                   ),
                                   AppText.appText(
-                                    "Advanced Search",
-                                    fontSize: 14,
+                                    "Advanced search",
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                     textColor: AppTheme.whiteColor,
                                   ),

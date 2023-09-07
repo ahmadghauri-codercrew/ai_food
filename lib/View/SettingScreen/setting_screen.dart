@@ -136,7 +136,13 @@ class _SettingScreenState extends State<SettingScreen> {
             },
             child: Row(
               children: [
-                Icon(Icons.logout, size: 20, color: AppTheme.appColor),
+                Container(
+                  height: 20,
+                  width: 20,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(image: AssetImage("assets/images/logout.png"))
+                  ),
+                ),
                 SizedBox(width: 2.w),
                 AppText.appText("Log out",
                     fontSize: 20,
@@ -144,11 +150,6 @@ class _SettingScreenState extends State<SettingScreen> {
                     fontWeight: FontWeight.w600),
               ],
             ),
-          ),
-          Divider(
-            height: 3.h,
-            color: AppTheme.appColor,
-            thickness: 1.5,
           ),
         ]),
       ),

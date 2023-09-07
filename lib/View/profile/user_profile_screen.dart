@@ -49,7 +49,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     "Primal",
     "Low FODMAP",
     "Whole30",
-    "Shellfish",
   ];
 
   List<String> addAllergies = [];
@@ -146,9 +145,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     color: AppTheme.appColor,
                     endIndent: 40,
                   ),
-                  Container(
-                    child: SingleChildScrollView(
-                      child: Column(
+                  Stack(
+                    children: [
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(
@@ -157,7 +156,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           AppText.appText(
                             "Allergies:",
                             fontSize: 22,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             textColor: AppTheme.appColor,
                           ),
                           const SizedBox(height: 10),
@@ -193,7 +192,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           AppText.appText(
                             "Dietary restrictions:",
                             fontSize: 22,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             textColor: AppTheme.appColor,
                           ),
                           const SizedBox(height: 10),
@@ -235,9 +234,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ),
                         ],
                       ),
-                    ),
+                      showMenu ? customMenu() : const SizedBox.shrink(),
+                    ],
                   ),
-                  showMenu ? customMenu() : const SizedBox.shrink(),
                 ],
               ),
             ),
@@ -250,7 +249,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 onTap: () {
                   print(
                       "allergies:$addAllergies  and restrictions: $addDietaryRestrictions");
-                  storeDatainSharedPref(addAllergies, addDietaryRestrictions);
+                  StoreDatainSharedPref(addAllergies,addDietaryRestrictions);
                   pushReplacement(
                       context,
                       BottomNavView(
@@ -339,11 +338,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  void storeDatainSharedPref(allergies, dietryRestriction) async {
+  void StoreDatainSharedPref(allergies,dietryRestriction)async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergies);
-    prefs.setStringList(
-        PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
+    prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
+
   }
 }
 
@@ -369,7 +368,7 @@ class CustomContainer extends StatelessWidget {
         decoration: BoxDecoration(
             color: containerColor,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: borderColor, width: 2)),
+            border: Border.all(color: borderColor, width: 1.5)),
         child: AppText.appText(
           text,
           textColor: textColor,
