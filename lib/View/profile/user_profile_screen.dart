@@ -1,14 +1,13 @@
-import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/AppAssetsImage.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
-import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -147,9 +146,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     color: AppTheme.appColor,
                     endIndent: 40,
                   ),
-                  Stack(
-                    children: [
-                      Column(
+                  Container(
+                    child: SingleChildScrollView(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(
@@ -236,9 +235,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ),
                         ],
                       ),
-                      showMenu ? customMenu() : const SizedBox.shrink(),
-                    ],
+                    ),
                   ),
+                  showMenu ? customMenu() : const SizedBox.shrink(),
                 ],
               ),
             ),
@@ -251,6 +250,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 onTap: () {
                   print(
                       "allergies:$addAllergies  and restrictions: $addDietaryRestrictions");
+                  storeDatainSharedPref(addAllergies, addDietaryRestrictions);
                   pushReplacement(
                       context,
                       BottomNavView(
@@ -337,6 +337,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         ),
       ),
     );
+  }
+
+  void storeDatainSharedPref(allergies, dietryRestriction) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergies);
+    prefs.setStringList(
+        PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
   }
 }
 

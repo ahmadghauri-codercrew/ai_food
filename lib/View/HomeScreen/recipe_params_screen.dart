@@ -74,7 +74,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         elevation: 0,
         leading: InkWell(
           onTap: () {
-           pushReplacement(context, SearchScreen());
+            pushReplacement(context, SearchScreen());
           },
           child: Padding(
             padding: const EdgeInsets.only(
@@ -106,11 +106,47 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
-                AppText.appText(
-                  "Food Choices:",
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  textColor: AppTheme.appColor,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AppText.appText(
+                      "Food Choices:",
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      textColor: AppTheme.appColor,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        //allergies
+                        allergiesProvider.removeAllergyParams();
+                        allergiesProvider.clearAllergiesAllCheckboxStates();
+                        //restrictions
+                        restrictionsProvider.removeDietaryRestrictions();
+                        restrictionsProvider
+                            .clearDietaryRestrictionsAllCheckboxStates();
+                        //protein
+                        proteinProvider.removePreferredProtein();
+                        proteinProvider.clearProteinAllCheckboxStates();
+                        //delicacy
+                        delicacyProvider.removeRegionalDelicacy();
+                        delicacyProvider
+                            .clearRegionalDelicacyAllCheckboxStates();
+                        //kitchen
+                        kitchenProvider.removeKitchenResources();
+                        kitchenProvider
+                            .clearKitchenResourcesAllCheckboxStates();
+
+                        showSnackBar(context, "Filters Reset Succesfully");
+                      },
+                      child: AppText.appText(
+                        "Clear Filters",
+                        fontSize: 16,
+                        underLine: true,
+                        fontWeight: FontWeight.w400,
+                        textColor: AppTheme.appColor,
+                      ),
+                    ),
+                  ],
                 ),
                 Stack(
                   children: [
@@ -255,23 +291,6 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                           dietary: restrictionsProvider,
                           regional: delicacyProvider,
                           kitchen: kitchenProvider);
-
-                      // //allergies
-                      // allergiesProvider.removeAllergyParams();
-                      // allergiesProvider.clearAllergiesAllCheckboxStates();
-                      // //restrictions
-                      // restrictionsProvider.removeDietaryRestrictions();
-                      // restrictionsProvider
-                      //     .clearDietaryRestrictionsAllCheckboxStates();
-                      // //protein
-                      // proteinProvider.removePreferredProtein();
-                      // proteinProvider.clearProteinAllCheckboxStates();
-                      // //delicacy
-                      // delicacyProvider.removeRegionalDelicacy();
-                      // delicacyProvider.clearRegionalDelicacyAllCheckboxStates();
-                      // //kitchen
-                      // kitchenProvider.removeKitchenResources();
-                      // kitchenProvider.clearKitchenResourcesAllCheckboxStates();
                     },
                   ),
                 ),
@@ -381,7 +400,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         ? "&includeIngredients=${proteinProvider.addProtein.toString().substring(1, proteinProvider.addProtein.toString().length - 1)}"
         : "";
     final allergies = allergiesProvider.addAllergies.isNotEmpty
-        ? "&intolerances=${allergiesProvider.toString().substring(1, allergiesProvider.addAllergies.toString().length - 1)}"
+        ? "&intolerances=${allergiesProvider.addAllergies.toString().substring(1, allergiesProvider.addAllergies.toString().length - 1)}"
         : "";
     final dietaryRestrictions = restrictionsProvider
             .addDietaryRestrictions.isNotEmpty
@@ -401,10 +420,19 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
           context,
           BottomNavView(
             type: 1,
+            offset: response.data["offset"],
+            totalResults: response.data["totalResults"],
+            foodStyle: addFoodStyle,
+            searchType: 1,
             data: response.data["results"],
           ));
     } else {
-      print('API request failed with status code: ${response.statusCode}');
+      if (response.statusCode == 402) {
+        showSnackBar(context, "${response.statusMessage}");
+      } else {
+        print('API request failed with status code: ${response.statusCode}');
+        showSnackBar(context, "${response.statusMessage}");
+      }
     }
   }
 }

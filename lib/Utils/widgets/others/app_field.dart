@@ -24,31 +24,30 @@ class CustomAppFormField extends StatefulWidget {
   final Color? suffixIconColor;
   final TextStyle? hintStyle;
 
-  CustomAppFormField(
-      {Key? key,
-      this.containerBorderCondition = false,
-      required this.texthint,
-      required this.controller,
-      this.validator,
-      this.height,
-      this.width,
-      this.obscureText = false,
-      this.onChanged,
-      this.onTap,
-      this.onTapOutside,
-      this.onEditingComplete,
-      this.onFieldSubmitted,
-      this.cursorHeight,
-      this.textAlign = TextAlign.start,
-      this.prefix,
-      this.suffix,
-      this.prefixIcon,
-      this.suffixIcon,
-      this.prefixIconColor,
-      this.suffixIconColor,
-      this.hintStyle,
-      })
-      : super(key: key);
+  CustomAppFormField({
+    Key? key,
+    this.containerBorderCondition = false,
+    required this.texthint,
+    required this.controller,
+    this.validator,
+    this.height,
+    this.width,
+    this.obscureText = false,
+    this.onChanged,
+    this.onTap,
+    this.onTapOutside,
+    this.onEditingComplete,
+    this.onFieldSubmitted,
+    this.cursorHeight,
+    this.textAlign = TextAlign.start,
+    this.prefix,
+    this.suffix,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.prefixIconColor,
+    this.suffixIconColor,
+    this.hintStyle,
+  }) : super(key: key);
 
   @override
   State<CustomAppFormField> createState() => _CustomAppFormFieldState();
@@ -162,7 +161,7 @@ class _CustomAppPasswordfieldState extends State<CustomAppPasswordfield> {
     return Padding(
       padding: const EdgeInsets.only(top: 15),
       child: Container(
-          height: 37,
+          height: 50,
           width: widget.width,
           child: TextFormField(
             textAlignVertical: TextAlignVertical.center,
@@ -179,38 +178,36 @@ class _CustomAppPasswordfieldState extends State<CustomAppPasswordfield> {
             cursorColor: AppTheme.appColor,
             style: TextStyle(color: AppTheme.appColor),
             decoration: InputDecoration(
-              prefixIconColor: widget.prefixIconColor,
-              suffixIconColor: widget.suffixIconColor,
-              prefix: widget.prefix,
-              suffix: widget.suffix,
-              prefixIcon: widget.prefixIcon,
-              contentPadding: const EdgeInsets.only(
-                left: 5,
-              ),
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: AppTheme.appColor)),
-              disabledBorder:
-                  const UnderlineInputBorder(borderSide: BorderSide.none),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                color: AppTheme.appColor,
-              )),
-              border: UnderlineInputBorder(
-                  borderSide: BorderSide(color: AppTheme.appColor)),
-              hintText: widget.texthint,
-              hintStyle: TextStyle(color: AppTheme.appColor),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscureText ? Icons.visibility_off : Icons.visibility,
-                  color: AppTheme.appColor,
+                prefixIconColor: widget.prefixIconColor,
+                suffixIconColor: widget.suffixIconColor,
+                prefix: widget.prefix,
+                suffix: widget.suffix,
+                prefixIcon: widget.prefixIcon,
+                contentPadding: const EdgeInsets.only(
+                  left: 5,
                 ),
-                onPressed: () {
-                  setState(() {
-                    _obscureText = !_obscureText;
-                  });
-                },
-              ),
-            ),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppTheme.appColor)),
+                disabledBorder:
+                    const UnderlineInputBorder(borderSide: BorderSide.none),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                  color: AppTheme.appColor,
+                )),
+                border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppTheme.appColor)),
+                hintText: widget.texthint,
+                hintStyle: TextStyle(color: AppTheme.appColor),
+                suffixIcon: InkWell(
+                  onTap: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                  child: Icon(
+                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                      color: AppTheme.appColor),
+                )),
           )),
     );
   }

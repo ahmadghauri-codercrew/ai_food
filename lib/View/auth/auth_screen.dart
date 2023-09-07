@@ -8,11 +8,10 @@ import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_card.dart';
-import 'package:ai_food/View/auth/GoogleSignIn/authentication.dart';
 import 'package:ai_food/View/auth/forgot_password_screen.dart';
-import 'package:ai_food/View/auth/set_password_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:sizer/sizer.dart';
@@ -34,28 +33,25 @@ class _AuthScreenState extends State<AuthScreen> {
   final _formKeyName = GlobalKey<FormState>();
   final _formKeyEmail = GlobalKey<FormState>();
   final _formKeyLoginEmail = GlobalKey<FormState>();
+  final _formKeyLoginPassword = GlobalKey<FormState>();
   final _formKeyPhone = GlobalKey<FormState>();
   final _formKeyPassword = GlobalKey<FormState>();
-  final _formKeyLoginPassword = GlobalKey<FormState>();
   final _formKeyConfirmPassword = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _loginEmailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _loginPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _loginEmailController = TextEditingController();
+  final TextEditingController _loginPasswordController = TextEditingController();
 
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+
   //sign in with apple code
   String generateNonce([int length = 32]) {
-    const charset =
-        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     final random = Random.secure();
-    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
-        .join();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
   }
 
   /// Returns the sha256 hash of [input] in hex notation.
@@ -78,7 +74,7 @@ class _AuthScreenState extends State<AuthScreen> {
           child: Padding(
             padding:
                 const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 50),
-            child: Container(
+            child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.93,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,12 +114,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                         login = true;
                                       });
                                     },
-                                    child: Container(
+                                    child: SizedBox(
                                       width: 90,
                                       child: AppText.appText("Sign In",
                                           textColor: login == true
                                               ? AppTheme.appColor
-                                              : AppTheme.primaryColor,
+                                              : Colors.black.withOpacity(0.25),
                                           fontSize: 24,
                                           fontWeight: FontWeight.w600),
                                     )),
@@ -148,14 +144,19 @@ class _AuthScreenState extends State<AuthScreen> {
                                     onTap: () {
                                       setState(() {
                                         login = false;
+                                        _nameController.text ='';
+                                        _emailController.text ='';
+                                        _phoneController.text ='';
+                                        _passwordController.text ='';
+                                        _confirmPasswordController.text ='';
                                       });
                                     },
-                                    child: Container(
+                                    child: SizedBox(
                                       width: 95,
                                       child: AppText.appText("Sign Up",
                                           textColor: login == false
                                               ? AppTheme.appColor
-                                              : AppTheme.primaryColor,
+                                              : Colors.black.withOpacity(0.25),
                                           fontSize: 24,
                                           fontWeight: FontWeight.w600),
                                     )),
@@ -185,27 +186,36 @@ class _AuthScreenState extends State<AuthScreen> {
                                         AutovalidateMode.onUserInteraction,
                                     child: CustomAppFormField(
                                         validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return "Please enter your email or mobile number";
-                                          }
                                           final isEmailValid = RegExp(
-                                                  r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
+                                              r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
                                               .hasMatch(value);
                                           final isMobileValid =
-                                              RegExp(r'^\d{10}$')
-                                                  .hasMatch(value);
-
+                                          RegExp(r'^\+(?:[0-9] ?){6,14}[0-9]$')
+                                              .hasMatch(value);
+                                          if (value.isEmpty||value == null) {
+                                            return "Please enter your email or mobile number";
+                                          }
                                           if (!isEmailValid && !isMobileValid) {
-                                            return "Please enter a valid email or mobile number";
+                                            return "Please enter a valid email";
                                           }
                                           return null;
                                         },
                                         texthint: "Email or Mobile number",
+                                        hintStyle: TextStyle(color: AppTheme.appColor),
                                         controller: _loginEmailController),
                                   ),
-                                  CustomAppPasswordfield(
-                                    texthint: "Enter Password",
-                                    controller: _loginPasswordController,
+                                  Form(key: _formKeyLoginPassword,
+                                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                                    child: CustomAppPasswordfield(
+                                      validator: (value){
+                                        if(value.isEmpty){
+                                          return "Field cannot be empty";
+                                        }
+                                        return null;
+                                      },
+                                      texthint: "Password",
+                                      controller: _loginPasswordController,
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -247,6 +257,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                         },
                                         height: 50,
                                         texthint: "Enter full name",
+                                        hintStyle: TextStyle( color: AppTheme.appColor),
                                         controller: _nameController),
                                   ),
                                   Form(
@@ -261,12 +272,13 @@ class _AuthScreenState extends State<AuthScreen> {
                                         final emailRegex = RegExp(
                                             r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
                                         if (!emailRegex.hasMatch(value)) {
-                                          return 'Please enter a valid email address';
+                                          return 'Invalid Email';
                                         }
                                         return null;
                                       },
                                       height: 50,
                                       texthint: "Enter email",
+                                      hintStyle: TextStyle( color: AppTheme.appColor),
                                       controller: _emailController,
                                     ),
                                   ),
@@ -279,9 +291,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           if (value == null || value.isEmpty) {
                                             return 'Please enter your mobile number';
                                           }
-                                          final isMobileValid = RegExp(
-                                                  r'^\+?\d{1,3}[-.\s]?\d{1,12}$')
-                                              .hasMatch(value);
+                                          final isMobileValid = RegExp(r'^\+(?:[0-9] ?){6,14}[0-9]$').hasMatch(value);
 
                                           if (!isMobileValid) {
                                             return "Please enter a valid email or mobile number";
@@ -289,6 +299,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           return null; // Validation passed
                                         },
                                         texthint: "Enter mobile number",
+                                        hintStyle: TextStyle( color: AppTheme.appColor),
                                         controller: _phoneController),
                                   ),
                                   Form(
@@ -314,7 +325,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Please enter your confirm Password';
-                                        } else if(_passwordController.text != value){
+                                        } else if (_passwordController.text !=
+                                            value) {
                                           return "password does not match";
                                         }
                                         return null; // Validation passed
@@ -327,7 +339,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               ),
                         AppButton.appButton(onTap: () {
                           if (login == true) {
-                            if (_formKeyLoginEmail.currentState!.validate()) {
+                            if (_formKeyLoginEmail.currentState!.validate()&&_formKeyLoginPassword.currentState!.validate()) {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
@@ -335,20 +347,24 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ),
                               );
                             }
-                          } else {
+                          }
+                          else
+                          {
                             if (_formKeyName.currentState!.validate() &&
                                 _formKeyEmail.currentState!.validate() &&
                                 _formKeyPhone.currentState!.validate() &&
                                 _formKeyPassword.currentState!.validate() &&
                                 _formKeyConfirmPassword.currentState!
                                     .validate()) {
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (context) => ForgotPasswordScreen(),
-                              //   ),
-                              // );
-                              showSnackBar(context, "User created successfully");
+
+                              print("name:${_nameController.text}");
+                              print("Email:${_emailController.text}");
+                              print("Phone Number:${_phoneController.text}");
+                              print("Password:${_passwordController.text}");
+
                             }
+
+
                           }
                         }, login == true ? "Sign In" : "Sign Up",
                             backgroundColor: AppTheme.appColor,
@@ -362,17 +378,19 @@ class _AuthScreenState extends State<AuthScreen> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Platform.isIOS ? Center(
-                        child: AppButton.appButtonWithLeadingIcon(
-                            "Continue with Apple",
-                            onTap: () {},
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                            textColor: AppTheme.appColor,
-                            icons: Icons.apple,
-                            height: 48,
-                            width: 79.w),
-                      ) : const SizedBox.shrink(),
+                      Platform.isIOS
+                          ? Center(
+                              child: AppButton.appButtonWithLeadingIcon(
+                                  "Continue with Apple",
+                                  onTap: () {},
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                  textColor: AppTheme.appColor,
+                                  icons: Icons.apple,
+                                  height: 48,
+                                  width: 79.w),
+                            )
+                          : const SizedBox.shrink(),
                       const SizedBox(
                         height: 6,
                       ),
@@ -443,7 +461,9 @@ class _AuthScreenState extends State<AuthScreen> {
       final result =
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
-      print(result.user!.displayName.toString());
+      if (kDebugMode) {
+        print(result.user!.displayName.toString());
+      }
       print(result.user!.email.toString());
       print(result.user!.uid.toString());
       print(result.additionalUserInfo!.username.toString());
