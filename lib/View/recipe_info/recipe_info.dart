@@ -267,10 +267,13 @@ class _RecipeInfoState extends State<RecipeInfo>
                           physics: ScrollPhysics(),
                           child: Column(
                             children: List.generate(
-                              widget
-                                  .recipeData["analyzedInstructions"][0]
-                                      ["steps"]
-                                  .length,
+                              widget.recipeData["analyzedInstructions"].isEmpty
+                                  ? widget
+                                      .recipeData["analyzedInstructions"].length
+                                  : widget
+                                      .recipeData["analyzedInstructions"][0]
+                                          ["steps"]
+                                      .length,
                               (index) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -298,7 +301,12 @@ class _RecipeInfoState extends State<RecipeInfo>
                                           Expanded(
                                             child: Container(
                                               child: Text(
-                                                "${widget.recipeData["analyzedInstructions"][0]["steps"][index]["step"]}",
+                                                widget
+                                                        .recipeData[
+                                                            "analyzedInstructions"]
+                                                        .isEmpty
+                                                    ? "steps"
+                                                    : "${widget.recipeData["analyzedInstructions"][0]["steps"][index]["step"]}",
                                                 textAlign: TextAlign.justify,
                                                 style: TextStyle(
                                                     color: AppTheme.appColor,
