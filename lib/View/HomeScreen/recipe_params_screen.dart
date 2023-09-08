@@ -12,9 +12,7 @@ import 'package:ai_food/View/HomeScreen/widgets/widget.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
-
 import '../../Constants/app_logger.dart';
 
 class RecipeParamScreen extends StatefulWidget {

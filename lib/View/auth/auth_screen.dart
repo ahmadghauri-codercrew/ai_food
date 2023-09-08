@@ -411,15 +411,16 @@ class _AuthScreenState extends State<AuthScreen> {
                       Platform.isIOS
                           ? Center(
                               child: AppButton.appButtonWithLeadingIcon(
-                                  "Continue with Apple", onTap: () async {
-                                await handleAppleSignIn();
-                              },
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                  textColor: AppTheme.appColor,
-                                  icons: Icons.apple,
-                                  height: 48,
-                                  width: 79.w),
+                                "Continue with Apple",
+                                onTap: () async {
+                                  await handleAppleSignIn();
+                                },
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                textColor: AppTheme.appColor,
+                                icons: Icons.apple,
+                                height: 48,
+                              ),
                             )
                           : const SizedBox.shrink(),
                       const SizedBox(
@@ -494,6 +495,7 @@ class _AuthScreenState extends State<AuthScreen> {
       print(result.user!.email.toString());
       print(result.user!.uid.toString());
       print(result.additionalUserInfo!.username.toString());
+      push(context, const UserProfileScreen());
     } catch (e, stackTrace) {
       // Handle exceptions here
       print("Error during Apple Sign-In: $e");
@@ -577,7 +579,7 @@ class _AuthScreenState extends State<AuthScreen> {
               "assets/images/done.gif",
               height: 120,
             )),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             Center(
@@ -588,7 +590,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             AppButton.appButton("Okay",
