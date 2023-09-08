@@ -244,7 +244,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               color: Colors.white,
                               fontSize: 20,
                               fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w400,
                               letterSpacing: -0.33,
                             ),
                           ),

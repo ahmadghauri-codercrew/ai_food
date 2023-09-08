@@ -7,12 +7,15 @@ import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_card.dart';
 import 'package:ai_food/View/auth/otp_screen.dart';
 import 'package:ai_food/View/auth/set_password_screen.dart';
+import 'package:ai_food/config/app_urls.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../Constants/app_logger.dart';
 import '../../Utils/widgets/others/custom_app_bar.dart';
+import '../../config/dio/app_dio.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   ForgotPasswordScreen({super.key});
@@ -192,129 +195,172 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     super.dispose();
   }
 
+  late AppDio dio;
+  AppLogger logger = AppLogger();
+  @override
+  void initState() {
+    dio = AppDio(context);
+    logger.init();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 25,
-            right: 25,
-          ),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 30),
-                child: InkWell(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: 25,
+              right: 25,
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: InkWell(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.arrow_back_ios, color: AppTheme.appColor),
+                        AppText.appText(
+                          "Back",
+                          underLine: true,
+                          textColor: AppTheme.appColor,
+                          fontSize: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.arrow_back_ios, color: AppTheme.appColor),
-                      AppText.appText(
-                        "Back",
-                        underLine: true,
-                        textColor: AppTheme.appColor,
-                        fontSize: 20,
+                      AppText.appText("Forgot Password",
+                          fontSize: 32,
+                          textColor: AppTheme.appColor,
+                          fontWeight: FontWeight.w600),
+                      AppText.appText("Enter email or number",
+                          fontSize: 16,
+                          textColor: AppTheme.appColor,
+                          fontWeight: FontWeight.w600),
+                      const SizedBox(
+                        height: 60,
+                      ),
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Customcard(
+                                childWidget: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 80,
+                                ),
+                                CustomAppFormField(
+                                  onTap: () {
+                                    _formKey.currentState!.reset();
+                                    forgetPassword(
+                                        emailController: _textController);
+                                  },
+                                  texthint: "Email or Mobile number",
+                                  hintStyle: TextStyle(
+                                      color: AppTheme.appColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400),
+                                  controller: _textController,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Please enter your email or mobile number";
+                                    }
+                                    final isEmailValid = RegExp(
+                                            r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
+                                        .hasMatch(value);
+                                    final isMobileValid =
+                                        RegExp(r'^\d{10}$').hasMatch(value);
+
+                                    if (!isEmailValid && !isMobileValid) {
+                                      return "Please enter a valid email or mobile number";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * .350,
+                                ),
+                                _verificationInProgress
+                                    ? Center(
+                                        child: CircularProgressIndicator(
+                                          color: AppTheme.appColor,
+                                          strokeWidth: 4,
+                                        ),
+                                      )
+                                    : AppButton.appButton("Send OTP",
+                                        onTap: () {
+                                        String inputText =
+                                            _textController.text.trim();
+                                        final emailRegExp = RegExp(
+                                            r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+
+                                        if (_formKey.currentState!.validate()) {
+                                          if (emailRegExp.hasMatch(inputText)) {
+                                            resetYourPassword(inputText);
+                                          } else {
+                                            if (!_verificationInProgress) {
+                                              if (inputText.isNotEmpty) {
+                                                _verifyPhoneNumber(inputText);
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                        width: 43.w,
+                                        height: 5.5.h,
+                                        border: false,
+                                        backgroundColor: AppTheme.appColor,
+                                        textColor: AppTheme.whiteColor,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w600)
+                              ],
+                            )),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppText.appText("Forgot Password",
-                        fontSize: 25.sp,
-                        textColor: AppTheme.appColor,
-                        fontWeight: FontWeight.w600),
-                    AppText.appText(
-                      "Enter email or number",
-                      fontSize: 12.sp,
-                      textColor: AppTheme.appColor,
-                    ),
-                    const SizedBox(
-                      height: 60,
-                    ),
-                    Customcard(
-                        childWidget: Column(
-                      children: [
-                        const SizedBox(
-                          height: 80,
-                        ),
-                        CustomAppFormField(
-                          onTap: () {
-                            _formKey.currentState!.reset();
-                          },
-                          texthint: "Email or Mobile number",
-                          controller: _textController,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Please enter your email or mobile number";
-                            }
-                            final isEmailValid = RegExp(
-                                    r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
-                                .hasMatch(value);
-                            final isMobileValid =
-                                RegExp(r'^\d{10}$').hasMatch(value);
-
-                            if (!isEmailValid && !isMobileValid) {
-                              return "Please enter a valid email or mobile number";
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(
-                          height: 225,
-                        ),
-                        _verificationInProgress
-                            ? Center(
-                                child: CircularProgressIndicator(
-                                  color: AppTheme.appColor,
-                                  strokeWidth: 4,
-                                ),
-                              )
-                            : AppButton.appButton("Send OTP", onTap: () {
-                                String inputText = _textController.text.trim();
-                                final emailRegExp = RegExp(
-                                    r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-
-                                if (_formKey.currentState!.validate()) {
-                                  if (emailRegExp.hasMatch(inputText)) {
-                                    resetYourPassword(inputText);
-                                  } else {
-                                    if (!_verificationInProgress) {
-                                      if (inputText.isNotEmpty) {
-                                        _verifyPhoneNumber(inputText);
-                                      }
-                                    }
-                                  }
-                                }
-                              },
-                                width: 43.w,
-                                height: 5.5.h,
-                                border: false,
-                                backgroundColor: AppTheme.appColor,
-                                textColor: AppTheme.whiteColor,
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w600)
-                      ],
-                    )),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  forgetPassword({emailController}) async {
+    final url = AppUrls.baseUrl + AppUrls.forgetPasswordUrl;
+    final response;
+    try {
+      response = await dio.post(path: url, data: emailController);
+      if (response.statusCode == 200) {
+        print(response.data);
+      } else {
+        print("error");
+      }
+    } catch (e) {
+      showSnackBar(context, e.toString());
+      print(e.toString());
+    }
   }
 }
