@@ -50,7 +50,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   Widget build(BuildContext context) {
     final loadingProvider = Provider.of<ChatBotProvider>(context, listen: true);
     return Scaffold(
-      backgroundColor: const Color(0xffa7a7a7),
+      backgroundColor: Colors.black.withOpacity(0.1),
       // floatingActionButton: FloatingActionButton(onPressed: () {
       //   getRecipeInformation(id:);
       // }),
@@ -281,7 +281,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
-                                     
                                       var inputString = item['link'];
 
                                       RegExp urlRegex = RegExp(
@@ -306,19 +305,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                                         print("No match found");
                                       }
                                     },
-                                    // child: Container(
-                                    //   height: 50,
-                                    //   width: 150,
-                                    //   decoration: BoxDecoration(
-                                    //       color: AppTheme.appColor,
-                                    //       borderRadius:
-                                    //           BorderRadius.circular(10)),
-                                    //   child: Center(
-                                    //     child: AppText.appText("Recipe Details",
-                                    //         fontSize: 18,
-                                    //         textColor: AppTheme.whiteColor),
-                                    //   ),
-                                    // ),
                                     child: SizedBox(
                                       width: 300,
                                       child: Center(
@@ -326,7 +312,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                                           item['link'],
                                           textAlign: TextAlign.center,
                                           // justifyText: true,
-                                          textColor:AppTheme.whiteColor,
+                                          textColor: AppTheme.whiteColor,
                                           underLine: true,
                                           fontSize: 10,
                                         ),
@@ -339,7 +325,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                           )
                           .toList(),
                     ),
-              const Divider(),
             ],
           ),
         );

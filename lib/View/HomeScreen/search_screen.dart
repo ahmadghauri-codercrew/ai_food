@@ -161,11 +161,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom:3.0),
+                                  const Padding(
+                                    padding: EdgeInsets.only(bottom:3.0),
                                     child: Icon(
                                       Icons.filter_list,
-                                      color: AppTheme.whiteColor,
+                                      color: Color(0xffF8F8F8),
                                       size: 22,
                                     ),
                                   ),

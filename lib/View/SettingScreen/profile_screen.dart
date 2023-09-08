@@ -26,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     "US",
     "Metric",
   ];
-  String updatedvalueM = "US";
+  String updatedvalueM = "";
   bool showMenu = false;
   bool measuringUnit = false;
   var responseData;
@@ -56,7 +56,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     "Primal",
     "Low FODMAP",
     "Whole30",
-    "Shellfish",
   ];
 
   List<String> addAllergies = [];
@@ -151,109 +150,100 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         const SizedBox(height: 10),
                         Row(
-                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: GestureDetector(
-                                onTap: () {
-                                  _selectDate(context);
-                                },
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Flexible(
-                                      flex: 5,
-                                      fit: FlexFit.tight,
-                                      child: AppText.appText(
-                                          "DOB: ${selectedDate == null ? "MM/DD/YYYY" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
+                            Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _selectDate(context);
+                                  },
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      AppText.appText(
+                                          "DOB:   ${selectedDate == null ? "MM/DD/YYYY" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
                                           fontSize: 15,
                                           textColor: AppTheme.appColor),
-                                    ),
-                                    Flexible(
-                                      fit: FlexFit.loose,
-                                      child: Icon(
+                                      Icon(
                                         Icons.keyboard_arrow_down,
                                         color: AppTheme.appColor,
                                         size: 30,
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
+                                Container(
+                                  height: 2,
+                                  width: 180,
+                                  color: AppTheme.appColor,
+                                )
+                              ],
                             ),
-                            const SizedBox(
-                              width: 40,
-                            ),
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    measuringUnit = !measuringUnit;
-                                  });
-                                },
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Flexible(
-                                      fit: FlexFit.loose,
-                                      flex: 4,
-                                      child: AppText.appText(
+                            Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      measuringUnit = !measuringUnit;
+                                    });
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      AppText.appText(
                                           updatedvalueM == ""
                                               ? "Measuring Unit"
                                               : updatedvalueM,
                                           fontSize: 18,
                                           textColor: AppTheme.appColor),
-                                    ),
-                                    Flexible(
-                                      fit: FlexFit.loose,
-                                      child: Icon(
+                                      Icon(
                                         !measuringUnit
                                             ? Icons.keyboard_arrow_down
                                             : Icons.keyboard_arrow_up,
                                         color: AppTheme.appColor,
                                         size: 30,
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
+                                Container(
+                                  height: 2,
+                                  width: 180,
+                                  color: AppTheme.appColor,
+                                )
+                              ],
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Flexible(
-                                fit: FlexFit.loose,
-                                child: Divider(
-                                  thickness: 2,
-                                  color: AppTheme.appColor,
-                                )),
-                            const SizedBox(
-                              width: 40,
-                            ),
-                            Flexible(
-                                fit: FlexFit.loose,
-                                child: Divider(
-                                  thickness: 2,
-                                  color: AppTheme.appColor,
-                                )),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisSize: MainAxisSize.min,
+                        //   children: [
+                        //     Flexible(
+                        //         fit: FlexFit.loose,
+                        //         child: Divider(
+                        //           thickness: 2,
+                        //           color: AppTheme.appColor,
+                        //         )),
+                        //     const SizedBox(
+                        //       width: 40,
+                        //     ),
+                        //     Flexible(
+                        //         fit: FlexFit.loose,
+                        //         child: Divider(
+                        //           thickness: 2,
+                        //           color: AppTheme.appColor,
+                        //         )),
+                        //   ],
+                        // ),
                         const SizedBox(
                           height: 30,
                         ),
                         AppText.appText(
                           "Allergies:",
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
                           textColor: AppTheme.appColor,
                         ),
                         const SizedBox(height: 10),
@@ -288,8 +278,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(height: 30),
                         AppText.appText(
                           "Dietary restrictions:",
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
                           textColor: AppTheme.appColor,
                         ),
                         const SizedBox(height: 10),
@@ -460,7 +450,7 @@ class CustomContainer extends StatelessWidget {
         decoration: BoxDecoration(
             color: containerColor,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppTheme.appColor, width: 2)),
+            border: Border.all(color: AppTheme.appColor, width: 1.5)),
         child: AppText.appText(
           text,
           textColor: textColor,

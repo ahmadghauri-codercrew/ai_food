@@ -39,7 +39,6 @@ class DietaryRestrictionsProvider extends ChangeNotifier {
     RecipesParameterClass(parameter: 'Primal'),
     RecipesParameterClass(parameter: 'Low FODMAP'),
     RecipesParameterClass(parameter: 'Whole30'),
-    RecipesParameterClass(parameter: 'Shellfish'),
   ];
 
   void showDietaryRestrictionsParameterDetails(context, String parameter) {

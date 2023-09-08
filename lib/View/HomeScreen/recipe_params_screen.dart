@@ -110,9 +110,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AppText.appText(
-                      "Food Choices:",
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
+                      "Food choices:",
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                       textColor: AppTheme.appColor,
                     ),
                     GestureDetector(
@@ -139,7 +139,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                         showSnackBar(context, "Filters Reset Succesfully");
                       },
                       child: AppText.appText(
-                        "Reset Filters",
+                        "Reset filters",
                         fontSize: 16,
                         underLine: true,
                         fontWeight: FontWeight.w400,
@@ -153,7 +153,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 15),
                         GestureDetector(
                           onTap: () {
                             showFoodStyle = !showFoodStyle;
@@ -285,7 +285,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                         child: AppButton.appButton(
                           "Generate",
                           fontSize: 20,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           textColor: Colors.white,
                           height: 50,
                           width: 180,

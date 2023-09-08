@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 80,
+        toolbarHeight: 100,
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         elevation: 0,
@@ -140,12 +140,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          padding: const EdgeInsets.only(
+                              left: 10.0, right: 10, bottom: 5),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               AppText.appText(
-                                  type == 0 ? "Recommended:" : "Search results",
+                                  type == 0
+                                      ? "Recommended:"
+                                      : "Search results:",
                                   fontSize: 20,
                                   textColor: AppTheme.appColor,
                                   fontWeight: FontWeight.w600),
@@ -160,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         }
                                       },
                                       child: Container(
-                                        height: 50,
+                                        height: 35,
                                         decoration: BoxDecoration(
                                           color: AppTheme.whiteColor,
                                           borderRadius:
@@ -169,7 +172,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               color: AppTheme.appColor),
                                         ),
                                         child: Padding(
-                                          padding: const EdgeInsets.all(12.0),
+                                          padding: const EdgeInsets.only(
+                                              left: 10.0, right: 10),
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -177,10 +181,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                               Icon(
                                                 Icons.autorenew,
                                                 color: AppTheme.appColor,
+                                                size: 18,
+                                              ),
+                                              const SizedBox(
+                                                width: 4,
                                               ),
                                               AppText.appText(
-                                                "Regenerate",
-                                                fontSize: 14,
+                                                "Regenerate result",
+                                                fontSize: 12,
                                                 fontWeight: FontWeight.w600,
                                                 textColor: AppTheme.appColor,
                                               ),
