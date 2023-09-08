@@ -158,57 +158,55 @@ class _CustomAppPasswordfieldState extends State<CustomAppPasswordfield> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 15),
-      child: Container(
-          height: 50,
-          width: widget.width,
-          child: TextFormField(
-            textAlignVertical: TextAlignVertical.center,
-            onChanged: widget.onChanged,
-            onTap: widget.onTap,
-            onTapOutside: widget.onTapOutside,
-            onFieldSubmitted: widget.onFieldSubmitted,
-            cursorHeight: widget.cursorHeight,
-            textAlign: widget.textAlign,
-            key: widget.key,
-            obscureText: _obscureText,
-            validator: widget.validator,
-            controller: widget.controller,
-            cursorColor: AppTheme.appColor,
-            style: TextStyle(color: AppTheme.appColor),
-            decoration: InputDecoration(
-                prefixIconColor: widget.prefixIconColor,
-                suffixIconColor: widget.suffixIconColor,
-                prefix: widget.prefix,
-                suffix: widget.suffix,
-                prefixIcon: widget.prefixIcon,
-                contentPadding: const EdgeInsets.only(
-                  left: 5,
-                ),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.appColor)),
-                disabledBorder:
-                    const UnderlineInputBorder(borderSide: BorderSide.none),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                  color: AppTheme.appColor,
-                )),
-                border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppTheme.appColor)),
-                hintText: widget.texthint,
-                hintStyle: TextStyle(color: AppTheme.appColor),
-                suffixIcon: InkWell(
-                  onTap: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
+    return Container(
+        height: 60,
+        child: TextFormField(
+          textAlignVertical: TextAlignVertical.center,
+          onChanged: widget.onChanged,
+          onTap: widget.onTap,
+          onTapOutside: widget.onTapOutside,
+          onFieldSubmitted: widget.onFieldSubmitted,
+          cursorHeight: widget.cursorHeight,
+          textAlign: widget.textAlign,
+          key: widget.key,
+          obscureText: _obscureText,
+          validator: widget.validator,
+          controller: widget.controller,
+          cursorColor: AppTheme.appColor,
+          style: TextStyle(color: AppTheme.appColor),
+          decoration: InputDecoration(
+              prefixIconColor: widget.prefixIconColor,
+              suffixIconColor: widget.suffixIconColor,
+              prefix: widget.prefix,
+              suffix: widget.suffix,
+              prefixIcon: widget.prefixIcon,
+              contentPadding: const EdgeInsets.only(top: 20,
+                left: 5,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: AppTheme.appColor)),
+              disabledBorder:
+                  const UnderlineInputBorder(borderSide: BorderSide.none),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                color: AppTheme.appColor,
+              )),
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: AppTheme.appColor)),
+              hintText: widget.texthint,
+              hintStyle: TextStyle(color: AppTheme.appColor),
+              suffixIcon: InkWell(
+                onTap: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+                child: Padding(padding: EdgeInsets.only(top: 13),
                   child: Icon(
-                      _obscureText ? Icons.visibility_off : Icons.visibility,
-                      color: AppTheme.appColor),
-                )),
-          )),
-    );
+                      _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                      color: AppTheme.appColor,),
+                ),
+              )),
+        ));
   }
 }

@@ -47,6 +47,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   late AppDio dio;
   AppLogger logger = AppLogger();
 
+  bool isLoading = false;
+
   @override
   void initState() {
     dio = AppDio(context);
@@ -139,7 +141,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                         showSnackBar(context, "Filters Reset Succesfully");
                       },
                       child: AppText.appText(
-                        "Clear Filters",
+                        "Reset Filters",
                         fontSize: 16,
                         underLine: true,
                         fontWeight: FontWeight.w400,
@@ -177,7 +179,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                 children: [
                                   AppText.appText(
                                       addFoodStyle.isEmpty
-                                          ? "Food Style"
+                                          ? "Food style"
                                           : addFoodStyle[0].toString(),
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500,
@@ -267,7 +269,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                     ),
                     showFoodStyle
                         ? Padding(
-                            padding: const EdgeInsets.only(top: 59.0),
+                            padding: const EdgeInsets.only(top: 85.0),
                             child: customFoodStyle(),
                           )
                         : const SizedBox.shrink(),
@@ -275,25 +277,31 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                 ),
                 //kitchen resources ends
                 const SizedBox(height: 30),
-                Center(
-                  child: AppButton.appButton(
-                    "Generate",
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                    textColor: Colors.white,
-                    height: 50,
-                    width: 180,
-                    backgroundColor: AppTheme.appColor,
-                    onTap: () async {
-                      await generateRecipe(
-                          style: addFoodStyle,
-                          allergy: allergiesProvider,
-                          dietary: restrictionsProvider,
-                          regional: delicacyProvider,
-                          kitchen: kitchenProvider);
-                    },
-                  ),
-                ),
+                isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: AppTheme.appColor,
+                        ),
+                      )
+                    : Center(
+                        child: AppButton.appButton(
+                          "Generate",
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          textColor: Colors.white,
+                          height: 50,
+                          width: 180,
+                          backgroundColor: AppTheme.appColor,
+                          onTap: () async {
+                            await generateRecipe(
+                                style: addFoodStyle,
+                                allergy: allergiesProvider,
+                                dietary: restrictionsProvider,
+                                regional: delicacyProvider,
+                                kitchen: kitchenProvider);
+                          },
+                        ),
+                      ),
                 // ignore: prefer_const_constructors
                 const SizedBox(
                   height: 20,
@@ -346,13 +354,17 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                       color: AppTheme.appColor,
                     ),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const SizedBox(height: 10),
-                        AppText.appText(
-                          "${foodStyle[index]}",
-                          fontSize: 18,
-                          textColor: AppTheme.whiteColor,
+                        Padding(
+                          padding: const EdgeInsets.only(left:18.0),
+                          child: AppText.appText(
+                            "${foodStyle[index]}",
+                            fontSize: 18,
+                            textColor: AppTheme.whiteColor,
+                          ),
                         ),
                         Container(
                           margin: const EdgeInsets.symmetric(horizontal: 14),
@@ -360,7 +372,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                             border: Border(
                               bottom: BorderSide(
                                 width: 2.0,
-                                color: AppTheme.whiteColor,
+                                color: foodStyle[index] == "Thai cuisine"
+                                    ? Colors.transparent
+                                    : AppTheme.whiteColor,
                               ),
                             ),
                           ),
@@ -379,6 +393,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   }
 
   Future generateRecipe({style, allergy, dietary, regional, kitchen}) async {
+    setState(() {
+      isLoading = true;
+    });
     final allergiesProvider =
         Provider.of<AllergiesProvider>(context, listen: false);
     final restrictionsProvider =
@@ -426,10 +443,19 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
             searchType: 1,
             data: response.data["results"],
           ));
+      setState(() {
+        isLoading = false;
+      });
     } else {
       if (response.statusCode == 402) {
+        setState(() {
+          isLoading = false;
+        });
         showSnackBar(context, "${response.statusMessage}");
       } else {
+        setState(() {
+          isLoading = false;
+        });
         print('API request failed with status code: ${response.statusCode}');
         showSnackBar(context, "${response.statusMessage}");
       }

@@ -149,7 +149,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           pushReplacement(context, const RecipeParamScreen());
                         },
                         child: Container(
-                            width: 130,
+                            width: 150,
                             height: 40,
                             decoration: BoxDecoration(
                               color: AppTheme.appColor,
