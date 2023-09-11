@@ -37,7 +37,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
         ),
       ),
       body: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+        padding: EdgeInsets.only(left: 20.0, top: 24, right: 20.0),
         child: Stack(
           children: [
             Column(
@@ -49,12 +49,10 @@ class _RecipesSelectionState extends State<RecipesSelection> {
                   fontSize: 32,
                   textColor: AppTheme.whiteColor,
                 ),
-                AppText.appText(
-                  "Lorem ipsum is just simply dummy text.",
-                  fontSize: 16,
-                  textColor: AppTheme.whiteColor,
-                  fontWeight: FontWeight.w400
-                ),
+                AppText.appText("Lorem ipsum is just simply dummy text.",
+                    fontSize: 16,
+                    textColor: AppTheme.whiteColor,
+                    fontWeight: FontWeight.w400),
               ],
             ),
             Align(
@@ -74,21 +72,32 @@ class _RecipesSelectionState extends State<RecipesSelection> {
                   ),
                   child: Center(
                     child: IconButton(
-                      icon: Icon(Icons.arrow_forward, size: 30,color: AppTheme.appColor,),
+                      icon: Icon(
+                        Icons.arrow_forward,
+                        size: 30,
+                        color: AppTheme.appColor,
+                      ),
                       onPressed: () {
                         if (widget.parameter == "Allergies") {
-                          Provider.of<DietaryRestrictionsProvider>(context, listen: false).addNextPage(context);
-                        } else if(widget.parameter == "Dietary Restrictions"){
-                          Provider.of<PreferredProteinProvider>(context, listen: false).addNextPage(context);
-                        } else if(widget.parameter == "Preferred Protein"){
-                          Provider.of<RegionalDelicacyProvider>(context, listen: false).addNextPage(context);
-                        } else if(widget.parameter == "Regional Delicacy"){
-                          Provider.of<KitchenResourcesProvider>(context, listen: false).addNextPage(context);
-                        } else if(widget.parameter == "Kitchen Resources"){
+                          Provider.of<DietaryRestrictionsProvider>(context,
+                                  listen: false)
+                              .addNextPage(context);
+                        } else if (widget.parameter == "Dietary restrictions") {
+                          Provider.of<PreferredProteinProvider>(context,
+                                  listen: false)
+                              .addNextPage(context);
+                        } else if (widget.parameter == "Preferred protein") {
+                          Provider.of<RegionalDelicacyProvider>(context,
+                                  listen: false)
+                              .addNextPage(context);
+                        } else if (widget.parameter == "Regional delicacy") {
+                          Provider.of<KitchenResourcesProvider>(context,
+                                  listen: false)
+                              .addNextPage(context);
+                        } else if (widget.parameter == "Kitchen resources") {
                           Navigator.of(context).pop();
                         }
                       },
-
                     ),
                   ),
                 ),
@@ -113,12 +122,16 @@ class _RecipesSelectionState extends State<RecipesSelection> {
                   recipeProvider.preferredAllergiesRecipe[index];
               return GestureDetector(
                 onTap: () {
-                  if (recipeProvider.preferredAllergiesRecipe[index].isChecked == false) {
+                  if (recipeProvider
+                          .preferredAllergiesRecipe[index].isChecked ==
+                      false) {
                     recipeProvider.toggleAllergiesRecipeState(index);
-                    recipeProvider.addAllergiesValue(recipesParams.parameter, index);
+                    recipeProvider.addAllergiesValue(
+                        recipesParams.parameter, index);
                   } else {
                     recipeProvider.toggleAllergiesRecipeState(index);
-                    recipeProvider.removeAllergiesValue(recipesParams.parameter, index);
+                    recipeProvider.removeAllergiesValue(
+                        recipesParams.parameter, index);
                   }
                 },
                 child: Container(
@@ -148,38 +161,45 @@ class _RecipesSelectionState extends State<RecipesSelection> {
           );
         },
       );
-    } else if(widget.parameter == "Dietary Restrictions"){
+    } else if (widget.parameter == "Dietary Restrictions") {
       return Consumer<DietaryRestrictionsProvider>(
         builder: (context, recipeProvider, _) {
           return Wrap(
             spacing: 10,
             runSpacing: 10,
             children: List.generate(
-                recipeProvider.preferredDietaryRestrictionsParametersRecipe.length, (index) {
-              final recipesParams = recipeProvider.preferredDietaryRestrictionsParametersRecipe[index];
+                recipeProvider.preferredDietaryRestrictionsParametersRecipe
+                    .length, (index) {
+              final recipesParams = recipeProvider
+                  .preferredDietaryRestrictionsParametersRecipe[index];
               return GestureDetector(
                 onTap: () {
-                  if (recipeProvider.preferredDietaryRestrictionsParametersRecipe[index].isChecked == false) {
+                  if (recipeProvider
+                          .preferredDietaryRestrictionsParametersRecipe[index]
+                          .isChecked ==
+                      false) {
                     recipeProvider.toggleDietaryRestrictionsRecipeState(index);
-                    recipeProvider.addDietaryRestrictionsValue(recipesParams.parameter, index);
+                    recipeProvider.addDietaryRestrictionsValue(
+                        recipesParams.parameter, index);
                   } else {
                     recipeProvider.toggleDietaryRestrictionsRecipeState(index);
-                    recipeProvider.removeDietaryRestrictionsValue(recipesParams.parameter, index);
+                    recipeProvider.removeDietaryRestrictionsValue(
+                        recipesParams.parameter, index);
                   }
                 },
                 child: Container(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   decoration: BoxDecoration(
-                      color: recipesParams.isChecked
-                          ? AppTheme.whiteColor
-                          : AppTheme.appColor,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                          color: recipesParams.isChecked
-                              ? AppTheme.appColor
-                              : AppTheme.whiteColor,
-                          width: 2),
+                    color: recipesParams.isChecked
+                        ? AppTheme.whiteColor
+                        : AppTheme.appColor,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                        color: recipesParams.isChecked
+                            ? AppTheme.appColor
+                            : AppTheme.whiteColor,
+                        width: 2),
                   ),
                   child: AppText.appText(
                     recipesParams.parameter,
@@ -195,7 +215,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
           );
         },
       );
-    } else if (widget.parameter == "Preferred Protein"){
+    } else if (widget.parameter == "Preferred Protein") {
       return Consumer<PreferredProteinProvider>(
         builder: (context, recipeProvider, _) {
           return Wrap(
@@ -203,20 +223,24 @@ class _RecipesSelectionState extends State<RecipesSelection> {
             runSpacing: 10,
             children: List.generate(
                 recipeProvider.preferredProteinRecipe.length, (index) {
-              final recipesParams = recipeProvider.preferredProteinRecipe[index];
+              final recipesParams =
+                  recipeProvider.preferredProteinRecipe[index];
               return GestureDetector(
                 onTap: () {
-                  if (recipeProvider.preferredProteinRecipe[index].isChecked == false) {
+                  if (recipeProvider.preferredProteinRecipe[index].isChecked ==
+                      false) {
                     recipeProvider.toggleProteinRecipeState(index);
-                    recipeProvider.addProteinValue(recipesParams.parameter, index);
+                    recipeProvider.addProteinValue(
+                        recipesParams.parameter, index);
                   } else {
                     recipeProvider.toggleProteinRecipeState(index);
-                    recipeProvider.removeProteinValue(recipesParams.parameter, index);
+                    recipeProvider.removeProteinValue(
+                        recipesParams.parameter, index);
                   }
                 },
                 child: Container(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   decoration: BoxDecoration(
                     color: recipesParams.isChecked
                         ? AppTheme.whiteColor
@@ -242,28 +266,35 @@ class _RecipesSelectionState extends State<RecipesSelection> {
           );
         },
       );
-    } else if (widget.parameter == "Regional Delicacy"){
+    } else if (widget.parameter == "Regional Delicacy") {
       return Consumer<RegionalDelicacyProvider>(
         builder: (context, recipeProvider, _) {
           return Wrap(
             spacing: 10,
             runSpacing: 10,
             children: List.generate(
-                recipeProvider.preferredRegionalDelicacyParametersRecipe.length, (index) {
-              final recipesParams = recipeProvider.preferredRegionalDelicacyParametersRecipe[index];
+                recipeProvider.preferredRegionalDelicacyParametersRecipe.length,
+                (index) {
+              final recipesParams = recipeProvider
+                  .preferredRegionalDelicacyParametersRecipe[index];
               return GestureDetector(
                 onTap: () {
-                  if (recipeProvider.preferredRegionalDelicacyParametersRecipe[index].isChecked == false) {
+                  if (recipeProvider
+                          .preferredRegionalDelicacyParametersRecipe[index]
+                          .isChecked ==
+                      false) {
                     recipeProvider.toggleRegionalDelicacyRecipeState(index);
-                    recipeProvider.addRegionalDelicacyValue(recipesParams.parameter, index);
+                    recipeProvider.addRegionalDelicacyValue(
+                        recipesParams.parameter, index);
                   } else {
                     recipeProvider.toggleRegionalDelicacyRecipeState(index);
-                    recipeProvider.removeRegionalDelicacyValue(recipesParams.parameter, index);
+                    recipeProvider.removeRegionalDelicacyValue(
+                        recipesParams.parameter, index);
                   }
                 },
                 child: Container(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   decoration: BoxDecoration(
                     color: recipesParams.isChecked
                         ? AppTheme.whiteColor
@@ -289,28 +320,35 @@ class _RecipesSelectionState extends State<RecipesSelection> {
           );
         },
       );
-    } else if(widget.parameter == "Kitchen Resources"){
+    } else if (widget.parameter == "Kitchen Resources") {
       return Consumer<KitchenResourcesProvider>(
         builder: (context, recipeProvider, _) {
           return Wrap(
             spacing: 10,
             runSpacing: 10,
             children: List.generate(
-                recipeProvider.preferredKitchenResourcesParametersRecipe.length, (index) {
-              final recipesParams = recipeProvider.preferredKitchenResourcesParametersRecipe[index];
+                recipeProvider.preferredKitchenResourcesParametersRecipe.length,
+                (index) {
+              final recipesParams = recipeProvider
+                  .preferredKitchenResourcesParametersRecipe[index];
               return GestureDetector(
                 onTap: () {
-                  if (recipeProvider.preferredKitchenResourcesParametersRecipe[index].isChecked == false) {
+                  if (recipeProvider
+                          .preferredKitchenResourcesParametersRecipe[index]
+                          .isChecked ==
+                      false) {
                     recipeProvider.toggleKitchenResourcesRecipeState(index);
-                    recipeProvider.addKitchenResourcesValue(recipesParams.parameter, index);
+                    recipeProvider.addKitchenResourcesValue(
+                        recipesParams.parameter, index);
                   } else {
                     recipeProvider.toggleKitchenResourcesRecipeState(index);
-                    recipeProvider.removeKitchenResourcesValue(recipesParams.parameter, index);
+                    recipeProvider.removeKitchenResourcesValue(
+                        recipesParams.parameter, index);
                   }
                 },
                 child: Container(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   decoration: BoxDecoration(
                     color: recipesParams.isChecked
                         ? AppTheme.whiteColor

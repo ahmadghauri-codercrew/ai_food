@@ -41,8 +41,8 @@ class KitchenResourcesProvider extends ChangeNotifier {
     RecipesParameterClass(parameter: 'Bowl'),
     RecipesParameterClass(parameter: 'Oven'),
     RecipesParameterClass(parameter: 'Microwave'),
-    RecipesParameterClass(parameter: 'Food Processor'),
-    RecipesParameterClass(parameter: 'Slow Cooker'),
+    RecipesParameterClass(parameter: 'Food processor'),
+    RecipesParameterClass(parameter: 'Slow cooker'),
   ];
 
   void showKitchenResourcesParameterDetails(context, String parameter) {

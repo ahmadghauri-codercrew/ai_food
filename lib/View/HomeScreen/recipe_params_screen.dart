@@ -283,8 +283,10 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                       )
                     : Center(
                         child: AppButton.appButton(
+
                           "Generate",
                           fontSize: 20,
+                        
                           fontWeight: FontWeight.w600,
                           textColor: Colors.white,
                           height: 50,

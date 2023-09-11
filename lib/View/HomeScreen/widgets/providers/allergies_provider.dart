@@ -38,7 +38,7 @@ class AllergiesProvider extends ChangeNotifier {
     RecipesParameterClass(parameter: 'Gluten'),
     RecipesParameterClass(parameter: 'Egg'),
     RecipesParameterClass(parameter: 'Grain'),
-    RecipesParameterClass(parameter: 'Tree Nut'),
+    RecipesParameterClass(parameter: 'Tree nut'),
     RecipesParameterClass(parameter: 'Shellfish'),
   ];
 

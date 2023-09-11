@@ -8,6 +8,7 @@ import 'package:ai_food/Utils/widgets/others/custom_card.dart';
 import 'package:ai_food/View/auth/otp_screen.dart';
 import 'package:ai_food/View/auth/set_password_screen.dart';
 import 'package:ai_food/config/app_urls.dart';
+import 'package:dio/src/response.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -349,12 +350,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   forgetPassword({emailController}) async {
-    final url = AppUrls.baseUrl + AppUrls.forgetPasswordUrl;
+    const url = AppUrls.baseUrl + AppUrls.forgetPasswordUrl;
     final response;
     try {
       response = await dio.post(path: url, data: emailController);
       if (response.statusCode == 200) {
         print(response.data);
+        // var responseData = response.data;
+        // pushReplacement(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => OTPScreen(
+        //         otp: responseData["data"]["OTP"],
+        //       ),
+        //     ));
       } else {
         print("error");
       }
