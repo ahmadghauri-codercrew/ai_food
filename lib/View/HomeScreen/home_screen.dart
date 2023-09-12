@@ -11,9 +11,11 @@ import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provi
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   final allergies;
@@ -24,8 +26,8 @@ class HomeScreen extends StatefulWidget {
   final totalResults;
   final foodStyle;
   final searchType;
-  final query;
-  const HomeScreen(
+  var query;
+  HomeScreen(
       {Key? key,
       this.data,
       this.type,
@@ -51,32 +53,47 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    print("bsjbdbd$type");
+    print("type$type");
     dio = AppDio(context);
     logger.init();
+    getUserCredentials();
 
     if (widget.type == 1) {
       type = widget.type;
     } else {
-      print("bsjbdbd22222$type");
+      print("type$type");
 
       getSuggestedRecipes(
-        allergies: widget.allergies,
-        dietaryRestrictions: widget.dietaryRestrictions,
+        allergies: widget.allergies ?? "",
+        dietaryRestrictions: widget.dietaryRestrictions ?? "",
       );
     }
     super.initState();
   }
 
+  void getUserCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(PrefKey.authorization);
+    String? name = prefs.getString(PrefKey.name);
+    print("home_token $token");
+    print("home_name $name");
+  }
+
+  @override
+  void dispose() {
+    widget.query = null;
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    print("djvbwdbw3${widget.allergies}");
-    print("djvbwdbw3uod${widget.dietaryRestrictions}");
+    print("allergies${widget.allergies}");
+    print("dietaryRestrictions${widget.dietaryRestrictions}");
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 100,
+        toolbarHeight: 80,
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         elevation: 0,
@@ -94,11 +111,12 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 20.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0),
                   child: Text(
-                    "Search",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                    "${widget.query ?? "Search"}",
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.w500),
                   ),
                 ),
                 Container(
@@ -110,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         topRight: Radius.circular(100),
                         bottomRight: Radius.circular(100)),
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.search_outlined,
                     size: 35,
                     color: Color(0xffFFFFFF),

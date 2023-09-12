@@ -88,6 +88,11 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: SizedBox(
                             width: width * 0.65,
                             child: TextFormField(
+                              onFieldSubmitted: (value) {
+                                print("search_value $value");
+                                getFood();
+                              },
+                              textInputAction: TextInputAction.search,
                               controller: _searchController,
                               autofocus: true,
                               cursorColor: AppTheme.appColor,
@@ -156,13 +161,14 @@ class _SearchScreenState extends State<SearchScreen> {
                               borderRadius: BorderRadius.circular(50),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal:10.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Padding(
-                                    padding: EdgeInsets.only(bottom:3.0),
+                                    padding: EdgeInsets.only(bottom: 3.0),
                                     child: Icon(
                                       Icons.filter_list,
                                       color: Color(0xffF8F8F8),
