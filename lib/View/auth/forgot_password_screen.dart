@@ -8,6 +8,7 @@ import 'package:ai_food/Utils/widgets/others/custom_card.dart';
 import 'package:ai_food/View/auth/otp_screen.dart';
 import 'package:ai_food/View/auth/set_password_screen.dart';
 import 'package:ai_food/config/app_urls.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -238,7 +239,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 25,
+                  height: 10,
                 ),
                 Form(
                   key: _formKey,
@@ -254,7 +255,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           textColor: AppTheme.appColor,
                           fontWeight: FontWeight.w600),
                       const SizedBox(
-                        height: 60,
+                        height: 40,
                       ),
                       Center(
                         child: Column(
@@ -264,8 +265,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             Customcard(
                                 childWidget: Column(
                               children: [
-                                const SizedBox(
-                                  height: 80,
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.14,
                                 ),
                                 CustomAppFormField(
                                   onTap: () {
@@ -297,7 +299,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 ),
                                 SizedBox(
                                   height:
-                                      MediaQuery.of(context).size.height * .350,
+                                      MediaQuery.of(context).size.height * .330,
                                 ),
                                 _verificationInProgress
                                     ? Center(
@@ -350,17 +352,61 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   forgetPassword({emailController}) async {
     final url = AppUrls.baseUrl + AppUrls.forgetPasswordUrl;
-    final response;
+    final dio =
+        Dio(); // Assuming you have imported and configured Dio properly.
     try {
-      response = await dio.post(path: url, data: emailController);
+      final response = await dio.post(
+        url,
+        data: emailController,
+      );
+
       if (response.statusCode == 200) {
-        print(response.data);
+        final responseData = response.data;
+
+        if (responseData['status'] == 'success') {
+          showSnackBar(context, responseData['message']);
+        } else {
+          print("API Error: ${responseData['message']}");
+        }
       } else {
-        print("error");
+        print("HTTP Error: ${response.statusCode}");
       }
     } catch (e) {
-      showSnackBar(context, e.toString());
-      print(e.toString());
+      if (e is DioError) {
+        if (e.response != null) {
+          print(
+              "Dio Error: ${e.response?.statusCode} - ${e.response!.statusMessage}");
+          print("Response Data: ${e.response!.data}");
+        } else {
+          print("Dio Error: ${e.message}");
+        }
+      } else {
+        print("Generic Error: $e");
+      }
+
+      showSnackBar(context, "An error occurred: $e");
     }
   }
 }
+
+//   forgetPassword({emailController}) async {
+//     final url = AppUrls.baseUrl + AppUrls.forgetPasswordUrl;
+//     final response;
+//     try {
+//       response = await dio.post(
+//         path: url,
+//         data: emailController,
+//       );
+//       print(response['status']);
+//       if (response.statusCode == 200) {
+//         showSnackBar(context, "${response[1]['message']}");
+//         print(response['status']);
+//       } else {
+//         print("error${response['status']}");
+//       }
+//     } catch (e) {
+//       showSnackBar(context, e.toString());
+//       print(e.toString());
+//     }
+//   }
+// }

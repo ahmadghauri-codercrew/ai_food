@@ -281,7 +281,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () async {
-                                     
                                       var inputString = item['link'];
 
                                       RegExp urlRegex = RegExp(
@@ -326,7 +325,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                                           item['link'],
                                           textAlign: TextAlign.center,
                                           // justifyText: true,
-                                          textColor:AppTheme.whiteColor,
+                                          textColor: AppTheme.whiteColor,
                                           underLine: true,
                                           fontSize: 10,
                                         ),
@@ -353,7 +352,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   }
 
   getRecipeInformation({id}) async {
-    print("gurirug23r3rhi3hrihior");
     const apiKey = '1acf1e54a67342b3bfa0f3d0b7888c6e';
     var url =
         "https://api.spoonacular.com/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";

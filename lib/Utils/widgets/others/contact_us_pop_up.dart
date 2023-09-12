@@ -1,7 +1,6 @@
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
-import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:flutter/material.dart';
 
 import '../../../View/auth/forgot_password_screen.dart';

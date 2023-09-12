@@ -338,8 +338,6 @@ class _RecipeInfoState extends State<RecipeInfo>
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 20, vertical: 8),
                                     child: Column(
-                                      // mainAxisAlignment:
-                                      //     MainAxisAlignment.start,
                                       children: [
                                         Container(
                                           child: Row(

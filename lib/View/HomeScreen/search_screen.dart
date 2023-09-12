@@ -1,9 +1,7 @@
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
-import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
-import 'package:ai_food/View/HomeScreen/home_screen.dart';
 import 'package:ai_food/View/HomeScreen/recipe_params_screen.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
@@ -17,7 +15,6 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   final TextEditingController _searchController = TextEditingController();
   late AppDio dio;
   AppLogger logger = AppLogger();
@@ -106,9 +103,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 return null;
                               },
                               onChanged: (value) {
-                                setState(() {
-                                  _autoValidateMode = AutovalidateMode.disabled;
-                                });
+                                setState(() {});
                               },
                             ),
                           ),
@@ -156,13 +151,14 @@ class _SearchScreenState extends State<SearchScreen> {
                               borderRadius: BorderRadius.circular(50),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal:10.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(bottom:3.0),
+                                    padding: const EdgeInsets.only(bottom: 3.0),
                                     child: Icon(
                                       Icons.filter_list,
                                       color: AppTheme.whiteColor,
