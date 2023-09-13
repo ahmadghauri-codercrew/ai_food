@@ -2,23 +2,19 @@ import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
-import 'package:ai_food/Utils/widgets/others/app_card_background.dart';
-import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
-import 'package:ai_food/Utils/widgets/others/custom_app_bar.dart';
 import 'package:ai_food/Utils/widgets/others/custom_card.dart';
-import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/auth/auth_screen.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class SetPasswordScreen extends StatefulWidget {
   final email;
   final otp;
-  const SetPasswordScreen({super.key, this.email, this.otp});
+  final type;
+  const SetPasswordScreen({super.key, this.email, this.otp, this.type});
 
   @override
   State<SetPasswordScreen> createState() => _SetPasswordScreenState();
@@ -45,6 +41,8 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
+    print("knwdkn${widget.email}");
+    print("otppppp${widget.otp}");
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -215,7 +213,10 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     const int responseCode400 = 400; // For Bad Request.
     const int responseCode401 = 401; // For Unauthorized access.
     const int responseCode404 = 404; // For For data not found
-    const int responseCode500 = 500; // Internal server error.
+    const int responseCode500 = 500;
+    const int responseCode503 = 503; // Internal server error.
+
+    // Internal server error.
 
     Map<String, dynamic> params = {
       "email": widget.email,
@@ -250,13 +251,27 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
           _isLoading = false;
         });
         showSnackBar(context, "${responseData["message"]}");
-      } else if (response.statusCode == responseCode200) {
-        print("responseData${responseData}");
+      } else if (response.statusCode == responseCode503) {
+        print("Internal server error.");
         setState(() {
           _isLoading = false;
         });
-        pushReplacement(context, AuthScreen());
         showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode200) {
+        if (responseData["status"] == false) {
+          setState(() {
+            _isLoading = false;
+          });
+          showSnackBar(context, "${responseData["message"]}");
+          return;
+        } else {
+          print("responseData${responseData}");
+          setState(() {
+            _isLoading = false;
+          });
+          pushReplacement(context, AuthScreen());
+          showSnackBar(context, "${responseData["message"]}");
+        }
       }
     } catch (e) {
       print("Something went Wrong ${e}");

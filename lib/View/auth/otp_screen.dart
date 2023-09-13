@@ -55,7 +55,9 @@ class _OTPScreenState extends State<OTPScreen> {
       setState(() {
         _verificationInProgress = false;
       });
-      push(context, SetPasswordScreen());
+
+      verfyOTP(code: smsCode);
+
       // _timer.cancel();
     }).catchError((error) {
       setState(() {
@@ -277,11 +279,12 @@ class _OTPScreenState extends State<OTPScreen> {
                               String smsCode = _smsCodeController.text.trim();
                               if (smsCode.isNotEmpty) {
                                 print("Check_sms $smsCode");
+                                _smsCodeController.clear();
                                 _signInWithPhoneNumber(smsCode);
                               }
                             }
                           } else if (widget.type == 1) {
-                            verfyOTP();
+                            verfyOTP(code: widget.otp);
                           }
                         },
                           width: 43.w,
@@ -305,7 +308,7 @@ class _OTPScreenState extends State<OTPScreen> {
     _smsCodeController.text = code;
   }
 
-  void verfyOTP() async {
+  void verfyOTP({code}) async {
     setState(() {
       isLoading = true;
     });
@@ -326,7 +329,7 @@ class _OTPScreenState extends State<OTPScreen> {
           context,
           SetPasswordScreen(
             email: widget.email,
-            otp: widget.otp,
+            otp: code,
           ));
     } else {
       if (response.statusCode == 402) {

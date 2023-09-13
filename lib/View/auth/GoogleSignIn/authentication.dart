@@ -1,15 +1,19 @@
 import 'package:ai_food/Utils/utils.dart';
+import 'package:ai_food/View/AskMaida/ask_maida_screen.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/auth/auth_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
+import 'package:ai_food/providers/google_signin_provider.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Authentication {
@@ -26,19 +30,20 @@ class Authentication {
   static Future<FirebaseApp> initializeFirebase({
     required BuildContext context,
   }) async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
+    FirebaseApp firebaseApp =
+    await Firebase.initializeApp();
 
-    User? user = FirebaseAuth.instance.currentUser;
-    // print("usr_id ${user?.uid}  ${user.uid}");
-    if (user != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const UserProfileScreen(
-              // user: user,
-              ),
-        ),
-      );
-    }
+    // User? user = FirebaseAuth.instance.currentUser;
+    // // print("usr_id ${user?.uid}  ${user.uid}");
+    // if (user != null) {
+    //   Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(
+    //       builder: (context) => const UserProfileScreen(
+    //           // user: user,
+    //           ),
+    //     ),
+    //   );
+    // }
 
     return firebaseApp;
   }

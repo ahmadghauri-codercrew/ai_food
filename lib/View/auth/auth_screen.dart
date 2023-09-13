@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
@@ -21,6 +22,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:sizer/sizer.dart';
 import 'package:crypto/crypto.dart';
+
 import 'GoogleSignIn/google_sign_in_button.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -92,8 +94,7 @@ class _AuthScreenState extends State<AuthScreen> {
         resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
           child: Padding(
-            padding:
-                const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 25),
+            padding: const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 25),
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.93,
               child: Column(
@@ -217,8 +218,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 value == null) {
                                               return "Please enter your email or mobile number";
                                             }
-                                            if (!isEmailValid &&
-                                                !isMobileValid) {
+                                            if (!isEmailValid && !isMobileValid) {
                                               return "Please enter a valid email or Number i.e (+1)";
                                             }
                                             return null;
@@ -328,7 +328,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 .hasMatch(value);
 
                                             if (!isMobileValid) {
-                                              return "Plaese enter mobile number i.e (+1)";
+                                              return "Please enter a valid email or Number i.e (+1)";
                                             }
                                             return null; // Validation passed
                                           },
@@ -526,16 +526,14 @@ class _AuthScreenState extends State<AuthScreen> {
       }
       String userId = result.user!.uid.toString();
       String naming = result.user!.displayName.toString();
-      String displayName =
-          "${appleCredential.givenName} ${appleCredential.familyName}";
+      String displayName = "${appleCredential.givenName} ${appleCredential.familyName}";
       bool newUser = result.additionalUserInfo!.isNewUser;
       print(result.user!.email.toString());
       print(result.user!.uid.toString());
       print(result.additionalUserInfo!.username.toString());
-      print(
-          "apple_user_data id $userId email ${result.user!.email.toString()} username $displayName");
-      print(
-          "apple_user_data fullname ${appleCredential.givenName} ${appleCredential.familyName} newUser $newUser");
+      print("apple_user_data id $userId email ${result.user!.email.toString()} username $displayName");
+      print("apple_user_data fullname ${appleCredential.givenName} ${appleCredential.familyName} newUser $newUser");
+
 
       // Check if the user is new or returning
       // if (result.additionalUserInfo != null && result.additionalUserInfo!.isNewUser) {
@@ -713,10 +711,7 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   //apple sign in
-  void appleLogin(
-      {required String userId,
-      required bool isNewUser,
-      required String name}) async {
+  void appleLogin({required String userId, required bool isNewUser, required String name}) async {
     setState(() {
       _appleLoading = true;
     });
@@ -724,7 +719,7 @@ class _AuthScreenState extends State<AuthScreen> {
     const int responseCode200 = 200; // For successful request.
     const int responseCode400 = 400; // For Bad Request.
     const int responseCode401 = 401; // For Unauthorized access.
-    const int responseCode404 = 404; // For For data not found
+    const int responseCode404 = 404; // For For data not found.
     const int responseCode500 = 500; // Internal server error.
 
     Map<String, dynamic> params = {
@@ -765,7 +760,7 @@ class _AuthScreenState extends State<AuthScreen> {
           showSnackBar(context, "${responseData["message"]}");
           return;
         } else {
-          if (isNewUser) {
+          if(isNewUser){
             pushReplacement(context, const UserProfileScreen());
           } else {
             pushReplacement(context, BottomNavView());

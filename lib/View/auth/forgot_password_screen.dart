@@ -106,7 +106,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           builder: (_) => OTPScreen(
               type: 0,
               verificationId: verificationId,
-              mobileNumber: phoneNumber)));
+              mobileNumber: phoneNumber,
+              email: phoneNumber,
+              )));
     }
 
     codeAutoRetrievalTimeout(String verificationId) {

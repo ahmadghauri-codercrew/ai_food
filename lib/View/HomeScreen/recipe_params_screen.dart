@@ -267,7 +267,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                     ),
                     showFoodStyle
                         ? Padding(
-                            padding: const EdgeInsets.only(top: 85.0),
+                            padding: const EdgeInsets.only(top: 65.0),
                             child: customFoodStyle(),
                           )
                         : const SizedBox.shrink(),
