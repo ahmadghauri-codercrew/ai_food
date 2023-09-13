@@ -53,7 +53,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             primaryColor: AppTheme.appColor, // Change the primary color
             colorScheme: ColorScheme.light(
                 primary: AppTheme.appColor), // Change overall color scheme
-            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            buttonTheme:
+                const ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
         );
@@ -152,7 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       flex: 5,
                                       fit: FlexFit.tight,
                                       child: AppText.appText(
-                                          "DOB: ${selectedDate == null ? "${selectedDateFromPref == ""?"MM-DD-YYYY":selectedDateFromPref}" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
+                                          "DOB: ${selectedDate == null ? "${selectedDateFromPref == "" ? "MM-DD-YYYY" : selectedDateFromPref}" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
                                           fontSize: 11.sp,
                                           textColor: AppTheme.appColor),
                                     ),
@@ -241,34 +242,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         const SizedBox(height: 10),
                         Wrap(
-                    runSpacing: 10,
-                    spacing: 10,
-                    children: allergies.entries.map((allergy) {
-                      String key = allergy.key;
-                      dynamic value = allergy.value;
-                      return CustomContainer(
-                        borderColor: addAllergies.containsKey(key)
-                            ? AppTheme.whiteColor
-                            : AppTheme.appColor,
-                        containerColor: addAllergies.containsKey(key)
-                            ? AppTheme.appColor
-                            : Colors.white,
-                        text: value.toString(),
-                        textColor: addAllergies.containsKey(key)
-                            ? Colors.white
-                            : AppTheme.appColor,
-                        onTap: () {
-                          setState(() {
-                            if (addAllergies.containsKey(key)) {
-                              addAllergies.remove(key);
-                            } else {
-                              addAllergies[key] = value;
-                            }
-                          });
-                        },
-                      );
-                    }).toList(),
-                  ),
+                          runSpacing: 10,
+                          spacing: 10,
+                          children: allergies.entries.map((allergy) {
+                            String key = allergy.key;
+                            dynamic value = allergy.value;
+                            return CustomContainer(
+                              borderColor: addAllergies.containsKey(key)
+                                  ? AppTheme.whiteColor
+                                  : AppTheme.appColor,
+                              containerColor: addAllergies.containsKey(key)
+                                  ? AppTheme.appColor
+                                  : Colors.white,
+                              text: value.toString(),
+                              textColor: addAllergies.containsKey(key)
+                                  ? Colors.white
+                                  : AppTheme.appColor,
+                              onTap: () {
+                                setState(() {
+                                  if (addAllergies.containsKey(key)) {
+                                    addAllergies.remove(key);
+                                  } else {
+                                    addAllergies[key] = value;
+                                  }
+                                });
+                              },
+                            );
+                          }).toList(),
+                        ),
                         const SizedBox(height: 30),
                         AppText.appText(
                           "Dietary restrictions:",
@@ -280,29 +281,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Wrap(
                           spacing: 10,
                           runSpacing: 10,
-                          children: dietaryRestrictions.entries.map((restriction) {
+                          children:
+                              dietaryRestrictions.entries.map((restriction) {
                             String key = restriction.key;
                             dynamic value = restriction.value;
                             return CustomContainer(
                               borderColor:
-                              addDietaryRestrictions.containsKey(key)
-                                  ? AppTheme.whiteColor
-                                  : AppTheme.appColor,
+                                  addDietaryRestrictions.containsKey(key)
+                                      ? AppTheme.whiteColor
+                                      : AppTheme.appColor,
                               containerColor:
-                              addDietaryRestrictions.containsKey(key)
-                                  ? AppTheme.appColor
-                                  : Colors.white,
-                              textColor:
-                              addDietaryRestrictions.containsKey(key)
+                                  addDietaryRestrictions.containsKey(key)
+                                      ? AppTheme.appColor
+                                      : Colors.white,
+                              textColor: addDietaryRestrictions.containsKey(key)
                                   ? Colors.white
                                   : AppTheme.appColor,
                               text: value.toString(),
                               onTap: () {
                                 setState(() {
-                                  if (addDietaryRestrictions
-                                      .containsKey(key)) {
-                                    addDietaryRestrictions
-                                        .remove(key);
+                                  if (addDietaryRestrictions.containsKey(key)) {
+                                    addDietaryRestrictions.remove(key);
                                   } else {
                                     addDietaryRestrictions[key] = value;
                                   }
@@ -314,7 +313,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     Positioned(
-                      top: 8.5.h,
+                      top: 8.4.h,
                       right: 0,
                       child: measuringUnit
                           ? customMeasuringUnit()
@@ -326,32 +325,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(
                 height: 30,
               ),
-            checkAPI == false
-                ? Center(
-                child: AppButton.appButton(
-                   "Save",
-                  onTap: ()async {
-                    setState(() {
-                      checkAPI = true;
-                    });
-                    SaveUnit();
-                    List<String> allergiesList = addAllergies.entries
-                        .map((value) => value.toString())
-                        .toList();
-                    List<String> dietaryRestrictionsList = addDietaryRestrictions.entries
-                        .map((value) => value.toString())
-                        .toList();
-                   await StoreDatainSharedPref(allergiesList,dietaryRestrictionsList);
-                    await UpdateSetupProfileOnUpdateAPI();
-                  },
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  textColor: Colors.white,
-                  height: 50,
-                  width: 180,
-                  backgroundColor: AppTheme.appColor,
-                ),
-              ): Center(child: CircularProgressIndicator(color: AppTheme.appColor),),
+              checkAPI == false
+                  ? Center(
+                      child: AppButton.appButton(
+                        "Save",
+                        onTap: () async {
+                          setState(() {
+                            checkAPI = true;
+                          });
+                          SaveUnit();
+                          List<String> allergiesList = addAllergies.entries
+                              .map((value) => value.toString())
+                              .toList();
+                          List<String> dietaryRestrictionsList =
+                              addDietaryRestrictions.entries
+                                  .map((value) => value.toString())
+                                  .toList();
+                          await StoreDatainSharedPref(
+                              allergiesList, dietaryRestrictionsList);
+                          await UpdateSetupProfileOnUpdateAPI();
+                        },
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        textColor: Colors.white,
+                        height: 50,
+                        width: 180,
+                        backgroundColor: AppTheme.appColor,
+                      ),
+                    )
+                  : Center(
+                      child:
+                          CircularProgressIndicator(color: AppTheme.appColor),
+                    ),
               const SizedBox(height: 30),
             ],
           ),
@@ -368,60 +373,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
           fit: FlexFit.loose,
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: AppTheme.whiteColor,
+              borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10)),
+              color: AppTheme.appColor,
             ),
             height: 110,
             width: MediaQuery.of(context).size.width * 0.415,
             child: Center(
               child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    measuringUnit = false;
-                  });
-                },
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: measuringUnitListShow.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        setState(() {
-                          measuringUnit = false;
-                          updatedvalueM = measuringUnitListShow.elementAt(index);
-                        });
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            AppText.appText(
-                              "${measuringUnitListShow[index]}",
+                  onTap: () {
+                    setState(() {
+                      measuringUnit = false;
+                    });
+                  },
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                measuringUnit = false;
+                                updatedvalueM = "US";
+                              });
+                            },
+                            child: AppText.appText(
+                              "US",
                               fontSize: 18,
-                              textColor: AppTheme.appColor,
+                              textColor: AppTheme.whiteColor,
                             ),
-                            Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    width: 1.0,
-                                    color: AppTheme.appColor,
-                                  ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  width: 1.0,
+                                  color: AppTheme.whiteColor,
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 20),
-                          ],
-                        ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                measuringUnit = false;
+                                updatedvalueM = "Metric";
+                              });
+                            },
+                            child: AppText.appText(
+                              "Metric",
+                              fontSize: 18,
+                              textColor: AppTheme.whiteColor,
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                ),
-              ),
+                    ),
+                  )),
             ),
           ),
         ),
@@ -431,8 +443,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   SaveUnit() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-   prefs.setString(PrefKey.unit, updatedvalueM);
+    prefs.setString(PrefKey.unit, updatedvalueM);
   }
+
   loadselectParamsfromAPI() async {
     var response;
     const int responseCode200 = 200; // For successful request.
@@ -442,7 +455,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     const int responseCode500 = 500; // Internal server error.
     try {
       response = await dio.get(
-          path: AppUrls.searchParameterUrl,  queryParameters: {"search": 0});
+          path: AppUrls.searchParameterUrl, queryParameters: {"search": 0});
       var responseData = response.data;
       switch (response.statusCode) {
         case responseCode400:
@@ -452,7 +465,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           print("Unauthorized access.");
           break;
         case responseCode404:
-          print("The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+          print(
+              "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
           break;
         case responseCode500:
           print("Internal server error.");
@@ -464,7 +478,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             var data = responseData["data"]["allergies"];
             var data2 = responseData["data"]["dietaryRestrictions"];
             //this condition is to make sure that if server didn;t work or server don't load the data.
-            if (data == null &&data2 == null ) {
+            if (data == null && data2 == null) {
               showSnackBar(context, "Something went wrong reload the page");
             }
             //-----------------//
@@ -477,32 +491,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
             showSnackBar(context, "selection Loaded from API");
             //----------------------//
-
           }
           break;
         default:
-        // Handle other response codes here if needed.
+          // Handle other response codes here if needed.
           break;
       }
     } catch (e) {
       showSnackBar(context, "Reload the page ${e}");
     }
   }
+
   LoadingSelectedDataFromSetupProfileScreen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      selectedDateFromPref= prefs.getString(PrefKey.dateOfBirth);
-      List<String> storedData =prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
-        for (String entry in storedData) {
-          String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
-          List<String> parts = result.split(':');
-          if (parts.length == 2) {
-            String key = parts[0].trim();
-            String value = parts[1].trim();
-           addAllergies[key] = value;
-          }
+      selectedDateFromPref = prefs.getString(PrefKey.dateOfBirth);
+      List<String> storedData =
+          prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
+      for (String entry in storedData) {
+        String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+        List<String> parts = result.split(':');
+        if (parts.length == 2) {
+          String key = parts[0].trim();
+          String value = parts[1].trim();
+          addAllergies[key] = value;
         }
-      List<String> storedData2 =prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction)!;
+      }
+      List<String> storedData2 =
+          prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction)!;
       for (String entry in storedData2) {
         String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
         List<String> parts = result.split(':');
@@ -512,11 +528,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           addDietaryRestrictions[key] = value;
         }
       }
-      _userNameController.text= prefs.getString(PrefKey.userName)!;
-      updatedvalueM==""? "US": prefs.getString(PrefKey.unit);
+      _userNameController.text = prefs.getString(PrefKey.userName)!;
+      updatedvalueM == "" ? "US" : prefs.getString(PrefKey.unit);
     });
     showSnackBar(context, "Data is Loaded from SharedPreference");
   }
+
   UpdateSetupProfileOnUpdateAPI() async {
     var response;
     Map<String, dynamic> arrangeIndexParam = {};
@@ -554,7 +571,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     Map<String, dynamic> params = {
       "name": _userNameController.text,
-      "DOB": selectedDateFromPref?? DateFormat('yyyy-MM-dd').format(selectedDate!),
+      "DOB": selectedDateFromPref ??
+          DateFormat('yyyy-MM-dd').format(selectedDate!),
       ...arrangeIndexParam,
       ...arrangeIndexParam2,
     };
@@ -581,7 +599,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           setState(() {
             checkAPI = false;
           });
-          print("The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+          print(
+              "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
           break;
         case responseCode500:
           setState(() {
@@ -610,7 +629,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           // Handle other response codes here if needed.
           break;
       }
-
     } catch (e) {
       //check if there is any other issue with the data from server
       setState(() {
@@ -619,12 +637,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       print("Something went Wrong ${e}");
     }
   }
+
   StoreDatainSharedPref(allergies, dietryRestriction) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(PrefKey.userName, _userNameController.text);
-    selectedDate == null?prefs.setString(PrefKey.dateOfBirth, selectedDateFromPref!):prefs.setString(PrefKey.dateOfBirth, DateFormat('MM-dd-yyyy').format(selectedDate!));
+    selectedDate == null
+        ? prefs.setString(PrefKey.dateOfBirth, selectedDateFromPref!)
+        : prefs.setString(PrefKey.dateOfBirth,
+            DateFormat('MM-dd-yyyy').format(selectedDate!));
     prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergies);
-    prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
+    prefs.setStringList(
+        PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
     showSnackBar(context, "Data is saved in SharedPreference");
   }
 }
@@ -638,11 +661,11 @@ class CustomContainer extends StatelessWidget {
 
   CustomContainer(
       {super.key,
-        this.text,
-        required this.onTap,
-        required this.textColor,
-        required this.containerColor,
-        this.borderColor});
+      this.text,
+      required this.onTap,
+      required this.textColor,
+      required this.containerColor,
+      this.borderColor});
 
   @override
   Widget build(BuildContext context) {

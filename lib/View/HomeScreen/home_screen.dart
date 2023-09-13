@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 80,
+        toolbarHeight: 120,
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         elevation: 0,
@@ -150,8 +150,8 @@ class _HomeScreenState extends State<HomeScreen> {
               // color: Colors.blueGrey,
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 10),
+                  padding: const EdgeInsets.only(
+                      left: 10.0, right: 10, bottom: 10),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,

@@ -219,7 +219,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                             Provider.of<DietaryRestrictionsProvider>(context,
                                     listen: false)
                                 .showDietaryRestrictionsParameterDetails(
-                                    context, "Dietary Restrictions");
+                                    context, "Dietary restrictions");
                           },
                         ),
                         const SizedBox(height: 30),
@@ -232,7 +232,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                             Provider.of<PreferredProteinProvider>(context,
                                     listen: false)
                                 .showProteinParameterDetails(
-                                    context, "Preferred Protein");
+                                    context, "Preferred protein");
                           },
                         ),
                         const SizedBox(height: 30),
@@ -245,7 +245,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                             Provider.of<RegionalDelicacyProvider>(context,
                                     listen: false)
                                 .showRegionalDelicacyParameterDetails(
-                                    context, "Regional Delicacy");
+                                    context, "Regional delicacy");
                           },
                         ),
                         const SizedBox(height: 30),
@@ -258,7 +258,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                             Provider.of<KitchenResourcesProvider>(context,
                                     listen: false)
                                 .showKitchenResourcesParameterDetails(
-                                    context, "Kitchen Resources");
+                                    context, "Kitchen resources");
                           },
                         ),
                         const SizedBox(height: 30),
