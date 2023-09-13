@@ -30,11 +30,12 @@ class AppButton {
         height: height,
         decoration: BoxDecoration(
             boxShadow: [
-              BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 5,
-                  offset: Offset(0, 4),
-                  spreadRadius: 2)
+              blurContainer == true
+                  ? BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 2,
+                      offset: Offset(0.0, 4))
+                  : BoxShadow()
             ],
             color: backgroundColor,
             borderRadius: BorderRadius.circular(50),

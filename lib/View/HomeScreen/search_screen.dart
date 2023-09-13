@@ -88,6 +88,11 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: SizedBox(
                             width: width * 0.65,
                             child: TextFormField(
+                              onFieldSubmitted: (value) {
+                                print("search_value $value");
+                                getFood();
+                              },
+                              textInputAction: TextInputAction.search,
                               controller: _searchController,
                               autofocus: true,
                               cursorColor: AppTheme.appColor,

@@ -14,10 +14,11 @@ import 'package:ai_food/View/auth/forgot_password_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
-import 'package:dio/dio.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:sizer/sizer.dart';
 import 'package:crypto/crypto.dart';
@@ -37,19 +38,18 @@ class _AuthScreenState extends State<AuthScreen> {
   AppLogger logger = AppLogger();
 
   bool _isLoading = false;
+  bool _appleLoading = false;
 
   //final _formKey = GlobalKey<FormState>();
   final _formKeyName = GlobalKey<FormState>();
   final _formKeyEmail = GlobalKey<FormState>();
   final _formKeyLoginEmail = GlobalKey<FormState>();
   final _formKeyLoginPassword = GlobalKey<FormState>();
-  final _formKeyPhone = GlobalKey<FormState>();
   final _formKeyPassword = GlobalKey<FormState>();
   final _formKeyConfirmPassword = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
@@ -166,7 +166,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                           login = false;
                                           _nameController.text = '';
                                           _emailController.text = '';
-                                          _phoneController.text = '';
                                           _passwordController.text = '';
                                           _confirmPasswordController.text = '';
                                         });
@@ -215,7 +214,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 .hasMatch(value);
                                             if (value.isEmpty ||
                                                 value == null) {
-                                              return "Please enter your email or mobile number";
+                                              return "Please enter your email";
                                             }
                                             if (!isEmailValid &&
                                                 !isMobileValid) {
@@ -223,7 +222,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                             }
                                             return null;
                                           },
-                                          texthint: "Email or Mobile number",
+                                          texthint: "Email",
                                           hintStyle: TextStyle(
                                               color: AppTheme.appColor),
                                           controller: _loginEmailController),
@@ -314,30 +313,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                       ),
                                     ),
                                     Form(
-                                      key: _formKeyPhone,
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      child: CustomAppFormField(
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Please enter your mobile number';
-                                            }
-                                            final isMobileValid = RegExp(
-                                                    r'^\+(?:[0-9] ?){6,14}[0-9]$')
-                                                .hasMatch(value);
-
-                                            if (!isMobileValid) {
-                                              return "Please enter a valid email or mobile number";
-                                            }
-                                            return null; // Validation passed
-                                          },
-                                          texthint: "Enter mobile number",
-                                          hintStyle: TextStyle(
-                                              color: AppTheme.appColor),
-                                          controller: _phoneController),
-                                    ),
-                                    Form(
                                       autovalidateMode:
                                           AutovalidateMode.onUserInteraction,
                                       key: _formKeyPassword,
@@ -394,26 +369,18 @@ class _AuthScreenState extends State<AuthScreen> {
                                       // );
                                       Login();
                                       print("Email:${_emailController.text}");
-                                      print("Password:${_passwordController.text}");
+                                      print(
+                                          "Password:${_passwordController.text}");
                                     }
                                   } else {
                                     if (_formKeyName.currentState!.validate() &&
                                         _formKeyEmail.currentState!
-                                            .validate() &&
-                                        _formKeyPhone.currentState!
                                             .validate() &&
                                         _formKeyPassword.currentState!
                                             .validate() &&
                                         _formKeyConfirmPassword.currentState!
                                             .validate()) {
                                       SignUp();
-                                      print("name:${_nameController.text}");
-                                      print("Email:${_emailController.text}");
-                                      print(
-                                          "Phone Number:${_phoneController.text}");
-                                      print(
-                                          "Password:${_passwordController.text}");
-                                      //alertDialogError(context);
                                     }
                                   }
                                 }, login == true ? "Sign in" : "Sign Up",
@@ -431,19 +398,25 @@ class _AuthScreenState extends State<AuthScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Platform.isIOS
-                          ? Center(
-                              child: AppButton.appButtonWithLeadingIcon(
-                                "Continue with Apple",
-                                onTap: () async {
-                                  await handleAppleSignIn();
-                                },
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                textColor: AppTheme.appColor,
-                                icons: Icons.apple,
-                                height: 48,
-                              ),
-                            )
+                          ? _appleLoading
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppTheme.appColor,
+                                  ),
+                                )
+                              : Center(
+                                  child: AppButton.appButtonWithLeadingIcon(
+                                    "Continue with Apple",
+                                    onTap: () async {
+                                      await handleAppleSignIn();
+                                    },
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                    textColor: AppTheme.appColor,
+                                    icons: Icons.apple,
+                                    height: 48,
+                                  ),
+                                )
                           : const SizedBox.shrink(),
                       const SizedBox(
                         height: 6,
@@ -491,6 +464,9 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Future<void> handleAppleSignIn() async {
+    setState(() {
+      _appleLoading = true;
+    });
     try {
       final rawNonce = generateNonce();
       final nonce = sha256ofString(rawNonce);
@@ -514,14 +490,39 @@ class _AuthScreenState extends State<AuthScreen> {
       if (kDebugMode) {
         print(result.user!.displayName.toString());
       }
+      String userId = result.user!.uid.toString();
+      String naming = result.user!.displayName.toString();
+      String displayName =
+          "${appleCredential.givenName} ${appleCredential.familyName}";
+      bool newUser = result.additionalUserInfo!.isNewUser;
       print(result.user!.email.toString());
       print(result.user!.uid.toString());
       print(result.additionalUserInfo!.username.toString());
-      push(context, const UserProfileScreen());
+      print(
+          "apple_user_data id $userId email ${result.user!.email.toString()} username $displayName");
+      print(
+          "apple_user_data fullname ${appleCredential.givenName} ${appleCredential.familyName} newUser $newUser");
+
+      // Check if the user is new or returning
+      // if (result.additionalUserInfo != null && result.additionalUserInfo!.isNewUser) {
+      //   // New user
+      //   print("New user signed in with Apple.");
+      // } else {
+      //   // Returning user
+      //   print("Returning user signed in with Apple.");
+      // }
+
+      appleLogin(userId: userId, name: displayName, isNewUser: newUser);
+      setState(() {
+        _appleLoading = true;
+      });
     } catch (e, stackTrace) {
       // Handle exceptions here
       print("Error during Apple Sign-In: $e");
       print("Stack trace: $stackTrace");
+      setState(() {
+        _appleLoading = false;
+      });
     }
   }
 
@@ -538,7 +539,6 @@ class _AuthScreenState extends State<AuthScreen> {
     Map<String, dynamic> params = {
       "name": _nameController.text,
       "email": _emailController.text,
-      "phone": _phoneController.text,
       "password": _passwordController.text,
       "password_confirmation": _confirmPasswordController.text,
     };
@@ -583,7 +583,14 @@ class _AuthScreenState extends State<AuthScreen> {
           setState(() {
             _isLoading = false;
           });
-          push(context, const UserProfileScreen());
+          var token = responseData['data']['token'];
+          var name = responseData['data']['user']['name'];
+          print("username_is $name");
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+          prefs.setString(PrefKey.authorization, token ?? '');
+          prefs.setString(PrefKey.name, name ?? '');
+          pushReplacement(context, const UserProfileScreen());
         }
       }
     } catch (e) {
@@ -595,15 +602,17 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
+  //simple sign in
   void Login() async {
     setState(() {
       _isLoading = true;
     });
     var response;
-    int responseCode200 = 200; // For successful request.
-    int responseCode400 = 400; // For Bad Request.
-    int responseCode401 = 401; // For Unauthorized access.
-    int responseCode500 = 500; // Internal server error.
+    const int responseCode200 = 200; // For successful request.
+    const int responseCode400 = 400; // For Bad Request.
+    const int responseCode401 = 401; // For Unauthorized access.
+    const int responseCode404 = 404; // For For data not found
+    const int responseCode500 = 500; // Internal server error.
 
     Map<String, dynamic> params = {
       "email": _loginEmailController.text,
@@ -612,7 +621,13 @@ class _AuthScreenState extends State<AuthScreen> {
     try {
       response = await dio.post(path: AppUrls.loginUrl, data: params);
       var responseData = response.data;
-      if (response.statusCode == responseCode400) {
+      if (response.statusCode == responseCode404) {
+        print("For For data not found.");
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode400) {
         print(" Bad Request.");
         setState(() {
           _isLoading = false;
@@ -643,11 +658,99 @@ class _AuthScreenState extends State<AuthScreen> {
           setState(() {
             _isLoading = false;
           });
-          push(context, BottomNavView());
+          var token = responseData['data']['token'];
+          var name = responseData['data']['user']['name'];
+          print("username_is $name");
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+          prefs.setString(PrefKey.authorization, token ?? '');
+          prefs.setString(PrefKey.name, name ?? '');
+          pushReplacement(context, BottomNavView());
         }
-        // push(context, const UserProfileScreen());
       }
     } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      print("Something went Wrong ${e}");
+      showSnackBar(context, "Something went Wrong.");
+    }
+  }
+
+  //apple sign in
+  void appleLogin(
+      {required String userId,
+      required bool isNewUser,
+      required String name}) async {
+    setState(() {
+      _appleLoading = true;
+    });
+    var response;
+    const int responseCode200 = 200; // For successful request.
+    const int responseCode400 = 400; // For Bad Request.
+    const int responseCode401 = 401; // For Unauthorized access.
+    const int responseCode404 = 404; // For For data not found.
+    const int responseCode500 = 500; // Internal server error.
+
+    Map<String, dynamic> params = {
+      "apple": userId,
+    };
+    try {
+      response = await dio.post(path: AppUrls.loginUrl, data: params);
+      var responseData = response.data;
+      if (response.statusCode == responseCode404) {
+        print("For For data not found.");
+        setState(() {
+          _appleLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode400) {
+        print(" Bad Request.");
+        setState(() {
+          _appleLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode401) {
+        print(" Unauthorized access.");
+        setState(() {
+          _appleLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode500) {
+        print("Internal server error.");
+        setState(() {
+          _appleLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode200) {
+        if (responseData["status"] == false) {
+          setState(() {
+            _appleLoading = false;
+          });
+          showSnackBar(context, "${responseData["message"]}");
+          return;
+        } else {
+          if (isNewUser) {
+            pushReplacement(context, const UserProfileScreen());
+          } else {
+            pushReplacement(context, BottomNavView());
+          }
+          print("responseData${responseData}");
+          setState(() {
+            _appleLoading = false;
+          });
+          var token = responseData['data']['token'];
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+          prefs.setString(PrefKey.authorization, token ?? '');
+          prefs.setString(PrefKey.name, name ?? '');
+          showSnackBar(context, "${responseData["message"]}");
+        }
+      }
+    } catch (e) {
+      setState(() {
+        _appleLoading = false;
+      });
       print("Something went Wrong ${e}");
       showSnackBar(context, "Something went Wrong.");
     }
