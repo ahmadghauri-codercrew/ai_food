@@ -1,10 +1,14 @@
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
+import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/View/HomeScreen/home_screen.dart';
 import 'package:ai_food/View/HomeScreen/recipe_params_screen.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
+import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -15,14 +19,15 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   final TextEditingController _searchController = TextEditingController();
-  late AppDio dio;
+  late SpoonAcularAppDio dio;
   AppLogger logger = AppLogger();
   bool isLoading = false;
 
   @override
   void initState() {
-    dio = AppDio(context);
+    dio = SpoonAcularAppDio(context);
     logger.init();
     super.initState();
   }
@@ -85,6 +90,11 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: SizedBox(
                             width: width * 0.65,
                             child: TextFormField(
+                              onFieldSubmitted: (value) {
+                                print("search_value $value");
+                                getFood();
+                              },
+                              textInputAction: TextInputAction.search,
                               controller: _searchController,
                               autofocus: true,
                               cursorColor: AppTheme.appColor,
@@ -103,7 +113,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                 return null;
                               },
                               onChanged: (value) {
-                                setState(() {});
+                                setState(() {
+                                  _autoValidateMode = AutovalidateMode.disabled;
+                                });
                               },
                             ),
                           ),
@@ -157,11 +169,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 3.0),
+                                  const Padding(
+                                    padding: EdgeInsets.only(bottom: 3.0),
                                     child: Icon(
                                       Icons.filter_list,
-                                      color: AppTheme.whiteColor,
+                                      color: Color(0xffF8F8F8),
                                       size: 22,
                                     ),
                                   ),
@@ -183,10 +195,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  // Define a boolean variable to track the loading state
-
   Future<void> getFood() async {
-    // Set isLoading to true when the API call starts
     setState(() {
       isLoading = true;
     });
@@ -195,7 +204,7 @@ class _SearchScreenState extends State<SearchScreen> {
     const apiKey = 'd9186e5f351240e094658382be62d948';
 
     final apiUrl =
-        'https://api.spoonacular.com/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
+        '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
 
     try {
       final response = await dio.get(path: apiUrl);
@@ -221,8 +230,47 @@ class _SearchScreenState extends State<SearchScreen> {
       }
     } catch (error) {
       print('API request failed with error: $error');
-    } finally {
-      // Set isLoading to false when the API call completes (success or failure)
-    }
+    } finally {}
   }
+
+  // Future<void> getFood() async {
+  //   // Set isLoading to true when the API call starts
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+
+  //   var searchtext = _searchController.text;
+  //   const apiKey = 'd9186e5f351240e094658382be62d948';
+
+  //   final apiUrl =
+  //       'https://api.spoonacular.com/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
+
+  //   try {
+  //     final response = await dio.get(path: apiUrl);
+
+  //     if (response.statusCode == 200) {
+  //       setState(() {
+  //         isLoading = false;
+  //       });
+  //       pushReplacement(
+  //         context,
+  //         BottomNavView(
+  //           searchType: 0,
+  //           type: 1,
+  //           data: response.data["results"],
+  //           query: searchtext,
+  //           offset: response.data["offset"],
+  //         ),
+  //       );
+
+  //       _searchController.clear();
+  //     } else {
+  //       print('API request failed with status code: ${response.statusCode}');
+  //     }
+  //   } catch (error) {
+  //     print('API request failed with error: $error');
+  //   } finally {
+  //     // Set isLoading to false when the API call completes (success or failure)
+  //   }
+  // }
 }

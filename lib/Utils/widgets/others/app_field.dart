@@ -100,7 +100,9 @@ class _CustomAppFormFieldState extends State<CustomAppFormField> {
               border: UnderlineInputBorder(
                   borderSide: BorderSide(color: AppTheme.appColor)),
               hintText: "${widget.texthint}",
-              hintStyle: widget.hintStyle),
+              hintStyle: widget.hintStyle
+              
+              ),
         ));
   }
 }

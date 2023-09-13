@@ -11,9 +11,11 @@ import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provi
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   final allergies;
@@ -24,8 +26,8 @@ class HomeScreen extends StatefulWidget {
   final totalResults;
   final foodStyle;
   final searchType;
-  final query;
-  const HomeScreen(
+  var query;
+  HomeScreen(
       {Key? key,
       this.data,
       this.type,
@@ -51,28 +53,43 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    print("bsjbdbd$type");
+    print("type$type");
     dio = AppDio(context);
     logger.init();
+    getUserCredentials();
 
     if (widget.type == 1) {
       type = widget.type;
     } else {
-      print("bsjbdbd22222$type");
+      print("type$type");
 
       getSuggestedRecipes(
-        allergies: widget.allergies,
-        dietaryRestrictions: widget.dietaryRestrictions,
+        allergies: widget.allergies ?? "",
+        dietaryRestrictions: widget.dietaryRestrictions ?? "",
       );
     }
     super.initState();
   }
 
+  void getUserCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString(PrefKey.authorization);
+    String? name = prefs.getString(PrefKey.name);
+    print("home_token $token");
+    print("home_name $name");
+  }
+
+  @override
+  void dispose() {
+    widget.query = null;
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    print("djvbwdbw3${widget.allergies}");
-    print("djvbwdbw3uod${widget.dietaryRestrictions}");
+    print("allergies${widget.allergies}");
+    print("dietaryRestrictions${widget.dietaryRestrictions}");
 
     return Scaffold(
       appBar: AppBar(
@@ -84,40 +101,48 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () {
             push(context, const SearchScreen());
           },
-          child: Container(
-            width: width,
-            height: 50,
-            decoration: BoxDecoration(
-              color: const Color(0xffd9c4ef),
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 20.0),
-                  child: Text(
-                    "Search",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                  ),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                width: width,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: const Color(0xffd9c4ef),
+                  borderRadius: BorderRadius.circular(100),
                 ),
-                Container(
-                  width: 60,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFB38ADE),
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(100),
-                        bottomRight: Radius.circular(100)),
-                  ),
-                  child: Icon(
-                    Icons.search_outlined,
-                    size: 35,
-                    color: Color(0xffFFFFFF),
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Text(
+                        "${widget.query ?? "Search"}",
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    Container(
+                      width: 60,
+                      height: 50,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFB38ADE),
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(100),
+                            bottomRight: Radius.circular(100)),
+                      ),
+                      child: const Icon(
+                        Icons.search_outlined,
+                        size: 35,
+                        color: Color(0xffFFFFFF),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -140,56 +165,80 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          padding: const EdgeInsets.only(
+                            left: 10.0,
+                            right: 10,
+                          ),
+                          child: Column(
                             children: [
-                              AppText.appText(
-                                  type == 0 ? "Recommended:" : "Search results",
-                                  fontSize: 20,
-                                  textColor: AppTheme.appColor,
-                                  fontWeight: FontWeight.w600),
-                              // REGENERATE RECIPE BUTTON
-                              type == 1
-                                  ? InkWell(
-                                      onTap: () async {
-                                        if (widget.searchType == 1) {
-                                          await reGenerateRecipe();
-                                        } else {
-                                          await reGenerateRecipeQuery();
-                                        }
-                                      },
-                                      child: Container(
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          color: AppTheme.whiteColor,
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          border: Border.all(
-                                              color: AppTheme.appColor),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(12.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Icon(
-                                                Icons.autorenew,
-                                                color: AppTheme.appColor,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    children: [
+                                      AppText.appText(
+                                          type == 0
+                                              ? "Recommended:"
+                                              : "Search results:",
+                                          fontSize: 20,
+                                          textColor: AppTheme.appColor,
+                                          fontWeight: FontWeight.w600),
+                                    ],
+                                  ),
+                                  // REGENERATE RECIPE BUTTON
+                                  type == 1
+                                      ? InkWell(
+                                          onTap: () async {
+                                            if (widget.searchType == 1) {
+                                              await reGenerateRecipe();
+                                            } else {
+                                              await reGenerateRecipeQuery();
+                                            }
+                                          },
+                                          child: Container(
+                                            height: 35,
+                                            decoration: BoxDecoration(
+                                              color: AppTheme.whiteColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              border: Border.all(
+                                                  color: AppTheme.appColor),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10.0, right: 10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Icon(
+                                                    Icons.autorenew,
+                                                    color: AppTheme.appColor,
+                                                    size: 18,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 4,
+                                                  ),
+                                                  AppText.appText(
+                                                    "Regenerate result",
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                    textColor:
+                                                        AppTheme.appColor,
+                                                  ),
+                                                ],
                                               ),
-                                              AppText.appText(
-                                                "Regenerate",
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                                textColor: AppTheme.appColor,
-                                              ),
-                                            ],
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox.shrink(),
+                                        )
+                                      : const SizedBox.shrink(),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
                             ],
                           ),
                         ),

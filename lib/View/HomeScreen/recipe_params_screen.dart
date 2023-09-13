@@ -10,7 +10,9 @@ import 'package:ai_food/View/HomeScreen/widgets/providers/preferredProtein_provi
 import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/widget.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
+import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Constants/app_logger.dart';
@@ -42,14 +44,14 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   ];
   List<String> addFoodStyle = [];
 
-  late AppDio dio;
+  late SpoonAcularAppDio dio;
   AppLogger logger = AppLogger();
 
   bool isLoading = false;
 
   @override
   void initState() {
-    dio = AppDio(context);
+    dio = SpoonAcularAppDio(context);
     logger.init();
     super.initState();
   }
@@ -110,9 +112,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AppText.appText(
-                      "Food Choices:",
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
+                      "Food choices:",
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                       textColor: AppTheme.appColor,
                     ),
                     GestureDetector(
@@ -139,7 +141,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                         showSnackBar(context, "Filters Reset Succesfully");
                       },
                       child: AppText.appText(
-                        "Reset Filters",
+                        "Reset filters",
                         fontSize: 16,
                         underLine: true,
                         fontWeight: FontWeight.w400,
@@ -153,7 +155,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 15),
                         GestureDetector(
                           onTap: () {
                             showFoodStyle = !showFoodStyle;
@@ -267,7 +269,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                     ),
                     showFoodStyle
                         ? Padding(
-                            padding: const EdgeInsets.only(top: 85.0),
+                            padding: const EdgeInsets.only(top: 65.0),
                             child: customFoodStyle(),
                           )
                         : const SizedBox.shrink(),
@@ -285,7 +287,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                         child: AppButton.appButton(
                           "Generate",
                           fontSize: 20,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           textColor: Colors.white,
                           height: 50,
                           width: 180,
@@ -357,7 +359,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                       children: [
                         const SizedBox(height: 10),
                         Padding(
-                          padding: const EdgeInsets.only(left:18.0),
+                          padding: const EdgeInsets.only(left: 18.0),
                           child: AppText.appText(
                             "${foodStyle[index]}",
                             fontSize: 18,
@@ -425,12 +427,11 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         ? "query=${delicacyProvider.addRegionalDelicacy.toString().substring(1, delicacyProvider.addRegionalDelicacy.toString().length - 1)}"
         : "";
     final apiUrl =
-        'https://api.spoonacular.com/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey';
+        '${AppUrls}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey';
 
     final response = await dio.get(path: apiUrl);
 
     if (response.statusCode == 200) {
-      // ignore: use_build_context_synchronously
       pushReplacement(
           context,
           BottomNavView(
@@ -459,4 +460,74 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
       }
     }
   }
+
+  // Future generateRecipe({style, allergy, dietary, regional, kitchen}) async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   final allergiesProvider =
+  //       Provider.of<AllergiesProvider>(context, listen: false);
+  //   final restrictionsProvider =
+  //       Provider.of<DietaryRestrictionsProvider>(context, listen: false);
+  //   final proteinProvider =
+  //       Provider.of<PreferredProteinProvider>(context, listen: false);
+  //   final delicacyProvider =
+  //       Provider.of<RegionalDelicacyProvider>(context, listen: false);
+  //   final kitchenProvider =
+  //       Provider.of<KitchenResourcesProvider>(context, listen: false);
+  //   const apiKey = 'd9186e5f351240e094658382be62d948';
+  //   final style = addFoodStyle.isNotEmpty
+  //       ? "&cuisine=${addFoodStyle.toString().substring(1, addFoodStyle.toString().length - 1)}"
+  //       : "";
+  //   final kitchenResources = kitchenProvider.addKitchenResources.isNotEmpty
+  //       ? "&equipment=${kitchenProvider.addKitchenResources.toString().substring(1, kitchenProvider.addKitchenResources.toString().length - 1)}"
+  //       : "";
+  //   final preferredProtein = proteinProvider.addProtein.isNotEmpty
+  //       ? "&includeIngredients=${proteinProvider.addProtein.toString().substring(1, proteinProvider.addProtein.toString().length - 1)}"
+  //       : "";
+  //   final allergies = allergiesProvider.addAllergies.isNotEmpty
+  //       ? "&intolerances=${allergiesProvider.addAllergies.toString().substring(1, allergiesProvider.addAllergies.toString().length - 1)}"
+  //       : "";
+  //   final dietaryRestrictions = restrictionsProvider
+  //           .addDietaryRestrictions.isNotEmpty
+  //       ? "&diet=${restrictionsProvider.addDietaryRestrictions.toString().substring(1, restrictionsProvider.addDietaryRestrictions.toString().length - 1)}"
+  //       : "";
+  //   final regionalDelicacy = delicacyProvider.addRegionalDelicacy.isNotEmpty
+  //       ? "query=${delicacyProvider.addRegionalDelicacy.toString().substring(1, delicacyProvider.addRegionalDelicacy.toString().length - 1)}"
+  //       : "";
+  //   final apiUrl =
+  //       'https://api.spoonacular.com/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey';
+
+  //   final response = await dio.get(path: apiUrl);
+
+  //   if (response.statusCode == 200) {
+  //     // ignore: use_build_context_synchronously
+  //     pushReplacement(
+  //         context,
+  //         BottomNavView(
+  //           type: 1,
+  //           offset: response.data["offset"],
+  //           totalResults: response.data["totalResults"],
+  //           foodStyle: addFoodStyle,
+  //           searchType: 1,
+  //           data: response.data["results"],
+  //         ));
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   } else {
+  //     if (response.statusCode == 402) {
+  //       setState(() {
+  //         isLoading = false;
+  //       });
+  //       showSnackBar(context, "${response.statusMessage}");
+  //     } else {
+  //       setState(() {
+  //         isLoading = false;
+  //       });
+  //       print('API request failed with status code: ${response.statusCode}');
+  //       showSnackBar(context, "${response.statusMessage}");
+  //     }
+  //   }
+  // }
 }

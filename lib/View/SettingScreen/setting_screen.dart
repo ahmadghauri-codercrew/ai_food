@@ -8,11 +8,13 @@ import 'package:ai_food/View/SettingScreen/privacypolicy_screen.dart';
 import 'package:ai_food/View/SettingScreen/profile_screen.dart';
 import 'package:ai_food/View/SettingScreen/termsofuse_screen.dart';
 import 'package:ai_food/View/auth/GoogleSignIn/authentication.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -235,7 +237,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       children: [
                         GestureDetector(
                           onTap: () async {
-                            await Authentication.signOut(context: context);
+                            await logout(context);
                           },
                           child: const Text(
                             'Yes',
@@ -310,7 +312,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           topRight: Radius.circular(8.0)),
                     ),
                     height: 56,
-                    width: 300,
+                    width: MediaQuery.sizeOf(context).width,
                     child: Center(
                       child: Text(
                         "Contact Us",
@@ -335,8 +337,10 @@ class _SettingScreenState extends State<SettingScreen> {
                             decoration: InputDecoration(
                                 contentPadding:
                                     EdgeInsets.only(top: 20, left: 10),
-                                hintStyle:
-                                    TextStyle(color: AppTheme.whiteColor),
+                                hintStyle: TextStyle(
+                                    color: AppTheme.whiteColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400),
                                 hintText: "jessica hanson",
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide:
@@ -359,7 +363,10 @@ class _SettingScreenState extends State<SettingScreen> {
                           decoration: InputDecoration(
                               contentPadding:
                                   EdgeInsets.only(top: 20, left: 10),
-                              hintStyle: TextStyle(color: AppTheme.whiteColor),
+                              hintStyle: TextStyle(
+                                  color: AppTheme.whiteColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400),
                               hintText: "jessicahanson@gmail.com",
                               focusedBorder: UnderlineInputBorder(
                                   borderSide:
@@ -402,7 +409,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   Center(
                     child: AppButton.appButton("Send message ",
                         fontSize: 20,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         textColor: AppTheme.appColor,
                         height: 50,
                         width: 180,
@@ -422,4 +429,9 @@ class _SettingScreenState extends State<SettingScreen> {
       },
     );
   }
+  Future<void> logout(context) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove(PrefKey.authorization);
+  await Authentication.signOut(context: context);
+}
 }

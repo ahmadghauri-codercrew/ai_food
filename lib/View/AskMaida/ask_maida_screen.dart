@@ -50,7 +50,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   Widget build(BuildContext context) {
     final loadingProvider = Provider.of<ChatBotProvider>(context, listen: true);
     return Scaffold(
-      backgroundColor: const Color(0xffa7a7a7),
+      backgroundColor: Colors.black.withOpacity(0.1),
       // floatingActionButton: FloatingActionButton(onPressed: () {
       //   getRecipeInformation(id:);
       // }),
@@ -286,38 +286,20 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                                       RegExp urlRegex = RegExp(
                                           r'https:\/\/spoonacular\.com\/recipes\/(.+)-(\d+)');
 
-// Use RegExp.firstMatch to find the first match in the inputString
                                       final match =
                                           urlRegex.firstMatch(inputString);
 
                                       if (match != null) {
-                                        // Extract the two captured groups: the substring and the digits
                                         String? substring = match.group(1);
                                         String? digits = match.group(2);
                                         getRecipeInformation(id: digits);
 
-                                        // Print the results
-                                        print(
-                                            "Substring: $substring"); // Output: Substring: chickpea-burgers-with-spinach
-                                        print(
-                                            "Digits: $digits"); // Output: Digits: 720738
+                                        print("Substring: $substring");
+                                        print("Digits: $digits");
                                       } else {
                                         print("No match found");
                                       }
                                     },
-                                    // child: Container(
-                                    //   height: 50,
-                                    //   width: 150,
-                                    //   decoration: BoxDecoration(
-                                    //       color: AppTheme.appColor,
-                                    //       borderRadius:
-                                    //           BorderRadius.circular(10)),
-                                    //   child: Center(
-                                    //     child: AppText.appText("Recipe Details",
-                                    //         fontSize: 18,
-                                    //         textColor: AppTheme.whiteColor),
-                                    //   ),
-                                    // ),
                                     child: SizedBox(
                                       width: 300,
                                       child: Center(
@@ -338,7 +320,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                           )
                           .toList(),
                     ),
-              const Divider(),
             ],
           ),
         );
@@ -352,6 +333,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   }
 
   getRecipeInformation({id}) async {
+    print("gurirug23r3rhi3hrihior");
     const apiKey = '1acf1e54a67342b3bfa0f3d0b7888c6e';
     var url =
         "https://api.spoonacular.com/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";

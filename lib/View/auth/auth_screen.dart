@@ -9,14 +9,16 @@ import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_card.dart';
+import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/auth/forgot_password_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
-import 'package:dio/dio.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:sizer/sizer.dart';
 import 'package:crypto/crypto.dart';
@@ -34,6 +36,9 @@ class _AuthScreenState extends State<AuthScreen> {
   bool login = true;
   late AppDio dio;
   AppLogger logger = AppLogger();
+
+  bool _isLoading = false;
+  bool _appleLoading = false;
 
   //final _formKey = GlobalKey<FormState>();
   final _formKeyName = GlobalKey<FormState>();
@@ -89,8 +94,7 @@ class _AuthScreenState extends State<AuthScreen> {
         resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
           child: Padding(
-            padding:
-                const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 25),
+            padding: const EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 25),
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.93,
               child: Column(
@@ -117,311 +121,336 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                   Customcard(
-                      childWidget: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        login = true;
-                                      });
-                                    },
-                                    child: SizedBox(
-                                      width: 90,
-                                      child: AppText.appText("Sign in",
-                                          textColor: login == true
-                                              ? AppTheme.appColor
-                                              : Colors.black.withOpacity(0.25),
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w600),
-                                    )),
-                                login == true
-                                    ? SizedBox(
-                                        height: 5,
-                                        width: 90,
-                                        child: Divider(
-                                          color: AppTheme.appColor,
-                                          thickness: 2.0,
-                                          height: 20.0,
-                                        ),
-                                      )
-                                    : const SizedBox(
-                                        height: 5,
-                                      )
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        login = false;
-                                        _nameController.text = '';
-                                        _emailController.text = '';
-                                        _phoneController.text = '';
-                                        _passwordController.text = '';
-                                        _confirmPasswordController.text = '';
-                                      });
-                                    },
-                                    child: SizedBox(
-                                      width: 95,
-                                      child: AppText.appText("Sign up",
-                                          textColor: login == false
-                                              ? AppTheme.appColor
-                                              : Colors.black.withOpacity(0.25),
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w600),
-                                    )),
-                                login == false
-                                    ? SizedBox(
-                                        height: 5,
-                                        width: 95,
-                                        child: Divider(
-                                          color: AppTheme.appColor,
-                                          thickness: 2.0,
-                                          height: 20.0,
-                                        ),
-                                      )
-                                    : const SizedBox(
-                                        height: 5,
-                                      )
-                              ],
-                            ),
-                          ],
-                        ),
-                        login == true
-                            ? Column(
+                    childWidget: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
                                 children: [
-                                  Form(
-                                    key: _formKeyLoginEmail,
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    child: CustomAppFormField(
+                                  InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          login = true;
+                                        });
+                                      },
+                                      child: SizedBox(
+                                        width: 90,
+                                        child: AppText.appText("Sign in",
+                                            textColor: login == true
+                                                ? AppTheme.appColor
+                                                : const Color(0xffBFBFBF),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w600),
+                                      )),
+                                  login == true
+                                      ? SizedBox(
+                                          height: 5,
+                                          width: 90,
+                                          child: Divider(
+                                            color: AppTheme.appColor,
+                                            thickness: 2.0,
+                                            height: 20.0,
+                                          ),
+                                        )
+                                      : const SizedBox(
+                                          height: 5,
+                                        )
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          login = false;
+                                          _nameController.text = '';
+                                          _emailController.text = '';
+                                          _phoneController.text = '';
+                                          _passwordController.text = '';
+                                          _confirmPasswordController.text = '';
+                                        });
+                                      },
+                                      child: SizedBox(
+                                        width: 95,
+                                        child: AppText.appText("Sign up",
+                                            textColor: login == false
+                                                ? AppTheme.appColor
+                                                // : Colors.black.withOpacity(0.25),
+                                                : const Color(0xffBFBFBF),
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w600),
+                                      )),
+                                  login == false
+                                      ? SizedBox(
+                                          height: 5,
+                                          width: 95,
+                                          child: Divider(
+                                            color: AppTheme.appColor,
+                                            thickness: 2.0,
+                                            height: 20.0,
+                                          ),
+                                        )
+                                      : const SizedBox(
+                                          height: 5,
+                                        )
+                                ],
+                              ),
+                            ],
+                          ),
+                          login == true
+                              ? Column(
+                                  children: [
+                                    Form(
+                                      key: _formKeyLoginEmail,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      child: CustomAppFormField(
+                                          validator: (value) {
+                                            final isEmailValid = RegExp(
+                                                    r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
+                                                .hasMatch(value);
+                                            final isMobileValid = RegExp(
+                                                    r'^\+(?:[0-9] ?){6,14}[0-9]$')
+                                                .hasMatch(value);
+                                            if (value.isEmpty ||
+                                                value == null) {
+                                              return "Please enter your email or mobile number";
+                                            }
+                                            if (!isEmailValid && !isMobileValid) {
+                                              return "Please enter a valid email or Number i.e (+1)";
+                                            }
+                                            return null;
+                                          },
+                                          texthint: "Email or Mobile number",
+                                          hintStyle: TextStyle(
+                                              color: AppTheme.appColor),
+                                          controller: _loginEmailController),
+                                    ),
+                                    Form(
+                                      key: _formKeyLoginPassword,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      child: CustomAppPasswordfield(
                                         validator: (value) {
-                                          final isEmailValid = RegExp(
-                                                  r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
-                                              .hasMatch(value);
-                                          final isMobileValid = RegExp(
-                                                  r'^\+(?:[0-9] ?){6,14}[0-9]$')
-                                              .hasMatch(value);
-                                          if (value.isEmpty || value == null) {
-                                            return "Please enter your email or mobile number";
-                                          }
-                                          if (!isEmailValid && !isMobileValid) {
-                                            return "Please enter a valid email";
+                                          if (value.isEmpty) {
+                                            return "Field cannot be empty";
+                                          } else if (value.length < 8) {
+                                            return "password length should atleast 8";
                                           }
                                           return null;
                                         },
-                                        texthint: "Email or Mobile number",
-                                        hintStyle:
-                                            TextStyle(color: AppTheme.appColor),
-                                        controller: _loginEmailController),
-                                  ),
-                                  Form(
-                                    key: _formKeyLoginPassword,
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    child: CustomAppPasswordfield(
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return "Field cannot be empty";
-                                        } else if (value.length < 8) {
-                                          return "password length should atleast 8";
-                                        }
-                                        return null;
-                                      },
-                                      texthint: "Password",
-                                      controller: _loginPasswordController,
+                                        texthint: "Password",
+                                        controller: _loginPasswordController,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ForgotPasswordScreen(),
-                                                ));
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ForgotPasswordScreen(),
+                                                  ));
+                                            },
+                                            child: AppText.appText(
+                                              "Forgot password?",
+                                              textColor: AppTheme.appColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                      ],
+                                    )
+                                  ],
+                                )
+                              : Column(
+                                  children: [
+                                    Form(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      key: _formKeyName,
+                                      child: CustomAppFormField(
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please enter your name';
+                                            }
+                                            return null; // Validation passed
                                           },
-                                          child: AppText.appText(
-                                            "Forgot password?",
-                                            textColor: AppTheme.appColor,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
-                                          )),
-                                    ],
-                                  )
-                                ],
-                              )
-                            : Column(
-                                children: [
-                                  Form(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    key: _formKeyName,
-                                    child: CustomAppFormField(
+                                          height: 50,
+                                          texthint: "Enter full name",
+                                          hintStyle: TextStyle(
+                                              color: AppTheme.appColor),
+                                          controller: _nameController),
+                                    ),
+                                    Form(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      key: _formKeyEmail,
+                                      child: CustomAppFormField(
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please enter your name';
+                                            return 'Please enter your email';
                                           }
-                                          return null; // Validation passed
+                                          final emailRegex = RegExp(
+                                              r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+                                          if (!emailRegex.hasMatch(value)) {
+                                            return 'Invalid Email';
+                                          }
+                                          return null;
                                         },
                                         height: 50,
-                                        texthint: "Enter full name",
+                                        texthint: "Enter email",
                                         hintStyle:
                                             TextStyle(color: AppTheme.appColor),
-                                        controller: _nameController),
-                                  ),
-                                  Form(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    key: _formKeyEmail,
-                                    child: CustomAppFormField(
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter your email';
-                                        }
-                                        final emailRegex = RegExp(
-                                            r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-                                        if (!emailRegex.hasMatch(value)) {
-                                          return 'Invalid Email';
-                                        }
-                                        return null;
-                                      },
-                                      height: 50,
-                                      texthint: "Enter email",
-                                      hintStyle:
-                                          TextStyle(color: AppTheme.appColor),
-                                      controller: _emailController,
+                                        controller: _emailController,
+                                      ),
                                     ),
-                                  ),
-                                  Form(
-                                    key: _formKeyPhone,
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    child: CustomAppFormField(
+                                    Form(
+                                      key: _formKeyPhone,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      child: CustomAppFormField(
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please enter your mobile number';
+                                            }
+                                            final isMobileValid = RegExp(
+                                                    r'^\+(?:[0-9] ?){6,14}[0-9]$')
+                                                .hasMatch(value);
+
+                                            if (!isMobileValid) {
+                                              return "Please enter a valid email or Number i.e (+1)";
+                                            }
+                                            return null; // Validation passed
+                                          },
+                                          texthint: "Enter mobile number",
+                                          hintStyle: TextStyle(
+                                              color: AppTheme.appColor),
+                                          controller: _phoneController),
+                                    ),
+                                    Form(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      key: _formKeyPassword,
+                                      child: CustomAppPasswordfield(
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please enter your mobile number';
-                                          }
-                                          final isMobileValid = RegExp(
-                                                  r'^\+(?:[0-9] ?){6,14}[0-9]$')
-                                              .hasMatch(value);
-
-                                          if (!isMobileValid) {
-                                            return "Please enter a valid email or mobile number";
+                                            return 'Please enter your password';
+                                          } else if (value.length < 8) {
+                                            return "password length should atleast 8";
                                           }
                                           return null; // Validation passed
                                         },
-                                        texthint: "Enter mobile number",
-                                        hintStyle:
-                                            TextStyle(color: AppTheme.appColor),
-                                        controller: _phoneController),
-                                  ),
-                                  Form(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    key: _formKeyPassword,
-                                    child: CustomAppPasswordfield(
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter your password';
-                                        } else if (value.length < 8) {
-                                          return "password length should atleast 8";
-                                        }
-                                        return null; // Validation passed
-                                      },
-                                      texthint: "Enter password",
-                                      controller: _passwordController,
+                                        texthint: "Enter password",
+                                        controller: _passwordController,
+                                      ),
                                     ),
-                                  ),
-                                  Form(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    key: _formKeyConfirmPassword,
-                                    child: CustomAppPasswordfield(
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter your confirm Password';
-                                        } else if (value.length < 8) {
-                                          return "password length should atleast 8";
-                                        } else if (_passwordController.text !=
-                                            value) {
-                                          return "password does not match";
-                                        }
-                                        return null; // Validation passed
-                                      },
-                                      texthint: "Confirm password",
-                                      controller: _confirmPasswordController,
+                                    Form(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      key: _formKeyConfirmPassword,
+                                      child: CustomAppPasswordfield(
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter your confirm Password';
+                                          } else if (value.length < 8) {
+                                            return "password length should atleast 8";
+                                          } else if (_passwordController.text !=
+                                              value) {
+                                            return "password does not match";
+                                          }
+                                          return null; // Validation passed
+                                        },
+                                        texthint: "Confirm password",
+                                        controller: _confirmPasswordController,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                        AppButton.appButton(onTap: () {
-                          if (login == true) {
-                            if (_formKeyLoginEmail.currentState!.validate() &&
-                                _formKeyLoginPassword.currentState!
-                                    .validate()) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const UserProfileScreen(),
+                                  ],
                                 ),
-                              );
-                            }
-                          } else {
-                            if (_formKeyName.currentState!.validate() &&
-                                _formKeyEmail.currentState!.validate() &&
-                                _formKeyPhone.currentState!.validate() &&
-                                _formKeyPassword.currentState!.validate() &&
-                                _formKeyConfirmPassword.currentState!
-                                    .validate()) {
-                              SignUp();
-                              print("name:${_nameController.text}");
-                              print("Email:${_emailController.text}");
-                              print("Phone Number:${_phoneController.text}");
-                              print("Password:${_passwordController.text}");
-                              //alertDialogError(context);
-                            }
-                          }
-                        }, login == true ? "Sign in" : "Sign Up",
-                            blurContainer: true,
-                            backgroundColor: AppTheme.appColor,
-                            textColor: Colors.white,
-                            width: 44.w,
-                            height: 40,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600)
-                      ])),
+                          _isLoading
+                              ? CircularProgressIndicator(
+                                  color: AppTheme.appColor,
+                                )
+                              : AppButton.appButton(onTap: () {
+                                  if (login == true) {
+                                    if (_formKeyLoginEmail.currentState!
+                                            .validate() &&
+                                        _formKeyLoginPassword.currentState!
+                                            .validate()) {
+                                      // Navigator.of(context).push(
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) =>
+                                      //         const UserProfileScreen(),
+                                      //   ),
+                                      // );
+                                      Login();
+                                      print("Email:${_emailController.text}");
+                                      print(
+                                          "Password:${_passwordController.text}");
+                                    }
+                                  } else {
+                                    if (_formKeyName.currentState!.validate() &&
+                                        _formKeyEmail.currentState!
+                                            .validate() &&
+                                        _formKeyPhone.currentState!
+                                            .validate() &&
+                                        _formKeyPassword.currentState!
+                                            .validate() &&
+                                        _formKeyConfirmPassword.currentState!
+                                            .validate()) {
+                                      SignUp();
+                                      print("name:${_nameController.text}");
+                                      print("Email:${_emailController.text}");
+                                      print(
+                                          "Phone Number:${_phoneController.text}");
+                                      print(
+                                          "Password:${_passwordController.text}");
+                                      //alertDialogError(context);
+                                    }
+                                  }
+                                }, login == true ? "Sign in" : "Sign Up",
+                                  blurContainer: true,
+                                  backgroundColor: AppTheme.appColor,
+                                  textColor: Colors.white,
+                                  width: 44.w,
+                                  height: 40,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600)
+                        ]),
+                  ),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Platform.isIOS
-                          ? Center(
-                              child: AppButton.appButtonWithLeadingIcon(
-                                "Continue with Apple",
-                                onTap: () async {
-                                  await handleAppleSignIn();
-                                },
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                textColor: AppTheme.appColor,
-                                icons: Icons.apple,
-                                height: 48,
-                              ),
-                            )
+                          ? _appleLoading
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppTheme.appColor,
+                                  ),
+                                )
+                              : Center(
+                                  child: AppButton.appButtonWithLeadingIcon(
+                                    "Continue with Apple",
+                                    onTap: () async {
+                                      await handleAppleSignIn();
+                                    },
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                    textColor: AppTheme.appColor,
+                                    icons: Icons.apple,
+                                    height: 48,
+                                  ),
+                                )
                           : const SizedBox.shrink(),
                       const SizedBox(
                         height: 6,
@@ -469,6 +498,9 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Future<void> handleAppleSignIn() async {
+    setState(() {
+      _appleLoading = true;
+    });
     try {
       final rawNonce = generateNonce();
       final nonce = sha256ofString(rawNonce);
@@ -492,18 +524,44 @@ class _AuthScreenState extends State<AuthScreen> {
       if (kDebugMode) {
         print(result.user!.displayName.toString());
       }
+      String userId = result.user!.uid.toString();
+      String naming = result.user!.displayName.toString();
+      String displayName = "${appleCredential.givenName} ${appleCredential.familyName}";
+      bool newUser = result.additionalUserInfo!.isNewUser;
       print(result.user!.email.toString());
       print(result.user!.uid.toString());
       print(result.additionalUserInfo!.username.toString());
-      push(context, const UserProfileScreen());
+      print("apple_user_data id $userId email ${result.user!.email.toString()} username $displayName");
+      print("apple_user_data fullname ${appleCredential.givenName} ${appleCredential.familyName} newUser $newUser");
+
+
+      // Check if the user is new or returning
+      // if (result.additionalUserInfo != null && result.additionalUserInfo!.isNewUser) {
+      //   // New user
+      //   print("New user signed in with Apple.");
+      // } else {
+      //   // Returning user
+      //   print("Returning user signed in with Apple.");
+      // }
+
+      appleLogin(userId: userId, name: displayName, isNewUser: newUser);
+      setState(() {
+        _appleLoading = true;
+      });
     } catch (e, stackTrace) {
       // Handle exceptions here
       print("Error during Apple Sign-In: $e");
       print("Stack trace: $stackTrace");
+      setState(() {
+        _appleLoading = false;
+      });
     }
   }
 
   void SignUp() async {
+    setState(() {
+      _isLoading = true;
+    });
     var response;
     int responseCode200 = 200; // For successful request.
     int responseCode400 = 400; // For Bad Request.
@@ -522,47 +580,209 @@ class _AuthScreenState extends State<AuthScreen> {
       var responseData = response.data;
       if (response.statusCode == responseCode400) {
         print("Bad Request.");
+        showSnackBar(context, "${responseData["message"]}");
+        setState(() {
+          _isLoading = false;
+        });
       } else if (response.statusCode == responseCode401) {
         print("Unauthorized access.");
+        showSnackBar(context, "${responseData["message"]}");
+        setState(() {
+          _isLoading = false;
+        });
       } else if (response.statusCode == responseCode404) {
         print(
             "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+        showSnackBar(context, "${responseData["message"]}");
+        setState(() {
+          _isLoading = false;
+        });
       } else if (response.statusCode == responseCode500) {
         print("Internal server error.");
+        showSnackBar(context, "${responseData["message"]}");
+        setState(() {
+          _isLoading = false;
+        });
       } else if (response.statusCode == responseCode200) {
-        print("responseData${responseData}");
+        if (responseData["status"] == false) {
+          setState(() {
+            _isLoading = false;
+          });
+          showSnackBar(context, "${responseData["message"]}");
+          return;
+        } else {
+          print("responseData${responseData}");
+          showSnackBar(context, "${responseData["message"]}");
+          setState(() {
+            _isLoading = false;
+          });
+          var token = responseData['data']['token'];
+          var name = responseData['data']['user']['name'];
+          print("username_is $name");
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+          prefs.setString(PrefKey.authorization, token ?? '');
+          prefs.setString(PrefKey.name, name ?? '');
+          pushReplacement(context, const UserProfileScreen());
+        }
       }
     } catch (e) {
       print("Something went Wrong ${e}");
+      showSnackBar(context, "Something went Wrong.");
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
+  //simple sign in
   void Login() async {
+    setState(() {
+      _isLoading = true;
+    });
     var response;
-    int responseCode200 = 200; // For successful request.
-    int responseCode400 = 400; // For Bad Request.
-    int responseCode401 = 401; // For Unauthorized access.
-    int responseCode500 = 500; // Internal server error.
+    const int responseCode200 = 200; // For successful request.
+    const int responseCode400 = 400; // For Bad Request.
+    const int responseCode401 = 401; // For Unauthorized access.
+    const int responseCode404 = 404; // For For data not found
+    const int responseCode500 = 500; // Internal server error.
 
     Map<String, dynamic> params = {
       "email": _loginEmailController.text,
       "password": _loginPasswordController.text,
     };
     try {
-      response = await dio.post(path: AppUrls.signUpUrl, data: params);
+      response = await dio.post(path: AppUrls.loginUrl, data: params);
       var responseData = response.data;
-      if (response.statusCode == responseCode400) {
+      if (response.statusCode == responseCode404) {
+        print("For For data not found.");
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode400) {
         print(" Bad Request.");
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode401) {
         print(" Unauthorized access.");
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode500) {
         print("Internal server error.");
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode200) {
-        print("responseData${responseData}");
-        showSnackBar(context, "User created Successfully");
+        if (responseData["status"] == false) {
+          setState(() {
+            _isLoading = false;
+          });
+          showSnackBar(context, "${responseData["message"]}");
+          return;
+        } else {
+          print("responseData${responseData}");
+          showSnackBar(context, "${responseData["message"]}");
+          setState(() {
+            _isLoading = false;
+          });
+          var token = responseData['data']['token'];
+          var name = responseData['data']['user']['name'];
+          print("username_is $name");
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+          prefs.setString(PrefKey.authorization, token ?? '');
+          prefs.setString(PrefKey.name, name ?? '');
+          pushReplacement(context, BottomNavView());
+        }
       }
     } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
       print("Something went Wrong ${e}");
+      showSnackBar(context, "Something went Wrong.");
+    }
+  }
+
+  //apple sign in
+  void appleLogin({required String userId, required bool isNewUser, required String name}) async {
+    setState(() {
+      _appleLoading = true;
+    });
+    var response;
+    const int responseCode200 = 200; // For successful request.
+    const int responseCode400 = 400; // For Bad Request.
+    const int responseCode401 = 401; // For Unauthorized access.
+    const int responseCode404 = 404; // For For data not found.
+    const int responseCode500 = 500; // Internal server error.
+
+    Map<String, dynamic> params = {
+      "apple": userId,
+    };
+    try {
+      response = await dio.post(path: AppUrls.loginUrl, data: params);
+      var responseData = response.data;
+      if (response.statusCode == responseCode404) {
+        print("For For data not found.");
+        setState(() {
+          _appleLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode400) {
+        print(" Bad Request.");
+        setState(() {
+          _appleLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode401) {
+        print(" Unauthorized access.");
+        setState(() {
+          _appleLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode500) {
+        print("Internal server error.");
+        setState(() {
+          _appleLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode200) {
+        if (responseData["status"] == false) {
+          setState(() {
+            _appleLoading = false;
+          });
+          showSnackBar(context, "${responseData["message"]}");
+          return;
+        } else {
+          if(isNewUser){
+            pushReplacement(context, const UserProfileScreen());
+          } else {
+            pushReplacement(context, BottomNavView());
+          }
+          print("responseData${responseData}");
+          setState(() {
+            _appleLoading = false;
+          });
+          var token = responseData['data']['token'];
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+          prefs.setString(PrefKey.authorization, token ?? '');
+          prefs.setString(PrefKey.name, name ?? '');
+          showSnackBar(context, "${responseData["message"]}");
+        }
+      }
+    } catch (e) {
+      setState(() {
+        _appleLoading = false;
+      });
+      print("Something went Wrong ${e}");
+      showSnackBar(context, "Something went Wrong.");
     }
   }
 

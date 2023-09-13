@@ -8,7 +8,6 @@ import 'package:ai_food/Utils/widgets/others/custom_card.dart';
 import 'package:ai_food/View/auth/otp_screen.dart';
 import 'package:ai_food/View/auth/set_password_screen.dart';
 import 'package:ai_food/config/app_urls.dart';
-import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,6 +29,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   bool _verificationInProgress = false;
   String? verificationIdCheck;
   final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   Future<void> _verifyPhoneNumber(String phoneNumber) async {
     setState(() {
@@ -104,7 +104,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ));
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (_) => OTPScreen(
-              verificationId: verificationId, mobileNumber: phoneNumber)));
+              type: 0,
+              verificationId: verificationId,
+              mobileNumber: phoneNumber,
+              email: phoneNumber,
+              )));
     }
 
     codeAutoRetrievalTimeout(String verificationId) {
@@ -149,7 +153,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const SetPasswordSreen())),
+                    builder: (context) => const SetPasswordScreen())),
                 child: const Text('OK'),
               ),
             ],
@@ -210,203 +214,178 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     var screenWidth = MediaQuery.of(context).size.width;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(
-              left: 25,
-              right: 25,
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: InkWell(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(Icons.arrow_back_ios, color: AppTheme.appColor),
-                        AppText.appText(
-                          "Back",
-                          underLine: true,
-                          textColor: AppTheme.appColor,
-                          fontSize: 20,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: InkWell(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      AppText.appText("Forgot Password",
-                          fontSize: 32,
-                          textColor: AppTheme.appColor,
-                          fontWeight: FontWeight.w600),
-                      AppText.appText("Enter email or number",
-                          fontSize: 16,
-                          textColor: AppTheme.appColor,
-                          fontWeight: FontWeight.w600),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Customcard(
-                                childWidget: Column(
-                              children: [
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.14,
-                                ),
-                                CustomAppFormField(
-                                  onTap: () {
-                                    _formKey.currentState!.reset();
-                                    forgetPassword(
-                                        emailController: _textController);
-                                  },
-                                  texthint: "Email or Mobile number",
-                                  hintStyle: TextStyle(
-                                      color: AppTheme.appColor,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400),
-                                  controller: _textController,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Please enter your email or mobile number";
-                                    }
-                                    final isEmailValid = RegExp(
-                                            r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
-                                        .hasMatch(value);
-                                    final isMobileValid =
-                                        RegExp(r'^\d{10}$').hasMatch(value);
-
-                                    if (!isEmailValid && !isMobileValid) {
-                                      return "Please enter a valid email or mobile number";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * .330,
-                                ),
-                                _verificationInProgress
-                                    ? Center(
-                                        child: CircularProgressIndicator(
-                                          color: AppTheme.appColor,
-                                          strokeWidth: 4,
-                                        ),
-                                      )
-                                    : AppButton.appButton("Send OTP",
-                                        onTap: () {
-                                        String inputText =
-                                            _textController.text.trim();
-                                        final emailRegExp = RegExp(
-                                            r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-
-                                        if (_formKey.currentState!.validate()) {
-                                          if (emailRegExp.hasMatch(inputText)) {
-                                            resetYourPassword(inputText);
-                                          } else {
-                                            if (!_verificationInProgress) {
-                                              if (inputText.isNotEmpty) {
-                                                _verifyPhoneNumber(inputText);
-                                              }
-                                            }
-                                          }
-                                        }
-                                      },
-                                        width: 43.w,
-                                        height: 5.5.h,
-                                        border: false,
-                                        backgroundColor: AppTheme.appColor,
-                                        textColor: AppTheme.whiteColor,
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w600)
-                              ],
-                            )),
-                          ],
-                        ),
+                      Icon(Icons.arrow_back_ios, color: AppTheme.appColor),
+                      AppText.appText(
+                        "Back",
+                        underLine: true,
+                        textColor: AppTheme.appColor,
+                        fontSize: 20,
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppText.appText("Forgot Password",
+                      fontSize: 32,
+                      textColor: AppTheme.appColor,
+                      fontWeight: FontWeight.w600),
+                  AppText.appText("Enter email or number",
+                      fontSize: 16,
+                      textColor: AppTheme.appColor,
+                      fontWeight: FontWeight.w600),
+                  const SizedBox(
+                    height: 60,
+                  ),
+                  Center(
+                    child: Customcard(
+                        childWidget: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 120.0),
+                          child: Form(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            key: _formKey,
+                            child: CustomAppFormField(
+                              texthint: "Email or Mobile number",
+                              hintStyle: TextStyle(
+                                  color: AppTheme.appColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400),
+                              controller: _textController,
+                              validator: (value) {
+                                final isEmailValid = RegExp(
+                                        r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
+                                    .hasMatch(value);
+                                final isMobileValid =
+                                    RegExp(r'^\+(?:[0-9] ?){6,14}[0-9]$')
+                                        .hasMatch(value);
+                                if (value.isEmpty || value == null) {
+                                  return "Please enter your email or mobile number";
+                                }
+                                if (!isEmailValid && !isMobileValid) {
+                                  return "Please enter a valid email or Number i.e (+1)";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                        _verificationInProgress || isLoading == true
+                            ? Align(
+                                alignment: Alignment.bottomCenter,
+                                child: CircularProgressIndicator(
+                                  color: AppTheme.appColor,
+                                  strokeWidth: 4,
+                                ),
+                              )
+                            : Align(
+                                alignment: Alignment.bottomCenter,
+                                child: AppButton.appButton("Send OTP",
+                                    onTap: () {
+                                  String inputText =
+                                      _textController.text.trim();
+                                  final emailRegExp = RegExp(
+                                      r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+
+                                  if (_formKey.currentState!.validate()) {
+                                    if (emailRegExp.hasMatch(inputText)) {
+                                      forgetPassword(text: inputText);
+                                    } else {
+                                      if (!_verificationInProgress) {
+                                        if (inputText.isNotEmpty) {
+                                          _verifyPhoneNumber(inputText);
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                    width: 43.w,
+                                    height: 5.5.h,
+                                    border: false,
+                                    backgroundColor: AppTheme.appColor,
+                                    textColor: AppTheme.whiteColor,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w600))
+                      ],
+                    )),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  forgetPassword({emailController}) async {
-    final url = AppUrls.baseUrl + AppUrls.forgetPasswordUrl;
-    final dio =
-        Dio(); // Assuming you have imported and configured Dio properly.
-    try {
-      final response = await dio.post(
-        url,
-        data: emailController,
-      );
+  void forgetPassword({text}) async {
+    setState(() {
+      isLoading = true;
+    });
 
-      if (response.statusCode == 200) {
-        final responseData = response.data;
+    Map<String, dynamic> params = {
+      "email": text,
+    };
 
-        if (responseData['status'] == 'success') {
-          showSnackBar(context, responseData['message']);
-        } else {
-          print("API Error: ${responseData['message']}");
-        }
+    final response =
+        await dio.post(path: AppUrls.forgetPasswordUrl, data: params);
+
+    if (response.statusCode == 200) {
+      var responseData = response.data;
+
+      if (responseData["status"] == false) {
+        setState(() {
+          isLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+        return;
       } else {
-        print("HTTP Error: ${response.statusCode}");
+        print("responseData${responseData["data"]["OTP"]}");
+        showSnackBar(context, "${responseData["message"]}");
+        setState(() {
+          isLoading = false;
+        });
+        pushReplacement(
+            context,
+            OTPScreen(
+              type: 1,
+              otp: responseData["data"]["OTP"],
+              email: text,
+            ));
       }
-    } catch (e) {
-      if (e is DioError) {
-        if (e.response != null) {
-          print(
-              "Dio Error: ${e.response?.statusCode} - ${e.response!.statusMessage}");
-          print("Response Data: ${e.response!.data}");
-        } else {
-          print("Dio Error: ${e.message}");
-        }
+    } else {
+      if (response.statusCode == 402) {
+        setState(() {
+          isLoading = false;
+        });
+        showSnackBar(context, "${response.statusMessage}");
       } else {
-        print("Generic Error: $e");
+        setState(() {
+          isLoading = false;
+        });
+        print('API request failed with status code: ${response.statusCode}');
+        showSnackBar(context, "${response.statusMessage}");
       }
-
-      showSnackBar(context, "An error occurred: $e");
     }
   }
 }
-
-//   forgetPassword({emailController}) async {
-//     final url = AppUrls.baseUrl + AppUrls.forgetPasswordUrl;
-//     final response;
-//     try {
-//       response = await dio.post(
-//         path: url,
-//         data: emailController,
-//       );
-//       print(response['status']);
-//       if (response.statusCode == 200) {
-//         showSnackBar(context, "${response[1]['message']}");
-//         print(response['status']);
-//       } else {
-//         print("error${response['status']}");
-//       }
-//     } catch (e) {
-//       showSnackBar(context, e.toString());
-//       print(e.toString());
-//     }
-//   }
-// }
