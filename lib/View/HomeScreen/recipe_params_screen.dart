@@ -463,7 +463,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     final style = addFoodStyle.isNotEmpty
         ? "&cuisine=${addFoodStyle.toString().substring(1, addFoodStyle.toString().length - 1)}"
         : "";

@@ -88,6 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
   void loadselectParamsfromAPI() async {
     var recipesParams;
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? recipesParamsJson = prefs.getString(PrefKey.parametersLists);
 
@@ -102,6 +103,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } else {
       print("recipesParamsJson is null");
     }
+    selectedDateFromPref= prefs.getString(PrefKey.dateOfBirth);
+    print("check if i recieve the data of birth${selectedDateFromPref}");
+    List<String> storedData =prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
+
+    for (String entry in storedData) {
+      String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+      List<String> parts = result.split(':');
+      if (parts.length == 2) {
+        String key = parts[0].trim();
+        String value = parts[1].trim();
+        addAllergies[key] = value;
+      }
+    }
+    List<String> storedData2 =prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction)!;
+    for (String entry in storedData2) {
+      String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+      List<String> parts = result.split(':');
+      if (parts.length == 2) {
+        String key = parts[0].trim();
+        String value = parts[1].trim();
+        addDietaryRestrictions[key] = value;
+      }
+    }
+    _userNameController.text= prefs.getString(PrefKey.userName)!;
+    updatedvalueM==""? "US": prefs.getString(PrefKey.unit);
   }
   @override
   Widget build(BuildContext context) {
@@ -519,34 +545,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   LoadingSelectedDataFromSetupProfileScreen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      selectedDateFromPref= prefs.getString(PrefKey.dateOfBirth);
-      List<String> storedData =prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
 
-        for (String entry in storedData) {
-          String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
-          List<String> parts = result.split(':');
-          if (parts.length == 2) {
-            String key = parts[0].trim();
-            String value = parts[1].trim();
-           addAllergies[key] = value;
-          }
-        }
-      List<String> storedData2 =prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction)!;
-      for (String entry in storedData2) {
-        String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
-        List<String> parts = result.split(':');
-        if (parts.length == 2) {
-          String key = parts[0].trim();
-          String value = parts[1].trim();
-          addDietaryRestrictions[key] = value;
-        }
-      }
-
-      _userNameController.text= prefs.getString(PrefKey.userName)!;
-      updatedvalueM==""? "US": prefs.getString(PrefKey.unit);
     });
-
-
     showSnackBar(context, "Data is Loaded from SharedPreference");
   }
   UpdateSetupProfileOnUpdateAPI() async {

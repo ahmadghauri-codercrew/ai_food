@@ -22,6 +22,25 @@ class RecipesSelection extends StatefulWidget {
 }
 
 class _RecipesSelectionState extends State<RecipesSelection> {
+  // Capitalize the first letter of each sentence
+  String capitalizeSentences(String input) {
+    if (input.isEmpty) return input;
+
+    final sentences = input.split(RegExp(r'(?<=[.!?])\s+'));
+
+    final capitalizedSentences = sentences.map((sentence) {
+      if (sentence.isNotEmpty) {
+        final firstLetter = sentence[0].toUpperCase();
+        final restOfSentence = sentence.substring(1).toLowerCase();
+        return '$firstLetter$restOfSentence';
+      } else {
+        return sentence;
+      }
+    });
+
+    return capitalizedSentences.join(' ');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,80 +49,107 @@ class _RecipesSelectionState extends State<RecipesSelection> {
         elevation: 0,
         backgroundColor: AppTheme.appColor,
         leading: IconButton(
-          icon: const Icon(Icons.close, size: 30),
+          icon: const Icon(Icons.close, size: 40),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(left: 20.0, top: 24, right: 20.0),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppText.appText(
-                  widget.parameter,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 32,
-                  textColor: AppTheme.whiteColor,
-                ),
-                AppText.appText("Lorem ipsum is just simply dummy text.",
-                    fontSize: 16,
-                    textColor: AppTheme.whiteColor,
-                    fontWeight: FontWeight.w400),
-              ],
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: allListsProviders(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 30.0),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: AppTheme.whiteColor,
-                    borderRadius: BorderRadius.circular(100),
+        bottom: PreferredSize(
+          preferredSize:
+              const Size.fromHeight(60), // Adjust the height as needed
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    capitalizeSentences(widget.parameter),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 32,
+                      color: Colors.white,
+                    ),
                   ),
-                  child: Center(
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.arrow_forward,
-                        size: 30,
-                        color: AppTheme.appColor,
+                  const Text(
+                    "Lorem ipsum is just simply dummy text.",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20.0, top: 24, right: 20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: allListsProviders(),
+                ),
+                const SizedBox(height: 50),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 30.0),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: AppTheme.whiteColor,
+                        borderRadius: BorderRadius.circular(100),
                       ),
-                      onPressed: () {
-                        if (widget.parameter == "Allergies") {
-                          Provider.of<DietaryRestrictionsProvider>(context,
-                                  listen: false)
-                              .addNextPage(context);
-                        } else if (widget.parameter == "Dietary restrictions") {
-                          Provider.of<PreferredProteinProvider>(context,
-                                  listen: false)
-                              .addNextPage(context);
-                        } else if (widget.parameter == "Preferred protein") {
-                          Provider.of<RegionalDelicacyProvider>(context,
-                                  listen: false)
-                              .addNextPage(context);
-                        } else if (widget.parameter == "Regional delicacy") {
-                          Provider.of<KitchenResourcesProvider>(context,
-                                  listen: false)
-                              .addNextPage(context);
-                        } else if (widget.parameter == "Kitchen resources") {
-                          Navigator.of(context).pop();
-                        }
-                      },
+                      child: Center(
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.arrow_forward,
+                            size: 30,
+                            color: AppTheme.appColor,
+                          ),
+                          onPressed: () {
+                            if (widget.parameter == "Allergies") {
+                              Provider.of<DietaryRestrictionsProvider>(
+                                      context,
+                                      listen: false)
+                                  .addNextPage(context);
+                            } else if (widget.parameter ==
+                                "Dietary Restrictions") {
+                              Provider.of<PreferredProteinProvider>(context,
+                                      listen: false)
+                                  .addNextPage(context);
+                            } else if (widget.parameter ==
+                                "Preferred Protein") {
+                              Provider.of<RegionalDelicacyProvider>(context,
+                                      listen: false)
+                                  .addNextPage(context);
+                            } else if (widget.parameter ==
+                                "Regional Delicacy") {
+                              Provider.of<KitchenResourcesProvider>(context,
+                                      listen: false)
+                                  .addNextPage(context);
+                            } else if (widget.parameter ==
+                                "Kitchen Resources") {
+                              Navigator.of(context).pop();
+                            }
+                          },
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
