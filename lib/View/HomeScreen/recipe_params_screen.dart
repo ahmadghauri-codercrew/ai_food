@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/View/HomeScreen/TestScreens/model_recipe.dart';
 import 'package:ai_food/View/HomeScreen/search_screen.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
@@ -13,8 +16,10 @@ import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../Constants/app_logger.dart';
 
 class RecipeParamScreen extends StatefulWidget {
@@ -28,32 +33,87 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   bool showFoodStyle = false;
 
   //start food style
-  List foodStyle = [
-    'Italian cuisine',
-    'Mexican cuisine',
-    'Greek cuisine',
-    'Spanish cuisine',
-    'Indian cuisine',
-    'Japanese cuisine',
-    'American cuisine',
-    'Turkish cuisine',
-    'French cuisine',
-    'Chinese cuisine',
-    'Brazilian cuisine',
-    'Thai cuisine',
-  ];
+  List<String>foodStyle = [];
   List<String> addFoodStyle = [];
 
-  late SpoonAcularAppDio dio;
+  late AppDio dio;
+  late SpoonAcularAppDio spoonDio;
+
   AppLogger logger = AppLogger();
 
   bool isLoading = false;
 
   @override
   void initState() {
-    dio = SpoonAcularAppDio(context);
+    dio = AppDio(context);
+    spoonDio =  SpoonAcularAppDio(context);
     logger.init();
+    getRecipesParameters(context);
     super.initState();
+  }
+
+  void getRecipesParameters(context) async {
+    final allergyProvider = Provider.of<AllergiesProvider>(context,listen: false).preferredAllergiesRecipe;
+    final dietaryRestrictionsProvider = Provider.of<DietaryRestrictionsProvider>(context,listen: false).preferredDietaryRestrictionsParametersRecipe;
+    final preferredProteinProvider = Provider.of<PreferredProteinProvider>(context,listen: false).preferredProteinRecipe;
+    final regionalDelicacyProvider = Provider.of<RegionalDelicacyProvider>(context,listen: false).preferredRegionalDelicacyParametersRecipe;
+    final kitchenResourcesProvider = Provider.of<KitchenResourcesProvider>(context,listen: false).preferredKitchenResourcesParametersRecipe;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? paramsList = prefs.getString(PrefKey.parametersLists);
+
+    try {
+      var recipesParams = jsonDecode(paramsList!);
+      var foodStyles = recipesParams["data"]["foodStyles"];
+      var allergies = recipesParams["data"]["allergies"];
+      var dietaryRestrictions = recipesParams["data"]["dietaryRestrictions"];
+      var preferredProteins = recipesParams["data"]["preferredProteins"];
+      var regionalDelicacies = recipesParams["data"]["regionalDelicacies"];
+      var kitchenResources = recipesParams["data"]["kitchenResources"];
+
+      //adding food styles list
+      foodStyles.forEach((key, value) {
+        foodStyle.add(value);
+      });
+
+      //adding allergies list
+      if(allergyProvider.isEmpty){
+        allergies.forEach((key, value) {
+          allergyProvider.add(RecipesParameterClass(parameter: value));
+        });
+      }
+
+      //adding dietary restrictions list
+      if(dietaryRestrictionsProvider.isEmpty){
+        dietaryRestrictions.forEach((key, value) {
+          dietaryRestrictionsProvider.add(RecipesParameterClass(parameter: value));
+        });
+      }
+
+      //adding proteins list
+      if(preferredProteinProvider.isEmpty){
+        preferredProteins.forEach((key, value) {
+          preferredProteinProvider.add(RecipesParameterClass(parameter: value));
+        });
+      }
+
+      //adding regional delicacy list
+      if(regionalDelicacyProvider.isEmpty){
+        regionalDelicacies.forEach((key, value) {
+          regionalDelicacyProvider.add(RecipesParameterClass(parameter: value));
+        });
+      }
+
+      //adding kitchen resources list
+      if(kitchenResourcesProvider.isEmpty){
+        kitchenResources.forEach((key, value) {
+          kitchenResourcesProvider.add(RecipesParameterClass(parameter: value));
+        });
+      }
+
+      setState(() {});
+    } catch (e) {
+      print("Error decoding JSON data: $e");
+    }
   }
 
   @override
@@ -72,11 +132,11 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         Provider.of<KitchenResourcesProvider>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
         leading: InkWell(
           onTap: () {
-            pushReplacement(context, SearchScreen());
+            pushReplacement(context, const SearchScreen());
           },
           child: Padding(
             padding: const EdgeInsets.only(
@@ -124,19 +184,16 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                         allergiesProvider.clearAllergiesAllCheckboxStates();
                         //restrictions
                         restrictionsProvider.removeDietaryRestrictions();
-                        restrictionsProvider
-                            .clearDietaryRestrictionsAllCheckboxStates();
+                        restrictionsProvider.clearDietaryRestrictionsAllCheckboxStates();
                         //protein
                         proteinProvider.removePreferredProtein();
                         proteinProvider.clearProteinAllCheckboxStates();
                         //delicacy
                         delicacyProvider.removeRegionalDelicacy();
-                        delicacyProvider
-                            .clearRegionalDelicacyAllCheckboxStates();
+                        delicacyProvider.clearRegionalDelicacyAllCheckboxStates();
                         //kitchen
                         kitchenProvider.removeKitchenResources();
-                        kitchenProvider
-                            .clearKitchenResourcesAllCheckboxStates();
+                        kitchenProvider.clearKitchenResourcesAllCheckboxStates();
 
                         showSnackBar(context, "Filters Reset Succesfully");
                       },
@@ -269,7 +326,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                     ),
                     showFoodStyle
                         ? Padding(
-                            padding: const EdgeInsets.only(top: 65.0),
+                            padding: const EdgeInsets.only(top: 69.0),
                             child: customFoodStyle(),
                           )
                         : const SizedBox.shrink(),
@@ -427,11 +484,12 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         ? "query=${delicacyProvider.addRegionalDelicacy.toString().substring(1, delicacyProvider.addRegionalDelicacy.toString().length - 1)}"
         : "";
     final apiUrl =
-        '${AppUrls}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey';
+        '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey';
 
-    final response = await dio.get(path: apiUrl);
+    final response = await spoonDio.get(path: apiUrl);
 
     if (response.statusCode == 200) {
+      // ignore: use_build_context_synchronously
       pushReplacement(
           context,
           BottomNavView(
@@ -460,74 +518,4 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
       }
     }
   }
-
-  // Future generateRecipe({style, allergy, dietary, regional, kitchen}) async {
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   final allergiesProvider =
-  //       Provider.of<AllergiesProvider>(context, listen: false);
-  //   final restrictionsProvider =
-  //       Provider.of<DietaryRestrictionsProvider>(context, listen: false);
-  //   final proteinProvider =
-  //       Provider.of<PreferredProteinProvider>(context, listen: false);
-  //   final delicacyProvider =
-  //       Provider.of<RegionalDelicacyProvider>(context, listen: false);
-  //   final kitchenProvider =
-  //       Provider.of<KitchenResourcesProvider>(context, listen: false);
-  //   const apiKey = 'd9186e5f351240e094658382be62d948';
-  //   final style = addFoodStyle.isNotEmpty
-  //       ? "&cuisine=${addFoodStyle.toString().substring(1, addFoodStyle.toString().length - 1)}"
-  //       : "";
-  //   final kitchenResources = kitchenProvider.addKitchenResources.isNotEmpty
-  //       ? "&equipment=${kitchenProvider.addKitchenResources.toString().substring(1, kitchenProvider.addKitchenResources.toString().length - 1)}"
-  //       : "";
-  //   final preferredProtein = proteinProvider.addProtein.isNotEmpty
-  //       ? "&includeIngredients=${proteinProvider.addProtein.toString().substring(1, proteinProvider.addProtein.toString().length - 1)}"
-  //       : "";
-  //   final allergies = allergiesProvider.addAllergies.isNotEmpty
-  //       ? "&intolerances=${allergiesProvider.addAllergies.toString().substring(1, allergiesProvider.addAllergies.toString().length - 1)}"
-  //       : "";
-  //   final dietaryRestrictions = restrictionsProvider
-  //           .addDietaryRestrictions.isNotEmpty
-  //       ? "&diet=${restrictionsProvider.addDietaryRestrictions.toString().substring(1, restrictionsProvider.addDietaryRestrictions.toString().length - 1)}"
-  //       : "";
-  //   final regionalDelicacy = delicacyProvider.addRegionalDelicacy.isNotEmpty
-  //       ? "query=${delicacyProvider.addRegionalDelicacy.toString().substring(1, delicacyProvider.addRegionalDelicacy.toString().length - 1)}"
-  //       : "";
-  //   final apiUrl =
-  //       'https://api.spoonacular.com/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey';
-
-  //   final response = await dio.get(path: apiUrl);
-
-  //   if (response.statusCode == 200) {
-  //     // ignore: use_build_context_synchronously
-  //     pushReplacement(
-  //         context,
-  //         BottomNavView(
-  //           type: 1,
-  //           offset: response.data["offset"],
-  //           totalResults: response.data["totalResults"],
-  //           foodStyle: addFoodStyle,
-  //           searchType: 1,
-  //           data: response.data["results"],
-  //         ));
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   } else {
-  //     if (response.statusCode == 402) {
-  //       setState(() {
-  //         isLoading = false;
-  //       });
-  //       showSnackBar(context, "${response.statusMessage}");
-  //     } else {
-  //       setState(() {
-  //         isLoading = false;
-  //       });
-  //       print('API request failed with status code: ${response.statusCode}');
-  //       showSnackBar(context, "${response.statusMessage}");
-  //     }
-  //   }
-  // }
 }

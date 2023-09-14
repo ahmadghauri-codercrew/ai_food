@@ -30,14 +30,14 @@ class _RecipesSelectionState extends State<RecipesSelection> {
         elevation: 0,
         backgroundColor: AppTheme.appColor,
         leading: IconButton(
-          icon: const Icon(Icons.close, size: 40),
+          icon: const Icon(Icons.close, size: 30),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+        padding: EdgeInsets.only(left: 20.0, top: 24, right: 20.0),
         child: Stack(
           children: [
             Column(
@@ -64,8 +64,8 @@ class _RecipesSelectionState extends State<RecipesSelection> {
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  width: 56,
-                  height: 56,
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
                     color: AppTheme.whiteColor,
                     borderRadius: BorderRadius.circular(100),
@@ -74,7 +74,7 @@ class _RecipesSelectionState extends State<RecipesSelection> {
                     child: IconButton(
                       icon: Icon(
                         Icons.arrow_forward,
-                        size: 20,
+                        size: 30,
                         color: AppTheme.appColor,
                       ),
                       onPressed: () {
@@ -82,19 +82,19 @@ class _RecipesSelectionState extends State<RecipesSelection> {
                           Provider.of<DietaryRestrictionsProvider>(context,
                                   listen: false)
                               .addNextPage(context);
-                        } else if (widget.parameter == "Dietary Restrictions") {
+                        } else if (widget.parameter == "Dietary restrictions") {
                           Provider.of<PreferredProteinProvider>(context,
                                   listen: false)
                               .addNextPage(context);
-                        } else if (widget.parameter == "Preferred Protein") {
+                        } else if (widget.parameter == "Preferred protein") {
                           Provider.of<RegionalDelicacyProvider>(context,
                                   listen: false)
                               .addNextPage(context);
-                        } else if (widget.parameter == "Regional Delicacy") {
+                        } else if (widget.parameter == "Regional delicacy") {
                           Provider.of<KitchenResourcesProvider>(context,
                                   listen: false)
                               .addNextPage(context);
-                        } else if (widget.parameter == "Kitchen Resources") {
+                        } else if (widget.parameter == "Kitchen resources") {
                           Navigator.of(context).pop();
                         }
                       },

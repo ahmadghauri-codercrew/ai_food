@@ -21,13 +21,17 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   final TextEditingController _searchController = TextEditingController();
-  late SpoonAcularAppDio dio;
+  late AppDio dio;
+  late SpoonAcularAppDio spoonDio;
+
   AppLogger logger = AppLogger();
   bool isLoading = false;
 
   @override
   void initState() {
-    dio = SpoonAcularAppDio(context);
+    dio = AppDio(context);
+    spoonDio = SpoonAcularAppDio(context);
+
     logger.init();
     super.initState();
   }
@@ -173,7 +177,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     padding: EdgeInsets.only(bottom: 3.0),
                                     child: Icon(
                                       Icons.filter_list,
-                                      color: Color(0xffF8F8F8),
+                                      color: Color(0xFFF7F7F7),
                                       size: 22,
                                     ),
                                   ),
@@ -195,7 +199,10 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
+  // Define a boolean variable to track the loading state
+
   Future<void> getFood() async {
+    // Set isLoading to true when the API call starts
     setState(() {
       isLoading = true;
     });
@@ -207,7 +214,7 @@ class _SearchScreenState extends State<SearchScreen> {
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
 
     try {
-      final response = await dio.get(path: apiUrl);
+      final response = await spoonDio.get(path: apiUrl);
 
       if (response.statusCode == 200) {
         setState(() {
@@ -230,47 +237,8 @@ class _SearchScreenState extends State<SearchScreen> {
       }
     } catch (error) {
       print('API request failed with error: $error');
-    } finally {}
+    } finally {
+      // Set isLoading to false when the API call completes (success or failure)
+    }
   }
-
-  // Future<void> getFood() async {
-  //   // Set isLoading to true when the API call starts
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-
-  //   var searchtext = _searchController.text;
-  //   const apiKey = 'd9186e5f351240e094658382be62d948';
-
-  //   final apiUrl =
-  //       'https://api.spoonacular.com/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
-
-  //   try {
-  //     final response = await dio.get(path: apiUrl);
-
-  //     if (response.statusCode == 200) {
-  //       setState(() {
-  //         isLoading = false;
-  //       });
-  //       pushReplacement(
-  //         context,
-  //         BottomNavView(
-  //           searchType: 0,
-  //           type: 1,
-  //           data: response.data["results"],
-  //           query: searchtext,
-  //           offset: response.data["offset"],
-  //         ),
-  //       );
-
-  //       _searchController.clear();
-  //     } else {
-  //       print('API request failed with status code: ${response.statusCode}');
-  //     }
-  //   } catch (error) {
-  //     print('API request failed with error: $error');
-  //   } finally {
-  //     // Set isLoading to false when the API call completes (success or failure)
-  //   }
-  // }
 }
