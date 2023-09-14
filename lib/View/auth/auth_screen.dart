@@ -305,7 +305,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           }
                                           return null;
                                         },
-                                        height: 50,
+                                        // height: 50,
                                         texthint: "Enter email",
                                         hintStyle:
                                             TextStyle(color: AppTheme.appColor),
