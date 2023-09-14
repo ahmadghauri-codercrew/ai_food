@@ -27,18 +27,7 @@ class RegionalDelicacyProvider extends ChangeNotifier {
   List<RecipesParameterClass> get regionalDelicacyRecipesParameters =>
       _regionalDelicacyRecipesParameters;
 
-  List<RecipesParameterClass> preferredRegionalDelicacyParametersRecipe = [
-    RecipesParameterClass(parameter: 'Italian pizza'),
-    RecipesParameterClass(parameter: 'Mexican tacos'),
-    RecipesParameterClass(parameter: 'Japanese sushi'),
-    RecipesParameterClass(parameter: 'Chinese dumplings'),
-    RecipesParameterClass(parameter: 'Indian curry'),
-    RecipesParameterClass(parameter: 'French baguette'),
-    RecipesParameterClass(parameter: 'Italian pasta'),
-    RecipesParameterClass(parameter: 'Thai pad thai'),
-    RecipesParameterClass(parameter: 'Greek souvlaki'),
-    RecipesParameterClass(parameter: 'American burger'),
-  ];
+  List<RecipesParameterClass> preferredRegionalDelicacyParametersRecipe = [];
 
   void showRegionalDelicacyParameterDetails(context, String parameter) {
     if (parameter == "Regional Delicacy") {
@@ -76,7 +65,8 @@ class RegionalDelicacyProvider extends ChangeNotifier {
   }
 
   void addNextPage(BuildContext context) {
-    _regionalDelicacyRecipesParameters.addAll(preferredRegionalDelicacyParametersRecipe);
+    _regionalDelicacyRecipesParameters
+        .addAll(preferredRegionalDelicacyParametersRecipe);
     var newScreen = RecipesSelection(
       parameter: "Regional Delicacy",
       recipesParameters: preferredRegionalDelicacyParametersRecipe,

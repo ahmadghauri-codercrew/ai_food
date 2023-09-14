@@ -8,6 +8,7 @@ class PrefKey {
   static const String notification = "notification";
   static const String id = "id";
   static const String unit = "unit";
+  static const String parametersLists = "parameters";
   static const String dataonBoardScreenAllergies = "dataonBoardScreenAllergies";
   static const String dataonBoardScreenDietryRestriction =
       "dataonBoardScreenDietryRestriction";

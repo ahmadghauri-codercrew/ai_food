@@ -27,23 +27,7 @@ class KitchenResourcesProvider extends ChangeNotifier {
   List<RecipesParameterClass> get kitchenResourcesRecipesParameters =>
       _kitchenResourcesRecipesParameters;
 
-  List<RecipesParameterClass> preferredKitchenResourcesParametersRecipe = [
-    RecipesParameterClass(parameter: 'Blender'),
-    RecipesParameterClass(parameter: 'Cutting board'),
-    RecipesParameterClass(parameter: 'Frying pan'),
-    RecipesParameterClass(parameter: 'knife'),
-    RecipesParameterClass(parameter: 'Salad spinner'),
-    RecipesParameterClass(parameter: 'Sheet pan'),
-    RecipesParameterClass(parameter: 'Measuring cup'),
-    RecipesParameterClass(parameter: 'Measuring spoon'),
-    RecipesParameterClass(parameter: 'Whisk'),
-    RecipesParameterClass(parameter: 'Tongs'),
-    RecipesParameterClass(parameter: 'Bowl'),
-    RecipesParameterClass(parameter: 'Oven'),
-    RecipesParameterClass(parameter: 'Microwave'),
-    RecipesParameterClass(parameter: 'Food processor'),
-    RecipesParameterClass(parameter: 'Slow cooker'),
-  ];
+  List<RecipesParameterClass> preferredKitchenResourcesParametersRecipe = [];
 
   void showKitchenResourcesParameterDetails(context, String parameter) {
     if (parameter == "Kitchen Resources") {

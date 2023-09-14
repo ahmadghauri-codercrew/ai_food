@@ -6,7 +6,9 @@ import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/HomeScreen/home_screen.dart';
 import 'package:ai_food/View/HomeScreen/recipe_params_screen.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
+import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -20,12 +22,16 @@ class _SearchScreenState extends State<SearchScreen> {
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   final TextEditingController _searchController = TextEditingController();
   late AppDio dio;
+  late SpoonAcularAppDio spoonDio;
+
   AppLogger logger = AppLogger();
   bool isLoading = false;
 
   @override
   void initState() {
     dio = AppDio(context);
+    spoonDio = SpoonAcularAppDio(context);
+
     logger.init();
     super.initState();
   }
@@ -205,10 +211,10 @@ class _SearchScreenState extends State<SearchScreen> {
     const apiKey = 'd9186e5f351240e094658382be62d948';
 
     final apiUrl =
-        'https://api.spoonacular.com/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
+        '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
 
     try {
-      final response = await dio.get(path: apiUrl);
+      final response = await spoonDio.get(path: apiUrl);
 
       if (response.statusCode == 200) {
         setState(() {

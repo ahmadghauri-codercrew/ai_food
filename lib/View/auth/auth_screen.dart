@@ -608,6 +608,9 @@ class _AuthScreenState extends State<AuthScreen> {
       _isLoading = true;
     });
     var response;
+    List<String> dietaryRestrictionsList = [];
+    List<String> allergiesList = [];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     const int responseCode200 = 200; // For successful request.
     const int responseCode400 = 400; // For Bad Request.
     const int responseCode401 = 401; // For Unauthorized access.
@@ -660,8 +663,19 @@ class _AuthScreenState extends State<AuthScreen> {
           });
           var token = responseData['data']['token'];
           var name = responseData['data']['user']['name'];
-          print("username_is $name");
-          SharedPreferences prefs = await SharedPreferences.getInstance();
+          var dietary_restrictions =
+              responseData['data']['user']['dietary_restrictions'];
+          var allergies = responseData['data']['user']['allergies'];
+          for (var data0 in dietary_restrictions) {
+            dietaryRestrictionsList.add('${data0['id']}:${data0['name']}');
+          }
+          for (var data0 in allergies) {
+            allergiesList.add('${data0['id']}:${data0['name']}');
+          }
+          prefs.setStringList(
+              PrefKey.dataonBoardScreenAllergies, allergiesList);
+          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction,
+              dietaryRestrictionsList);
 
           prefs.setString(PrefKey.authorization, token ?? '');
           prefs.setString(PrefKey.name, name ?? '');
