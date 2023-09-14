@@ -6,7 +6,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import '../keys/headers.dart';
-import 'interceptors.dart';
 
 class SpoonAcularAppDio {
   Dio dio = Dio(BaseOptions(
