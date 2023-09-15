@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:ai_food/config/dio/spoonacular_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import '../keys/headers.dart';
-import 'interceptors.dart';
 
-class AppDio {
-  Dio _dio = Dio(BaseOptions(
+class SpoonAcularAppDio {
+  Dio dio = Dio(BaseOptions(
     connectTimeout: const Duration(seconds: 3),
     receiveTimeout: const Duration(seconds: 3),
   ));
@@ -16,14 +16,14 @@ class AppDio {
   static bool initialize = false;
   final bool customRequest;
 
-  AppDio(this.context, {this.customRequest = false}) {
+  SpoonAcularAppDio(this.context, {this.customRequest = false}) {
     init();
   }
 
   init() {
-    _dio = Dio();
+    dio = Dio();
     if (!customRequest) {
-      _dio.interceptors.add(AppDioInterceptor(context));
+      dio.interceptors.add(SpoonacularInterceptor(context));
     }
     initialize = true;
   }
@@ -44,7 +44,7 @@ class AppDio {
           contentType: Application.xFormUrlEncoded,
           headers: {HttpHeaders.acceptHeader: Application.json});
     }
-    return _dio.get(
+    return dio.get(
       path,
       queryParameters: queryParameters,
       options: options,
@@ -71,7 +71,7 @@ class AppDio {
           contentType: Application.xFormUrlEncoded,
           headers: {HttpHeaders.acceptHeader: Application.json});
     }
-    return _dio.post(
+    return dio.post(
       path,
       data: data,
       options: options,
@@ -97,7 +97,7 @@ class AppDio {
     } else {
       options = Options(contentType: Application.json);
     }
-    return _dio.post(
+    return dio.post(
       path,
       data: json.encode(data),
       options: options,
@@ -126,7 +126,7 @@ class AppDio {
           contentType: Application.xFormUrlEncoded,
           headers: {HttpHeaders.acceptHeader: Application.json});
     }
-    return _dio.put(
+    return dio.put(
       path,
       data: data,
       options: options,
@@ -152,7 +152,7 @@ class AppDio {
     } else {
       options = Options(contentType: Application.json);
     }
-    return _dio.put(
+    return dio.put(
       path,
       data: json.encode(data),
       options: options,
@@ -181,7 +181,7 @@ class AppDio {
           contentType: Application.xFormUrlEncoded,
           headers: {HttpHeaders.acceptHeader: Application.json});
     }
-    return _dio.patch(
+    return dio.patch(
       path,
       data: data,
       options: options,
@@ -207,7 +207,7 @@ class AppDio {
     } else {
       options = Options(contentType: Application.json);
     }
-    return _dio.patch(
+    return dio.patch(
       path,
       data: json.encode(data),
       options: options,
@@ -233,7 +233,7 @@ class AppDio {
     } else {
       options = Options(headers: {HttpHeaders.acceptHeader: Application.json});
     }
-    return _dio.delete(
+    return dio.delete(
       path,
       data: data,
       options: options,

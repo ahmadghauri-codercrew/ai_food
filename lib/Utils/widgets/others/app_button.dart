@@ -19,7 +19,8 @@ class AppButton {
       double? letterSpacing,
       bool underLine = false,
       bool fontFamily = false,
-      bool? border}) {
+      bool? border,
+      bool? blurContainer}) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -28,6 +29,14 @@ class AppButton {
         width: width,
         height: height,
         decoration: BoxDecoration(
+            boxShadow: [
+              blurContainer == true
+                  ? BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 2,
+                      offset: Offset(0.0, 4))
+                  : BoxShadow()
+            ],
             color: backgroundColor,
             borderRadius: BorderRadius.circular(50),
             border: border == false
@@ -62,44 +71,48 @@ class AppButton {
       TextBaseline? textBaseline,
       TextOverflow? overflow,
       double? letterSpacing,
+      Function()? onTap,
       IconData? icons,
       bool underLine = false,
       bool fontFamily = false,
       bool? border}) {
-    return Container(
-      padding: padding,
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(50),
-          border: border == false
-              ? null
-              : Border.all(
-                  color: AppTheme.appColor,
-                  width: 2,
-                )),
-      child: Row(
-        children: [
-          const SizedBox(
-            width: 20,
-          ),
-          Icon(icons, size: 35),
-          const SizedBox(
-            width: 20,
-          ),
-          AppText.appText(text,
-              fontFamily: fontFamily,
-              fontSize: fontSize,
-              textAlign: textAlign,
-              fontWeight: fontWeight,
-              textColor: textColor,
-              overflow: overflow,
-              letterSpacing: letterSpacing,
-              textBaseline: textBaseline,
-              fontStyle: fontStyle,
-              underLine: underLine),
-        ],
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: padding,
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(50),
+            border: border == false
+                ? null
+                : Border.all(
+                    color: AppTheme.appColor,
+                    width: 2,
+                  )),
+        child: Row(
+          children: [
+            const SizedBox(
+              width: 20,
+            ),
+            Icon(icons, size: 35),
+            const SizedBox(
+              width: 20,
+            ),
+            AppText.appText(text,
+                fontFamily: fontFamily,
+                fontSize: fontSize,
+                textAlign: textAlign,
+                fontWeight: fontWeight,
+                textColor: textColor,
+                overflow: overflow,
+                letterSpacing: letterSpacing,
+                textBaseline: textBaseline,
+                fontStyle: fontStyle,
+                underLine: underLine),
+          ],
+        ),
       ),
     );
   }
@@ -118,7 +131,7 @@ class AppButton {
       TextOverflow? overflow,
       double? letterSpacing,
       IconData? icons,
-    Function()? onTap,
+      Function()? onTap,
       String? imagePath,
       bool underLine = false,
       bool fontFamily = false,
@@ -139,17 +152,11 @@ class AppButton {
                     width: 2,
                   )),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const SizedBox(
-              width: 20,
-            ),
             Image(
               image: AssetImage(imagePath!),
               height: 25,
-              width: 25,
-            ),
-            const SizedBox(
-              width: 20,
             ),
             AppText.appText(text,
                 fontFamily: fontFamily,
@@ -162,6 +169,9 @@ class AppButton {
                 textBaseline: textBaseline,
                 fontStyle: fontStyle,
                 underLine: underLine),
+            SizedBox(
+              width: 20,
+            ),
           ],
         ),
       ),

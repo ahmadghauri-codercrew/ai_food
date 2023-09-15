@@ -7,12 +7,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:req_fun/req_fun.dart';
 
-class AppDioInterceptor extends Interceptor {
-   final BuildContext  context;
+class SpoonacularInterceptor extends Interceptor {
+  final BuildContext context;
   String token = "";
   final AppLogger _logger = AppLogger();
 
-  AppDioInterceptor(this.context) {
+  SpoonacularInterceptor(this.context) {
     gettokenSharedPreferences();
   }
 
@@ -60,7 +60,7 @@ class AppDioInterceptor extends Interceptor {
       throw Exception("Base URL is not set");
     }
 
-    options..baseUrl = AppUrls.baseUrl;
+    options..baseUrl = AppUrls.spoonacularBaseUrl;
     if (token.isNotEmpty) {
       options..headers.addAll({RequestHeader.authorization: "Bearer $token"});
     }
@@ -79,7 +79,7 @@ class AppDioInterceptor extends Interceptor {
     handler.next(options);
   }
 
-  void gettokenSharedPreferences() async{
+  void gettokenSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     token = prefs.getString(PrefKey.authorization) ?? "";
   }
