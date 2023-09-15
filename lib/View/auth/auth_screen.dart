@@ -305,7 +305,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           }
                                           return null;
                                         },
-                                        height: 50,
+                                        // height: 50,
                                         texthint: "Enter email",
                                         hintStyle:
                                             TextStyle(color: AppTheme.appColor),
@@ -589,7 +589,7 @@ class _AuthScreenState extends State<AuthScreen> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
 
           prefs.setString(PrefKey.authorization, token ?? '');
-          prefs.setString(PrefKey.name, name ?? '');
+          prefs.setString(PrefKey.userName, name ?? '');
           pushReplacement(context, const UserProfileScreen());
         }
       }
@@ -678,7 +678,7 @@ class _AuthScreenState extends State<AuthScreen> {
               dietaryRestrictionsList);
 
           prefs.setString(PrefKey.authorization, token ?? '');
-          prefs.setString(PrefKey.name, name ?? '');
+          prefs.setString(PrefKey.userName, name ?? '');
           pushReplacement(context, BottomNavView());
         }
       }
@@ -757,7 +757,7 @@ class _AuthScreenState extends State<AuthScreen> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
 
           prefs.setString(PrefKey.authorization, token ?? '');
-          prefs.setString(PrefKey.name, name ?? '');
+          prefs.setString(PrefKey.userName, name ?? '');
           showSnackBar(context, "${responseData["message"]}");
         }
       }

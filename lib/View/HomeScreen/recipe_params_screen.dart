@@ -33,7 +33,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   bool showFoodStyle = false;
 
   //start food style
-  List<String> foodStyle = [];
+  List<String>foodStyle = [];
   List<String> addFoodStyle = [];
 
   late AppDio dio;
@@ -46,28 +46,18 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   @override
   void initState() {
     dio = AppDio(context);
-    spoonDio = SpoonAcularAppDio(context);
+    spoonDio =  SpoonAcularAppDio(context);
     logger.init();
     getRecipesParameters(context);
     super.initState();
   }
 
   void getRecipesParameters(context) async {
-    final allergyProvider =
-        Provider.of<AllergiesProvider>(context, listen: false)
-            .preferredAllergiesRecipe;
-    final dietaryRestrictionsProvider =
-        Provider.of<DietaryRestrictionsProvider>(context, listen: false)
-            .preferredDietaryRestrictionsParametersRecipe;
-    final preferredProteinProvider =
-        Provider.of<PreferredProteinProvider>(context, listen: false)
-            .preferredProteinRecipe;
-    final regionalDelicacyProvider =
-        Provider.of<RegionalDelicacyProvider>(context, listen: false)
-            .preferredRegionalDelicacyParametersRecipe;
-    final kitchenResourcesProvider =
-        Provider.of<KitchenResourcesProvider>(context, listen: false)
-            .preferredKitchenResourcesParametersRecipe;
+    final allergyProvider = Provider.of<AllergiesProvider>(context,listen: false).preferredAllergiesRecipe;
+    final dietaryRestrictionsProvider = Provider.of<DietaryRestrictionsProvider>(context,listen: false).preferredDietaryRestrictionsParametersRecipe;
+    final preferredProteinProvider = Provider.of<PreferredProteinProvider>(context,listen: false).preferredProteinRecipe;
+    final regionalDelicacyProvider = Provider.of<RegionalDelicacyProvider>(context,listen: false).preferredRegionalDelicacyParametersRecipe;
+    final kitchenResourcesProvider = Provider.of<KitchenResourcesProvider>(context,listen: false).preferredKitchenResourcesParametersRecipe;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? paramsList = prefs.getString(PrefKey.parametersLists);
 
@@ -86,36 +76,35 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
       });
 
       //adding allergies list
-      if (allergyProvider.isEmpty) {
+      if(allergyProvider.isEmpty){
         allergies.forEach((key, value) {
           allergyProvider.add(RecipesParameterClass(parameter: value));
         });
       }
 
       //adding dietary restrictions list
-      if (dietaryRestrictionsProvider.isEmpty) {
+      if(dietaryRestrictionsProvider.isEmpty){
         dietaryRestrictions.forEach((key, value) {
-          dietaryRestrictionsProvider
-              .add(RecipesParameterClass(parameter: value));
+          dietaryRestrictionsProvider.add(RecipesParameterClass(parameter: value));
         });
       }
 
       //adding proteins list
-      if (preferredProteinProvider.isEmpty) {
+      if(preferredProteinProvider.isEmpty){
         preferredProteins.forEach((key, value) {
           preferredProteinProvider.add(RecipesParameterClass(parameter: value));
         });
       }
 
       //adding regional delicacy list
-      if (regionalDelicacyProvider.isEmpty) {
+      if(regionalDelicacyProvider.isEmpty){
         regionalDelicacies.forEach((key, value) {
           regionalDelicacyProvider.add(RecipesParameterClass(parameter: value));
         });
       }
 
       //adding kitchen resources list
-      if (kitchenResourcesProvider.isEmpty) {
+      if(kitchenResourcesProvider.isEmpty){
         kitchenResources.forEach((key, value) {
           kitchenResourcesProvider.add(RecipesParameterClass(parameter: value));
         });
@@ -195,19 +184,16 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                         allergiesProvider.clearAllergiesAllCheckboxStates();
                         //restrictions
                         restrictionsProvider.removeDietaryRestrictions();
-                        restrictionsProvider
-                            .clearDietaryRestrictionsAllCheckboxStates();
+                        restrictionsProvider.clearDietaryRestrictionsAllCheckboxStates();
                         //protein
                         proteinProvider.removePreferredProtein();
                         proteinProvider.clearProteinAllCheckboxStates();
                         //delicacy
                         delicacyProvider.removeRegionalDelicacy();
-                        delicacyProvider
-                            .clearRegionalDelicacyAllCheckboxStates();
+                        delicacyProvider.clearRegionalDelicacyAllCheckboxStates();
                         //kitchen
                         kitchenProvider.removeKitchenResources();
-                        kitchenProvider
-                            .clearKitchenResourcesAllCheckboxStates();
+                        kitchenProvider.clearKitchenResourcesAllCheckboxStates();
 
                         showSnackBar(context, "Filters Reset Succesfully");
                       },
@@ -477,6 +463,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
     const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     final style = addFoodStyle.isNotEmpty
         ? "&cuisine=${addFoodStyle.toString().substring(1, addFoodStyle.toString().length - 1)}"

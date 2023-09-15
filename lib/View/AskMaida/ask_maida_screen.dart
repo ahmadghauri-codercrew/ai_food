@@ -189,7 +189,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   void chatBotTalk() async {
     final chatsProvider = Provider.of<ChatBotProvider>(context, listen: false);
     chatsProvider.messageLoading(true);
-    const apiKey = '50c97694758d413ba8021361c1a6aff8';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     // const apiKey = '56806fa3f874403c8794d4b7e491c937';
     final apiUrl =
         'https://api.spoonacular.com/food/converse?text=${_messageController.text}&apiKey=$apiKey';

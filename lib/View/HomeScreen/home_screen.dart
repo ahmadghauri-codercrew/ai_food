@@ -55,34 +55,64 @@ class _HomeScreenState extends State<HomeScreen> {
   var responseData;
   int type = 0;
   bool isLoading = false;
-
   @override
   void initState() {
     print("type$type");
     dio = AppDio(context);
     spoondio = SpoonAcularAppDio(context);
-
     logger.init();
     getUserCredentials();
-    getRecipesParameters();
+    setRecipesParameters();
+    LoadingDataFromSharedPreffromProfile();
 
+    super.initState();
+  }
+
+  void LoadingDataFromSharedPreffromProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? value;
+    String? value2;
+    List<String> finalValue = [];
+    List<String> finalValue2 = [];
+    List<String>? storedData =
+        prefs.getStringList(PrefKey.dataonBoardScreenAllergies);
+    List<String>? storedData2 =
+        prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction);
+    if (storedData != null && storedData2 != null) {
+      for (String entry in storedData) {
+        String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+        List<String> parts = result.split(':');
+        if (parts.length == 2) {
+          String key = parts[0].trim();
+          value = parts[1].trim();
+          finalValue.add(value);
+        }
+      }
+      for (String entry in storedData2) {
+        String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+        List<String> parts = result.split(':');
+        if (parts.length == 2) {
+          String key = parts[0].trim();
+          value2 = parts[1].trim();
+          finalValue2.add(value2);
+        }
+      }
+    }
     if (widget.type == 1) {
       type = widget.type;
     } else {
-      print("type$type");
-
       getSuggestedRecipes(
-        allergies: widget.allergies ?? "",
-        dietaryRestrictions: widget.dietaryRestrictions ?? "",
+        allergies: finalValue.isEmpty ? widget.allergies : finalValue,
+        dietaryRestrictions:
+            finalValue2.isEmpty ? widget.dietaryRestrictions : finalValue2,
       );
     }
-    super.initState();
   }
 
   void getUserCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(PrefKey.authorization);
-    String? name = prefs.getString(PrefKey.name);
+    String? name = prefs.getString(PrefKey.userName);
     print("home_token $token");
     print("home_name $name");
   }
@@ -107,7 +137,11 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         title: GestureDetector(
           onTap: () {
-            push(context, const SearchScreen());
+            if (type == 1) {
+              pushReplacement(context, const SearchScreen());
+            } else {
+              push(context, const SearchScreen());
+            }
           },
           child: Container(
             width: width,
@@ -474,13 +508,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ? "${dietaryRestrictions.join(',').toLowerCase()}"
         : "";
     String apiFinalUrl;
-    if (allergies.isEmpty && dietaryRestrictions.isNotEmpty) {
+    if (allergiesAre.isEmpty && dietaryRestrictionsAre.isNotEmpty) {
       apiFinalUrl =
           '${AppUrls.spoonacularBaseUrl}/recipes/random?number=8&tags=${dietaryRestrictionsAre}&apiKey=$apiKey';
-    } else if (allergies.isNotEmpty && dietaryRestrictions.isEmpty) {
+    } else if (allergiesAre.isNotEmpty && dietaryRestrictionsAre.isEmpty) {
       apiFinalUrl =
           'https://api.spoonacular.com/recipes/random?number=8&tags=${allergiesAre}&apiKey=$apiKey';
-    } else if (allergies.isNotEmpty && dietaryRestrictions.isNotEmpty) {
+    } else if (allergiesAre.isNotEmpty && dietaryRestrictionsAre.isNotEmpty) {
       apiFinalUrl =
           'https://api.spoonacular.com/recipes/random?number=8&tags=${allergiesAre},${dietaryRestrictionsAre}&apiKey=$apiKey';
     } else {
@@ -503,7 +537,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   //get recipes data api
-  void getRecipesParameters() async {
+  void setRecipesParameters() async {
     var response;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     const int responseCode200 = 200; // For successful request.
@@ -519,33 +553,33 @@ class _HomeScreenState extends State<HomeScreen> {
       print("responseData${responseData}");
       if (response.statusCode == responseCode405) {
         print("For For data not found.");
-        showSnackBar(context, "${responseData["message"]}");
+        // showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode404) {
         print("For For data not found.");
-        showSnackBar(context, "${responseData["message"]}");
+        // showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode400) {
         print(" Bad Request.");
-        showSnackBar(context, "${responseData["message"]}");
+        // showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode401) {
         print(" Unauthorized access.");
-        showSnackBar(context, "${responseData["message"]}");
+        // showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode500) {
         print("Internal server error.");
-        showSnackBar(context, "${responseData["message"]}");
+        // showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode200) {
         if (responseData["status"] == false) {
-          showSnackBar(context, "${responseData["message"]}");
+          print("Status code is false.");
+          // showSnackBar(context, "${responseData["message"]}");
         } else {
           print("responseData${responseData}");
           var encodeData = jsonEncode(responseData);
           print("encoded_data is $encodeData");
           prefs.setString(PrefKey.parametersLists, encodeData);
-          showSnackBar(context, "${responseData["message"]}");
         }
       }
     } catch (e) {
       print("Something went Wrong ${e}");
-      showSnackBar(context, "Something went Wrong.");
+      // showSnackBar(context, "Something went Wrong.");
     }
   }
 

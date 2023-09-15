@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
-import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_app_bar.dart';
@@ -32,7 +31,6 @@ class _SettingScreenState extends State<SettingScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController messageController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

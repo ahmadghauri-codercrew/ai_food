@@ -513,7 +513,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   void getUserName() async {
     final prefs = await SharedPreferences.getInstance();
-    String? userName = prefs.getString(PrefKey.name);
+    String? userName = prefs.getString(PrefKey.userName);
     setState(() {
       _userNameController.text = userName!;
     });
