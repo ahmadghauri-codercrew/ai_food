@@ -141,6 +141,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 ? AppTheme.appColor
                                                 : const Color(0xffBFBFBF),
                                             fontSize: 24,
+                                            textAlign: TextAlign.center,
                                             fontWeight: FontWeight.w600),
                                       )),
                                   login == true
@@ -178,6 +179,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 // : Colors.black.withOpacity(0.25),
                                                 : const Color(0xffBFBFBF),
                                             fontSize: 24,
+                                            textAlign: TextAlign.center,
                                             fontWeight: FontWeight.w600),
                                       )),
                                   login == false
@@ -223,7 +225,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                             return null;
                                           },
                                           texthint: "Email",
-                                          hintStyle: TextStyle(
+                                          hintStyle: TextStyle(fontWeight: FontWeight.w400,
                                               color: AppTheme.appColor),
                                           controller: _loginEmailController),
                                     ),
@@ -575,7 +577,7 @@ class _AuthScreenState extends State<AuthScreen> {
           setState(() {
             _isLoading = false;
           });
-          showSnackBar(context, "${responseData["message"]}");
+          alertDialogError(context,responseData["message"]);
           return;
         } else {
           print("responseData${responseData}");
@@ -624,39 +626,38 @@ class _AuthScreenState extends State<AuthScreen> {
       response = await dio.post(path: AppUrls.loginUrl, data: params);
       var responseData = response.data;
       if (response.statusCode == responseCode404) {
-        print("For For data not found.");
+        print("For data not found.");
         setState(() {
           _isLoading = false;
         });
-        showSnackBar(context, "${responseData["message"]}");
+        // alertDialogError(context,responseData["message"]);
       } else if (response.statusCode == responseCode400) {
         print(" Bad Request.");
         setState(() {
           _isLoading = false;
         });
-        showSnackBar(context, "${responseData["message"]}");
+        //  alertDialogError(context,responseData["message"]);
       } else if (response.statusCode == responseCode401) {
         print(" Unauthorized access.");
         setState(() {
           _isLoading = false;
         });
-        showSnackBar(context, "${responseData["message"]}");
+        //  alertDialogError(context,responseData["message"]);
       } else if (response.statusCode == responseCode500) {
         print("Internal server error.");
         setState(() {
           _isLoading = false;
         });
-        showSnackBar(context, "${responseData["message"]}");
+        // alertDialogError(context,responseData["message"]);
       } else if (response.statusCode == responseCode200) {
         if (responseData["status"] == false) {
           setState(() {
             _isLoading = false;
           });
-          showSnackBar(context, "${responseData["message"]}");
+          alertDialogError(context, responseData["message"]);
           return;
         } else {
-          print("responseData${responseData}");
-          showSnackBar(context, "${responseData["message"]}");
+          alertDialogError(context, responseData["message"]);
           setState(() {
             _isLoading = false;
           });
@@ -767,42 +768,50 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  alertDialogError(context) {
+  alertDialogError(context, message) {
     return showDialog(
+      barrierColor: Colors.transparent,
       context: context,
       builder: (context) {
-        return AlertDialog(
-          backgroundColor: AppTheme.whiteColor,
-          actionsAlignment: MainAxisAlignment.center,
-          actions: [
-            Center(
-                child: Image.asset(
-              "assets/images/done.gif",
-              height: 120,
-            )),
-            const SizedBox(
-              height: 50,
-            ),
-            Center(
-              child: AppText.appText(
-                "User Created Successfully",
-                fontSize: 24,
-                textColor: AppTheme.appColor,
-                fontWeight: FontWeight.w600,
+        return Padding(
+          padding:  EdgeInsets.only(left: 5.w,right: 5.w),
+          child: AlertDialog(
+            actionsPadding: EdgeInsets.only(top: 5,left: 0,right: 0),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
+            shadowColor: Colors.transparent,
+            elevation: 0,
+            backgroundColor: AppTheme.appColor,
+            actionsAlignment: MainAxisAlignment.center,
+            actions: [
+               SizedBox(height: 20,),
+              Center(
+                child: AppText.appText(
+                  "${message}",
+                  fontSize: 24,
+                  textAlign: TextAlign.center,
+                  textColor: AppTheme.whiteColor,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            AppButton.appButton("Okay",
-                onTap: () => Navigator.of(context).pop(),
-                height: 30,
-                fontWeight: FontWeight.w600,
-                fontSize: 20,
-                textColor: AppTheme.appColor,
-                backgroundColor: AppTheme.whiteColor,
-                border: false)
-          ],
+              const SizedBox(
+                height: 40,
+              ),
+              Divider(height: 1,thickness: 1,color: AppTheme.whiteColor,),
+              Center(
+                child: TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(
+                      "Ok",
+                      style: TextStyle(
+                        fontFamily: "Roboto",
+                          color: AppTheme.whiteColor,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500),
+                    )),
+              )
+            ],
+          ),
         );
       },
     );

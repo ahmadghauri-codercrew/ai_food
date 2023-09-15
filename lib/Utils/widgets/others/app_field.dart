@@ -205,7 +205,7 @@ class _CustomAppPasswordfieldState extends State<CustomAppPasswordfield> {
           border: UnderlineInputBorder(
               borderSide: BorderSide(color: AppTheme.appColor)),
           hintText: widget.texthint,
-          hintStyle: TextStyle(color: AppTheme.appColor),
+          hintStyle: TextStyle(color: AppTheme.appColor,fontWeight: FontWeight.w400),
           suffixIcon: InkWell(
             onTap: () {
               setState(() {
