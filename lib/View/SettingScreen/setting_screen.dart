@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
+import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_app_bar.dart';
@@ -31,19 +32,20 @@ class _SettingScreenState extends State<SettingScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController messageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.appBar(
-        backgroundColor: AppTheme.whiteColor,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: true,
-        elevation: 5,
-        titleText: "Settings",
-        titleTextStyle: TextStyle(
-            fontFamily: "Roboto",
-            color: AppTheme.appColor,
-            fontSize: 24,
-            fontWeight: FontWeight.w600),
+        title: Text(
+          "Settings",
+          style: TextStyle(
+              color: AppTheme.appColor,
+              fontWeight: FontWeight.w600,
+              fontSize: 24),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.only(left: 5.w, right: 5.w),
@@ -66,9 +68,12 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
           ),
           Divider(
-            height: 3.h,
+            height: 12,
             color: AppTheme.appColor,
             thickness: 1.5,
+          ),
+          SizedBox(
+            height: 20,
           ),
           GestureDetector(
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -87,9 +92,12 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
           ),
           Divider(
-            height: 3.h,
+            height: 12,
             color: AppTheme.appColor,
             thickness: 1.5,
+          ),
+          SizedBox(
+            height: 20,
           ),
           GestureDetector(
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -110,9 +118,12 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
           ),
           Divider(
-            height: 3.h,
+            height: 12,
             color: AppTheme.appColor,
             thickness: 1.5,
+          ),
+          SizedBox(
+            height: 20,
           ),
           GestureDetector(
             onTap: () {
@@ -133,9 +144,12 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
           ),
           Divider(
-            height: 3.h,
+            height: 12,
             color: AppTheme.appColor,
             thickness: 1.5,
+          ),
+          SizedBox(
+            height: 20,
           ),
           GestureDetector(
             onTap: () {
