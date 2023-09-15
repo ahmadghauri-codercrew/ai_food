@@ -141,6 +141,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 ? AppTheme.appColor
                                                 : const Color(0xffBFBFBF),
                                             fontSize: 24,
+                                            textAlign: TextAlign.center,
                                             fontWeight: FontWeight.w600),
                                       )),
                                   login == true
@@ -178,6 +179,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 // : Colors.black.withOpacity(0.25),
                                                 : const Color(0xffBFBFBF),
                                             fontSize: 24,
+                                            textAlign: TextAlign.center,
                                             fontWeight: FontWeight.w600),
                                       )),
                                   login == false
@@ -223,7 +225,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                             return null;
                                           },
                                           texthint: "Email",
-                                          hintStyle: TextStyle(
+                                          hintStyle: TextStyle(fontWeight: FontWeight.w400,
                                               color: AppTheme.appColor),
                                           controller: _loginEmailController),
                                     ),
