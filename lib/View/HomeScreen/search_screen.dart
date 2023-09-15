@@ -208,7 +208,7 @@ class _SearchScreenState extends State<SearchScreen> {
     });
 
     var searchtext = _searchController.text;
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
 
     final apiUrl =
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';

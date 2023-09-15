@@ -445,7 +445,7 @@ class _HomeScreenState extends State<HomeScreen> {
   getSearchResult(id) async {
     print("kjbjfejfbjefbefljeblf");
 
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
 
     final apiUrl =
         'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey';
@@ -466,7 +466,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ////////////////////////////////////get suggested recipe////////////////////////////////////////////////////////////////////
 
   getSuggestedRecipes({allergies, dietaryRestrictions}) async {
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
 
     final allergiesAre =
         allergies.isNotEmpty ? "${allergies.join(',').toLowerCase()}" : "";
@@ -516,6 +516,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       response = await dio.get(path: AppUrls.searchParameterUrl);
       var responseData = response.data;
+      print("responseData${responseData}");
       if (response.statusCode == responseCode405) {
         print("For For data not found.");
         showSnackBar(context, "${responseData["message"]}");
@@ -564,7 +565,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
-    const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
 
     int currentOffset = widget.offset + 8;
 
@@ -630,7 +631,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isLoading = true;
     });
-    const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
 
     int currentOffset = widget.offset + 8;
 
