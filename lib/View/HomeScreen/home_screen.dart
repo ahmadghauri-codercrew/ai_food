@@ -63,7 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
     logger.init();
     getUserCredentials();
     setRecipesParameters();
-    LoadingDataFromSharedPreffromProfile();
+    if (widget.type == 1) {
+      type = widget.type;
+    } else {
+      LoadingDataFromSharedPreffromProfile();
+
+    }
+
 
     super.initState();
   }
@@ -98,15 +104,11 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     }
-    if (widget.type == 1) {
-      type = widget.type;
-    } else {
-      getSuggestedRecipes(
-        allergies: finalValue.isEmpty ? widget.allergies : finalValue,
-        dietaryRestrictions:
-            finalValue2.isEmpty ? widget.dietaryRestrictions : finalValue2,
-      );
-    }
+    print("value_is ${finalValue} data ${finalValue2}");
+    getSuggestedRecipes(
+      allergies:finalValue.isEmpty? widget.allergies:finalValue,
+      dietaryRestrictions:finalValue2.isEmpty? widget.dietaryRestrictions:finalValue2,
+    );
   }
 
   void getUserCredentials() async {
@@ -479,7 +481,8 @@ class _HomeScreenState extends State<HomeScreen> {
   getSearchResult(id) async {
     print("kjbjfejfbjefbefljeblf");
 
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
 
     final apiUrl =
         'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey';

@@ -45,26 +45,27 @@ class _SearchScreenState extends State<SearchScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
+        toolbarHeight: 65,
+        leadingWidth: 60,
         leading: InkWell(
           onTap: () {
             Navigator.pop(context);
           },
           child: Padding(
             padding: const EdgeInsets.only(
-              left: 20.0,
-              bottom: 10,
-              top: 10,
+              left: 15.0,
+              top: 20,
             ),
             child: Container(
-                height: 20,
-                width: 20,
+                height: 25,
+                width: 25,
                 decoration: BoxDecoration(
                     color: AppTheme.appColor,
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(100)),
                 child: Padding(
-                  padding: EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.only(left: 8.0),
                   child: Icon(Icons.arrow_back_ios,
-                      size: 20, color: AppTheme.whiteColor),
+                      size: 25, color: AppTheme.whiteColor),
                 )),
           ),
         ),
@@ -76,7 +77,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             )
           : Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 15.0, top: 15),
               child: Column(
                 children: [
                   Container(
@@ -96,7 +97,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             child: TextFormField(
                               onFieldSubmitted: (value) {
                                 print("search_value $value");
-                                getFood();
+                                getFood(context);
                               },
                               textInputAction: TextInputAction.search,
                               controller: _searchController,
@@ -126,9 +127,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            FocusScope.of(context)
-                                .requestFocus(new FocusNode());
-                            getFood();
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            getFood(context);
                           },
                           child: Container(
                             width: 60,
@@ -149,7 +149,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 24,
                   ),
                   Row(
@@ -201,7 +201,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   // Define a boolean variable to track the loading state
 
-  Future<void> getFood() async {
+  Future<void> getFood(context) async {
     // Set isLoading to true when the API call starts
     setState(() {
       isLoading = true;
@@ -231,7 +231,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         );
 
-        _searchController.clear();
+        // _searchController.clear();
       } else {
         print('API request failed with status code: ${response.statusCode}');
       }

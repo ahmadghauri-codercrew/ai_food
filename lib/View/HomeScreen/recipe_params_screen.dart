@@ -8,6 +8,7 @@ import 'package:ai_food/View/HomeScreen/TestScreens/model_recipe.dart';
 import 'package:ai_food/View/HomeScreen/search_screen.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/food_style_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/kitchenResources_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/preferredProtein_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provider.dart';
@@ -120,6 +121,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    final foodStyleProvider = Provider.of<FoodStyleProvider>(context,listen: false);
+    print("food_style ${foodStyleProvider.foodStyle}");
     final allergiesProvider =
         Provider.of<AllergiesProvider>(context, listen: true);
     final restrictionsProvider =
@@ -132,28 +135,30 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         Provider.of<KitchenResourcesProvider>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
         elevation: 0,
+        toolbarHeight: 65,
+        leadingWidth: 60,
         leading: InkWell(
           onTap: () {
-            pushReplacement(context, const SearchScreen());
+            Navigator.pop(context);
           },
           child: Padding(
             padding: const EdgeInsets.only(
-              left: 20.0,
-              bottom: 10,
-              top: 10,
+              left: 15.0,
+              top: 20,
             ),
             child: Container(
-                height: 20,
-                width: 20,
+                height: 25,
+                width: 25,
                 decoration: BoxDecoration(
                     color: AppTheme.appColor,
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(100)),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Icon(Icons.arrow_back_ios,
-                      size: 20, color: AppTheme.whiteColor),
+                      size: 25, color: AppTheme.whiteColor),
                 )),
           ),
         ),
@@ -195,6 +200,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                         kitchenProvider.removeKitchenResources();
                         kitchenProvider.clearKitchenResourcesAllCheckboxStates();
 
+                        //food style
+                        foodStyleProvider.clearFoodStyleValue();
+
                         showSnackBar(context, "Filters Reset Succesfully");
                       },
                       child: AppText.appText(
@@ -223,8 +231,11 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                             height: 55,
                             width: 227,
                             decoration: BoxDecoration(
-                                // color: Colors.redAccent,
-                                borderRadius: BorderRadius.circular(5),
+                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(5),
+                                  topRight: Radius.circular(5),
+                                  bottomLeft: Radius.circular(0),
+                                  bottomRight: Radius.circular(0),
+                                ),
                                 border: Border.all(
                                     color: AppTheme.appColor, width: 2)),
                             child: Padding(
@@ -235,9 +246,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   AppText.appText(
-                                      addFoodStyle.isEmpty
+                                      foodStyleProvider.foodStyle.isEmpty
                                           ? "Food style"
-                                          : addFoodStyle[0].toString(),
+                                          : foodStyleProvider.foodStyle,
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500,
                                       textColor: AppTheme.appColor),
@@ -372,6 +383,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   }
 
   Widget customFoodStyle() {
+    final foodStyleProvider = Provider.of<FoodStyleProvider>(context,listen: false);
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.appColor,
@@ -379,8 +391,6 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
           bottomLeft: Radius.circular(10),
           bottomRight: Radius.circular(10),
         ),
@@ -399,45 +409,54 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
               shrinkWrap: true,
               itemCount: foodStyle.length,
               itemBuilder: (context, int index) {
+                int max = foodStyle.length;
                 return InkWell(
                   onTap: () {
                     setState(() {
+                      foodStyleProvider.clearFoodStyleValue();
                       showFoodStyle = false;
                       addFoodStyle.insert(0, foodStyle[index]);
+                      foodStyleProvider.setFoodStyleValue(foodStyle[index]);
                     });
                   },
                   child: Container(
                     decoration: BoxDecoration(
                       color: AppTheme.appColor,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 18.0),
-                          child: AppText.appText(
-                            "${foodStyle[index]}",
-                            fontSize: 18,
-                            textColor: AppTheme.whiteColor,
+                    child: Padding(
+                      padding: index == 0 ? const EdgeInsets.only(top: 10.0) : (index == max -1 ? const EdgeInsets.only(bottom: 10.0) :  const EdgeInsets.symmetric(vertical: 0.0)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 18.0),
+                            child: AppText.appText(
+                              foodStyle[index],
+                              fontSize: 18,
+                              textColor: AppTheme.whiteColor,
+                            ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 14),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                width: 2.0,
-                                color: foodStyle[index] == "Thai cuisine"
-                                    ? Colors.transparent
-                                    : AppTheme.whiteColor,
+                          const SizedBox(height: 3),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 14),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  width: 2.0,
+                                  color:
+                                  // foodStyle[index] == "Thai cuisine"
+                                  //     ? Colors.transparent
+                                  //     :
+                                  AppTheme.whiteColor,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                      ],
+                          const SizedBox(height: 10),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -453,6 +472,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     setState(() {
       isLoading = true;
     });
+    final foodStyleProvider = Provider.of<FoodStyleProvider>(context,listen: false);
     final allergiesProvider =
         Provider.of<AllergiesProvider>(context, listen: false);
     final restrictionsProvider =
@@ -465,8 +485,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         Provider.of<KitchenResourcesProvider>(context, listen: false);
     // const apiKey = 'd9186e5f351240e094658382be62d948';
     const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    final style = addFoodStyle.isNotEmpty
-        ? "&cuisine=${addFoodStyle.toString().substring(1, addFoodStyle.toString().length - 1)}"
+    final style = foodStyleProvider.foodStyle.isNotEmpty
+        ? "&cuisine=${foodStyleProvider.foodStyle.toString().substring(1, foodStyleProvider.foodStyle.toString().length - 1)}"
         : "";
     final kitchenResources = kitchenProvider.addKitchenResources.isNotEmpty
         ? "&equipment=${kitchenProvider.addKitchenResources.toString().substring(1, kitchenProvider.addKitchenResources.toString().length - 1)}"
@@ -497,7 +517,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
             type: 1,
             offset: response.data["offset"],
             totalResults: response.data["totalResults"],
-            foodStyle: addFoodStyle,
+            foodStyle: foodStyleProvider.foodStyle,
             searchType: 1,
             data: response.data["results"],
           ));
