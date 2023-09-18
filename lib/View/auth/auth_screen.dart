@@ -9,6 +9,7 @@ import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_card.dart';
+import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/auth/forgot_password_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
@@ -136,7 +137,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       },
                                       child: SizedBox(
                                         width: 90,
-                                        child: AppText.appText("Sign in",
+                                        child: AppText.appText("Sign In",
                                             textColor: login == true
                                                 ? AppTheme.appColor
                                                 : const Color(0xffBFBFBF),
@@ -173,7 +174,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       },
                                       child: SizedBox(
                                         width: 95,
-                                        child: AppText.appText("Sign up",
+                                        child: AppText.appText("Sign Up",
                                             textColor: login == false
                                                 ? AppTheme.appColor
                                                 // : Colors.black.withOpacity(0.25),
@@ -225,8 +226,11 @@ class _AuthScreenState extends State<AuthScreen> {
                                             return null;
                                           },
                                           texthint: "Email",
-                                          hintStyle: TextStyle(fontWeight: FontWeight.w400,
-                                              color: AppTheme.appColor),
+                                          hintStyle: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              color: AppTheme.appColor
+                                                  .withOpacity(0.6)),
                                           controller: _loginEmailController),
                                     ),
                                     Form(
@@ -288,7 +292,10 @@ class _AuthScreenState extends State<AuthScreen> {
                                           height: 50,
                                           texthint: "Enter full name",
                                           hintStyle: TextStyle(
-                                              color: AppTheme.appColor),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              color: AppTheme.appColor
+                                                  .withOpacity(0.6)),
                                           controller: _nameController),
                                     ),
                                     Form(
@@ -308,9 +315,13 @@ class _AuthScreenState extends State<AuthScreen> {
                                           return null;
                                         },
                                         // height: 50,
+
                                         texthint: "Enter email",
-                                        hintStyle:
-                                            TextStyle(color: AppTheme.appColor),
+                                        hintStyle: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppTheme.appColor
+                                                .withOpacity(0.6)),
                                         controller: _emailController,
                                       ),
                                     ),
@@ -385,7 +396,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       SignUp();
                                     }
                                   }
-                                }, login == true ? "Sign in" : "Sign Up",
+                                }, login == true ? "Sign In" : "Sign Up",
                                   blurContainer: true,
                                   backgroundColor: AppTheme.appColor,
                                   textColor: Colors.white,
@@ -448,7 +459,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             textColor: AppTheme.appColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w400),
-                        AppText.appText(login == true ? "Sign up" : "Sign in",
+                        AppText.appText(login == true ? "Sign Up" : "Sign In",
                             textColor: AppTheme.appColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -577,7 +588,7 @@ class _AuthScreenState extends State<AuthScreen> {
           setState(() {
             _isLoading = false;
           });
-          alertDialogError(context,responseData["message"]);
+          alertDialogError(context: context,message: responseData["message"]);
           return;
         } else {
           print("responseData${responseData}");
@@ -654,17 +665,18 @@ class _AuthScreenState extends State<AuthScreen> {
           setState(() {
             _isLoading = false;
           });
-          alertDialogError(context, responseData["message"]);
+          alertDialogError(context: context, message: responseData["message"]);
           return;
         } else {
-          alertDialogError(context, responseData["message"]);
+          alertDialogError(context: context, message: responseData["message"]);
           setState(() {
             _isLoading = false;
           });
           var token = responseData['data']['token'];
           var name = responseData['data']['user']['name'];
           var DOB = responseData['data']['user']['DOB'];
-          var dietary_restrictions = responseData['data']['user']['dietary_restrictions'];
+          var dietary_restrictions =
+              responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
           for (var data0 in dietary_restrictions) {
             dietaryRestrictionsList.addAll({'${data0['id']}:${data0['name']}'});
@@ -672,12 +684,20 @@ class _AuthScreenState extends State<AuthScreen> {
           for (var data0 in allergies) {
             allergiesList.addAll({'${data0['id']}:${data0['name']}'});
           }
-          prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergiesList);
-          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietaryRestrictionsList);
+          prefs.setStringList(
+              PrefKey.dataonBoardScreenAllergies, allergiesList);
+          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction,
+              dietaryRestrictionsList);
           prefs.setString(PrefKey.dateOfBirth, DOB);
           prefs.setString(PrefKey.authorization, token ?? '');
           prefs.setString(PrefKey.userName, name ?? '');
-          pushReplacement(context, BottomNavView(type: 0,allergies: allergiesList,dietaryRestrictions: dietaryRestrictionsList,));
+          pushReplacement(
+              context,
+              BottomNavView(
+                type: 0,
+                allergies: allergiesList,
+                dietaryRestrictions: dietaryRestrictionsList,
+              ));
         }
       }
     } catch (e) {
@@ -766,54 +786,5 @@ class _AuthScreenState extends State<AuthScreen> {
       print("Something went Wrong ${e}");
       showSnackBar(context, "Something went Wrong.");
     }
-  }
-
-  alertDialogError(context, message) {
-    return showDialog(
-      barrierColor: Colors.transparent,
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding:  EdgeInsets.only(left: 5.w,right: 5.w),
-          child: AlertDialog(
-            actionsPadding: EdgeInsets.only(top: 5,left: 0,right: 0),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
-            shadowColor: Colors.transparent,
-            elevation: 0,
-            backgroundColor: AppTheme.appColor,
-            actionsAlignment: MainAxisAlignment.center,
-            actions: [
-               SizedBox(height: 20,),
-              Center(
-                child: AppText.appText(
-                  "${message}",
-                  fontSize: 24,
-                  textAlign: TextAlign.center,
-                  textColor: AppTheme.whiteColor,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Divider(height: 1,thickness: 1,color: AppTheme.whiteColor,),
-              Center(
-                child: TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      "Ok",
-                      style: TextStyle(
-                        fontFamily: "Roboto",
-                          color: AppTheme.whiteColor,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500),
-                    )),
-              )
-            ],
-          ),
-        );
-      },
-    );
   }
 }

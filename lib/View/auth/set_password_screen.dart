@@ -13,7 +13,11 @@ import 'package:sizer/sizer.dart';
 class SetPasswordScreen extends StatefulWidget {
   final email;
   final otp;
-  const SetPasswordScreen({super.key, this.email, this.otp,});
+  const SetPasswordScreen({
+    super.key,
+    this.email,
+    this.otp,
+  });
 
   @override
   State<SetPasswordScreen> createState() => _SetPasswordScreenState();
@@ -88,33 +92,35 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                         cursorColor: AppTheme.appColor,
                         style: TextStyle(color: AppTheme.appColor),
                         decoration: InputDecoration(
-                            suffix: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    passwordvisible = !passwordvisible;
-                                  });
-                                },
-                                child: Icon(
-                                  passwordvisible == false
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: AppTheme.appColor,
-                                )),
-                            contentPadding: const EdgeInsets.only(left: 10),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: AppTheme.appColor)),
-                            disabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide.none),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                              color: AppTheme.appColor,
-                            )),
-                            border: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: AppTheme.appColor)),
-                            hintText: "Enter new password",
-                            hintStyle: TextStyle(color: AppTheme.appColor)),
+                          suffix: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  passwordvisible = !passwordvisible;
+                                });
+                              },
+                              child: Icon(
+                                passwordvisible == false
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: AppTheme.appColor,
+                              )),
+                          contentPadding: const EdgeInsets.only(left: 10),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: AppTheme.appColor)),
+                          disabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide.none),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                            color: AppTheme.appColor,
+                          )),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: AppTheme.appColor)),
+                          hintText: "Enter new password",
+                          hintStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: AppTheme.appColor.withOpacity(0.6)),
+                        ),
                       ),
                     ),
                   ),
@@ -140,34 +146,36 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                         cursorColor: AppTheme.appColor,
                         style: TextStyle(color: AppTheme.appColor),
                         decoration: InputDecoration(
-                            suffix: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    confirmPasswordvisible =
-                                        !confirmPasswordvisible;
-                                  });
-                                },
-                                child: Icon(
-                                  confirmPasswordvisible == false
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: AppTheme.appColor,
-                                )),
-                            contentPadding: const EdgeInsets.only(left: 10),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: AppTheme.appColor)),
-                            disabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide.none),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                              color: AppTheme.appColor,
-                            )),
-                            border: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: AppTheme.appColor)),
-                            hintText: "Confirm password",
-                            hintStyle: TextStyle(color: AppTheme.appColor)),
+                          suffix: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  confirmPasswordvisible =
+                                      !confirmPasswordvisible;
+                                });
+                              },
+                              child: Icon(
+                                confirmPasswordvisible == false
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: AppTheme.appColor,
+                              )),
+                          contentPadding: const EdgeInsets.only(left: 10),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: AppTheme.appColor)),
+                          disabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide.none),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                            color: AppTheme.appColor,
+                          )),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: AppTheme.appColor)),
+                          hintText: "Confirm password",
+                          hintStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: AppTheme.appColor.withOpacity(0.6)),
+                        ),
                       ),
                     ),
                   ),

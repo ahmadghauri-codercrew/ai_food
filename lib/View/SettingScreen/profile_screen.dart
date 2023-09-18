@@ -137,6 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
         Future.delayed(const Duration(milliseconds: 200), () {
           setState(() {
             measuringUnit = false;
@@ -177,9 +178,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Flexible(
                           fit: FlexFit.loose,
                           child: CustomAppFormField(
+                            fontsize: 11.sp,
+                            fontweight: FontWeight.w400,
                             texthint: "User name",
                             controller: _userNameController,
-                            hintStyle: TextStyle(color: AppTheme.appColor,fontWeight: FontWeight.w500,),
+                            hintStyle: TextStyle(
+                              color: AppTheme.appColor,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 11.sp,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -202,16 +209,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       flex: 5,
                                       fit: FlexFit.tight,
                                       child: AppText.appText(
-                                          "DOB: ${selectedDate == null ? "${selectedDateFromPref == "" ? "MM-DD-YYYY" : selectedDateFromPref}" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
-                                          fontSize: 11.sp,
-                                          textColor: AppTheme.appColor,fontWeight: FontWeight.w500,),
+                                        "DOB: ${selectedDate == null ? "${selectedDateFromPref == "" ? "MM-DD-YYYY" : selectedDateFromPref}" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
+                                        fontSize: 11.sp,
+                                        textColor: AppTheme.appColor,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
                                     Flexible(
                                       fit: FlexFit.loose,
                                       child: Icon(
                                         Icons.keyboard_arrow_down,
                                         color: AppTheme.appColor,
-
                                         size: 30,
                                       ),
                                     ),
@@ -239,11 +247,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       fit: FlexFit.loose,
                                       flex: 4,
                                       child: AppText.appText(
-                                          updatedvalueM == ""
-                                              ? "Measuring Unit"
-                                              : updatedvalueM,
-                                          fontSize: 18,
-                                          textColor: AppTheme.appColor,fontWeight: FontWeight.w500,),
+                                        updatedvalueM == ""
+                                            ? "Measuring Unit"
+                                            : updatedvalueM,
+                                        fontSize: 11.sp,
+                                        textColor: AppTheme.appColor,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
                                     Flexible(
                                       fit: FlexFit.loose,
@@ -286,7 +296,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         AppText.appText(
                           "Allergies:",
-                          fontSize: 22,
+                          fontSize: 24,
                           fontWeight: FontWeight.w600,
                           textColor: AppTheme.appColor,
                         ),
@@ -706,7 +716,7 @@ class CustomContainer extends StatelessWidget {
           text,
           textColor: textColor,
           fontSize: 16,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w400,
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
@@ -135,7 +136,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             child: AppText.appText(
                                 "DOB: ${selectedDate == null ? "MM-DD-YYYY" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
                                 fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w400,
                                 textColor: AppTheme.appColor),
                           ),
                         ],
@@ -157,7 +158,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ),
                           AppText.appText(
                             "Allergies:",
-                            fontSize: 22,
+                            fontSize: 24,
                             fontWeight: FontWeight.w600,
                             textColor: AppTheme.appColor,
                           ),
@@ -194,7 +195,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           const SizedBox(height: 30),
                           AppText.appText(
                             "Dietary restrictions:",
-                            fontSize: 22,
+                            fontSize: 24,
                             fontWeight: FontWeight.w600,
                             textColor: AppTheme.appColor,
                           ),
@@ -314,12 +315,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       index1++;
     }
     if (selectedDate == null) {
-      showSnackBar(context, "select DOB");
+      alertDialogError(context: context, message: "Select DOB");
       setState(() {
         checkAPI = false;
       });
     } else if (_userNameController.text.isEmpty) {
-      showSnackBar(context, "field cannot be empty");
+      alertDialogError(context: context, message: "field cannot be empty");
       setState(() {
         checkAPI = false;
       });
@@ -368,13 +369,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             setState(() {
               checkAPI = false;
             });
-            showSnackBar(context, "${responseData["message"]}");
+            alertDialogError(
+                context: context, message: "${responseData["message"]}");
+
             // print("Something Went Wrong: ${responseData["message"]}");
           } else {
             setState(() {
               checkAPI = false;
             });
-            print("everything is alright");
+
             pushReplacement(
                 context,
                 BottomNavView(
@@ -441,12 +444,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   StoreDatainSharedPref(allergies, dietryRestriction) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_userNameController.text.isEmpty) {
-      showSnackBar(context, "field cannot be empty");
       setState(() {
         checkAPI == false;
       });
     } else if (selectedDate == null) {
-      showSnackBar(context, "select DOB");
       setState(() {
         checkAPI == false;
       });
@@ -550,7 +551,7 @@ class CustomContainer extends StatelessWidget {
           text,
           textColor: textColor,
           fontSize: 16,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w400,
         ),
       ),
     );
