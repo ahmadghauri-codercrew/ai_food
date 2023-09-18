@@ -100,13 +100,15 @@ class _HomeScreenState extends State<HomeScreen> {
           String key = parts[0].trim();
           value2 = parts[1].trim();
           finalValue2.add(value2);
+
         }
       }
     }
+    print("finalValue2${finalValue2}");
       getSuggestedRecipes(
-        allergies: finalValue.isEmpty ? widget.allergies : finalValue,
+        allergies: finalValue,
         dietaryRestrictions:
-            finalValue2.isEmpty ? widget.dietaryRestrictions : finalValue2,
+             finalValue2,
       );
 
   }
@@ -128,8 +130,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    print("allergies${widget.allergies}");
-    print("dietaryRestrictions${widget.dietaryRestrictions}");
+    // print("allergies${widget.allergies}");
+    // print("dietaryRestrictions${widget.dietaryRestrictions}");
 
     return Scaffold(
       appBar: AppBar(

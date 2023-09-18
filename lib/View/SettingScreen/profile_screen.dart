@@ -571,20 +571,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     const int responseCode500 = 500; // Internal server error.
 
     //here creates map like allergies[0]: 4,... using for loop to insert the data;
-    for (var data in addAllergies.entries) {
-      String key = "allergies[${index}]";
-      String key2 = data.key;
-      dynamic value = data.value;
-      arrangeIndexParam[key] = key2;
-      index++;
+    if(addAllergies.isEmpty){
+      arrangeIndexParam["allergies[0]"] = "0";
+    }else {
+      for (var data in addAllergies.entries) {
+        String key = "allergies[${index}]";
+        String key2 = data.key;
+        dynamic value = data.value;
+        arrangeIndexParam[key] = key2;
+        index++;
+      }
     }
-    for (var data in addDietaryRestrictions.entries) {
-      String key = "dietary_restrictions[${index1}]";
-      String key2 = data.key;
-      dynamic value = data.value;
-      arrangeIndexParam2[key] = key2;
-      index1++;
+    if(addDietaryRestrictions.isEmpty){
+      arrangeIndexParam2["dietary_restrictions[0]"] = "0";
+    }else{
+      for (var data in addDietaryRestrictions.entries) {
+        String key = "dietary_restrictions[${index1}]";
+        String key2 = data.key;
+        dynamic value = data.value;
+        arrangeIndexParam2[key] = key2;
+        index1++;
+      }
     }
+
     //----------------------//
     //check if username is empty or not
     if (_userNameController.text.isEmpty) {
@@ -595,8 +604,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     Map<String, dynamic> params = {
       "name": _userNameController.text,
-      "DOB": selectedDateFromPref ??
-          DateFormat('yyyy-MM-dd').format(selectedDate!),
+      "DOB": selectedDateFromPref ?? DateFormat('yyyy-MM-dd').format(selectedDate!),
       ...arrangeIndexParam,
       ...arrangeIndexParam2,
     };
