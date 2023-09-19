@@ -126,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     }
     _userNameController.text= prefs.getString(PrefKey.userName)!;
-    updatedvalueM==""? "US": prefs.getString(PrefKey.unit);
+    updatedvalueM =  prefs.getString(PrefKey.unit)!;
   }
   @override
   Widget build(BuildContext context) {
@@ -178,7 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             hintStyle: TextStyle(color: AppTheme.appColor,fontWeight: FontWeight.w500),
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 25),
                         Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -259,32 +259,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Flexible(
-                                fit: FlexFit.loose,
-                                child: Divider(
-                                  thickness: 1,
-                                  color: AppTheme.appColor,
-                                )),
-                            const SizedBox(
-                              width: 40,
-                            ),
-                            Flexible(
-                                fit: FlexFit.loose,
-                                child: Divider(
-                                  thickness: 1,
-                                  color: AppTheme.appColor,
-                                )),
-                          ],
+                        Container(height: 2,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                  fit: FlexFit.loose,
+                                  child: Divider(
+                                    thickness: 1,
+                                    color: AppTheme.appColor,
+                                  )),
+                              const SizedBox(
+                                width: 40,
+                              ),
+                              Flexible(
+                                  fit: FlexFit.loose,
+                                  child: Divider(
+                                    thickness: 1,
+                                    color: AppTheme.appColor,
+                                  ),),
+                            ],
+                          ),
                         ),
                         const SizedBox(
                           height: 30,
                         ),
                         AppText.appText(
                           "Allergies:",
-                          fontSize: 24,
+                          fontSize: 22,
                           fontWeight: FontWeight.w600,
                           textColor: AppTheme.appColor,
                         ),
@@ -321,7 +323,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(height: 30),
                         AppText.appText(
                           "Dietary restrictions:",
-                          fontSize: 24,
+                          fontSize: 22,
                           fontWeight: FontWeight.w600,
                           textColor: AppTheme.appColor,
                         ),
