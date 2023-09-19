@@ -284,6 +284,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(
                           height: 30,
                         ),
+
                         AppText.appText(
                           "Allergies:",
                           fontSize: 22,
