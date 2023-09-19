@@ -4,7 +4,6 @@ import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
-import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
@@ -96,10 +95,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 50,
+                    height: 40,
                     child: TextFormField(
                       cursorColor: AppTheme.appColor,
-                      style: TextStyle(color: AppTheme.appColor),
+                      style: TextStyle(color: AppTheme.appColor, fontWeight: FontWeight.w500),
                       controller: _userNameController,
                       decoration: InputDecoration(
                           isDense: true,
@@ -122,7 +121,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               fontSize: 16)),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  // const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
                       _selectDate(context);
@@ -136,7 +135,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             child: AppText.appText(
                                 "DOB: ${selectedDate == null ? "MM-DD-YYYY" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
                                 fontSize: 16,
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w500,
                                 textColor: AppTheme.appColor),
                           ),
                         ],
@@ -146,7 +145,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Divider(
                     thickness: 1,
                     color: AppTheme.appColor,
-                    endIndent: 40,
                   ),
                   Stack(
                     children: [
@@ -158,7 +156,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ),
                           AppText.appText(
                             "Allergies:",
-                            fontSize: 24,
+                            fontSize: 22,
                             fontWeight: FontWeight.w600,
                             textColor: AppTheme.appColor,
                           ),
@@ -195,7 +193,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           const SizedBox(height: 30),
                           AppText.appText(
                             "Dietary restrictions:",
-                            fontSize: 24,
+                            fontSize: 22,
                             fontWeight: FontWeight.w600,
                             textColor: AppTheme.appColor,
                           ),
@@ -300,27 +298,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     const int responseCode401 = 401; // For Unauthorized access.
     const int responseCode404 = 404; // For For data not found
     const int responseCode500 = 500; // Internal server error.
-    for (var data in addAllergies.entries) {
-      String key = "allergies[${index}]";
-      String key2 = data.key;
-      dynamic value = data.value;
-      arrangeIndexParam[key] = key2;
-      index++;
+    if(addAllergies.isEmpty){
+      arrangeIndexParam["allergies[0]"] = "0";
+    }else {
+      for (var data in addAllergies.entries) {
+        String key = "allergies[${index}]";
+        String key2 = data.key;
+        dynamic value = data.value;
+        arrangeIndexParam[key] = key2;
+        index++;
+      }
     }
-    for (var data in addDietaryRestrictions.entries) {
-      String key = "dietary_restrictions[${index1}]";
-      String key2 = data.key;
-      dynamic value = data.value;
-      arrangeIndexParam2[key] = key2;
-      index1++;
+    if(addDietaryRestrictions.isEmpty){
+      arrangeIndexParam2["dietary_restrictions[0]"] = "0";
+    }else{
+      for (var data in addDietaryRestrictions.entries) {
+        String key = "dietary_restrictions[${index1}]";
+        String key2 = data.key;
+        dynamic value = data.value;
+        arrangeIndexParam2[key] = key2;
+        index1++;
+      }
     }
     if (selectedDate == null) {
-      alertDialogError(context: context, message: "Select DOB");
+      showSnackBar(context, "select DOB");
       setState(() {
         checkAPI = false;
       });
     } else if (_userNameController.text.isEmpty) {
-      alertDialogError(context: context, message: "field cannot be empty");
+      showSnackBar(context, "field cannot be empty");
       setState(() {
         checkAPI = false;
       });
@@ -369,15 +375,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             setState(() {
               checkAPI = false;
             });
-            alertDialogError(
-                context: context, message: "${responseData["message"]}");
-
+            showSnackBar(context, "${responseData["message"]}");
             // print("Something Went Wrong: ${responseData["message"]}");
           } else {
             setState(() {
               checkAPI = false;
             });
-
+            print("everything is alright");
             pushReplacement(
                 context,
                 BottomNavView(
@@ -444,10 +448,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   StoreDatainSharedPref(allergies, dietryRestriction) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_userNameController.text.isEmpty) {
+      showSnackBar(context, "field cannot be empty");
       setState(() {
         checkAPI == false;
       });
     } else if (selectedDate == null) {
+      showSnackBar(context, "select DOB");
       setState(() {
         checkAPI == false;
       });
@@ -551,7 +557,7 @@ class CustomContainer extends StatelessWidget {
           text,
           textColor: textColor,
           fontSize: 16,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );

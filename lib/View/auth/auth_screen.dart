@@ -137,12 +137,11 @@ class _AuthScreenState extends State<AuthScreen> {
                                       },
                                       child: SizedBox(
                                         width: 90,
-                                        child: AppText.appText("Sign In",
+                                        child: AppText.appText("Sign in",
                                             textColor: login == true
                                                 ? AppTheme.appColor
                                                 : const Color(0xffBFBFBF),
                                             fontSize: 24,
-                                            textAlign: TextAlign.center,
                                             fontWeight: FontWeight.w600),
                                       )),
                                   login == true
@@ -174,13 +173,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                       },
                                       child: SizedBox(
                                         width: 95,
-                                        child: AppText.appText("Sign Up",
+                                        child: AppText.appText("Sign up",
                                             textColor: login == false
                                                 ? AppTheme.appColor
                                                 // : Colors.black.withOpacity(0.25),
                                                 : const Color(0xffBFBFBF),
                                             fontSize: 24,
-                                            textAlign: TextAlign.center,
                                             fontWeight: FontWeight.w600),
                                       )),
                                   login == false
@@ -227,10 +225,10 @@ class _AuthScreenState extends State<AuthScreen> {
                                           },
                                           texthint: "Email",
                                           hintStyle: TextStyle(
-                                              fontSize: 16,
+                                            fontSize: 16,
                                               fontWeight: FontWeight.w400,
-                                              color: AppTheme.appColor
-                                                  .withOpacity(0.6)),
+                                              color: AppTheme.appColor.withOpacity(0.8),
+                                          ),
                                           controller: _loginEmailController),
                                     ),
                                     Form(
@@ -292,10 +290,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                           height: 50,
                                           texthint: "Enter full name",
                                           hintStyle: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: AppTheme.appColor
-                                                  .withOpacity(0.6)),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppTheme.appColor.withOpacity(0.8),),
                                           controller: _nameController),
                                     ),
                                     Form(
@@ -315,13 +312,11 @@ class _AuthScreenState extends State<AuthScreen> {
                                           return null;
                                         },
                                         // height: 50,
-
                                         texthint: "Enter email",
-                                        hintStyle: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: AppTheme.appColor
-                                                .withOpacity(0.6)),
+                                        hintStyle:
+                                            TextStyle(fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              color: AppTheme.appColor.withOpacity(0.8),),
                                         controller: _emailController,
                                       ),
                                     ),
@@ -380,7 +375,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       //         const UserProfileScreen(),
                                       //   ),
                                       // );
-                                      Login();
+                                      Login(context);
                                       print("Email:${_emailController.text}");
                                       print(
                                           "Password:${_passwordController.text}");
@@ -393,10 +388,10 @@ class _AuthScreenState extends State<AuthScreen> {
                                             .validate() &&
                                         _formKeyConfirmPassword.currentState!
                                             .validate()) {
-                                      SignUp();
+                                      SignUp(context);
                                     }
                                   }
-                                }, login == true ? "Sign In" : "Sign Up",
+                                }, login == true ? "Sign in" : "Sign Up",
                                   blurContainer: true,
                                   backgroundColor: AppTheme.appColor,
                                   textColor: Colors.white,
@@ -459,7 +454,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             textColor: AppTheme.appColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w400),
-                        AppText.appText(login == true ? "Sign Up" : "Sign In",
+                        AppText.appText(login == true ? "Sign up" : "Sign in",
                             textColor: AppTheme.appColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -539,7 +534,7 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  void SignUp() async {
+  void SignUp(context) async {
     setState(() {
       _isLoading = true;
     });
@@ -588,11 +583,11 @@ class _AuthScreenState extends State<AuthScreen> {
           setState(() {
             _isLoading = false;
           });
-          alertDialogError(context: context,message: responseData["message"]);
+          alertDialogError(context: context, message: responseData["message"]);
           return;
         } else {
           print("responseData${responseData}");
-          showSnackBar(context, "${responseData["message"]}");
+          // alertDialogError(context: context, message: responseData["message"]);
           setState(() {
             _isLoading = false;
           });
@@ -616,7 +611,7 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   //simple sign in
-  void Login() async {
+  void Login(context) async {
     setState(() {
       _isLoading = true;
     });
@@ -637,29 +632,29 @@ class _AuthScreenState extends State<AuthScreen> {
       response = await dio.post(path: AppUrls.loginUrl, data: params);
       var responseData = response.data;
       if (response.statusCode == responseCode404) {
-        print("For data not found.");
+        print("For For data not found.");
         setState(() {
           _isLoading = false;
         });
-        // alertDialogError(context,responseData["message"]);
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode400) {
         print(" Bad Request.");
         setState(() {
           _isLoading = false;
         });
-        //  alertDialogError(context,responseData["message"]);
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode401) {
         print(" Unauthorized access.");
         setState(() {
           _isLoading = false;
         });
-        //  alertDialogError(context,responseData["message"]);
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode500) {
         print("Internal server error.");
         setState(() {
           _isLoading = false;
         });
-        // alertDialogError(context,responseData["message"]);
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode200) {
         if (responseData["status"] == false) {
           setState(() {
@@ -668,15 +663,15 @@ class _AuthScreenState extends State<AuthScreen> {
           alertDialogError(context: context, message: responseData["message"]);
           return;
         } else {
-          alertDialogError(context: context, message: responseData["message"]);
+          print("responseData${responseData}");
+          // alertDialogError(context: context, message: responseData["message"]);
           setState(() {
             _isLoading = false;
           });
           var token = responseData['data']['token'];
           var name = responseData['data']['user']['name'];
           var DOB = responseData['data']['user']['DOB'];
-          var dietary_restrictions =
-              responseData['data']['user']['dietary_restrictions'];
+          var dietary_restrictions = responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
           for (var data0 in dietary_restrictions) {
             dietaryRestrictionsList.addAll({'${data0['id']}:${data0['name']}'});
@@ -684,20 +679,12 @@ class _AuthScreenState extends State<AuthScreen> {
           for (var data0 in allergies) {
             allergiesList.addAll({'${data0['id']}:${data0['name']}'});
           }
-          prefs.setStringList(
-              PrefKey.dataonBoardScreenAllergies, allergiesList);
-          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction,
-              dietaryRestrictionsList);
+          prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergiesList);
+          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietaryRestrictionsList);
           prefs.setString(PrefKey.dateOfBirth, DOB);
           prefs.setString(PrefKey.authorization, token ?? '');
           prefs.setString(PrefKey.userName, name ?? '');
-          pushReplacement(
-              context,
-              BottomNavView(
-                type: 0,
-                allergies: allergiesList,
-                dietaryRestrictions: dietaryRestrictionsList,
-              ));
+          pushReplacement(context, BottomNavView(type: 0,allergies: allergiesList,dietaryRestrictions: dietaryRestrictionsList,));
         }
       }
     } catch (e) {
@@ -718,6 +705,9 @@ class _AuthScreenState extends State<AuthScreen> {
       _appleLoading = true;
     });
     var response;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> dietaryRestrictionsList = [];
+    List<String> allergiesList = [];
     const int responseCode200 = 200; // For successful request.
     const int responseCode400 = 400; // For Bad Request.
     const int responseCode401 = 401; // For Unauthorized access.
@@ -762,6 +752,28 @@ class _AuthScreenState extends State<AuthScreen> {
           showSnackBar(context, "${responseData["message"]}");
           return;
         } else {
+
+          var token = responseData['data']['token'];
+          // if(name.isEmpty || name == ""){
+          //   name = responseData['data']['user']['name'];
+          // }
+
+          // print("name_is_here ${responseData['data']['user']['name']}");
+          // var DOB = responseData['data']['user']['DOB'];
+          var dietary_restrictions = responseData['data']['user']['dietary_restrictions'];
+          var allergies = responseData['data']['user']['allergies'];
+          for (var data0 in dietary_restrictions) {
+            dietaryRestrictionsList.addAll({'${data0['id']}:${data0['name']}'});
+          }
+          for (var data0 in allergies) {
+            allergiesList.addAll({'${data0['id']}:${data0['name']}'});
+          }
+          prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergiesList);
+          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietaryRestrictionsList);
+          // prefs.setString(PrefKey.dateOfBirth, DOB);
+          prefs.setString(PrefKey.authorization, token ?? '');
+          prefs.setString(PrefKey.userName, name ?? '');
+
           if (isNewUser) {
             pushReplacement(context, const UserProfileScreen());
           } else {
@@ -771,11 +783,11 @@ class _AuthScreenState extends State<AuthScreen> {
           setState(() {
             _appleLoading = false;
           });
-          var token = responseData['data']['token'];
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-
-          prefs.setString(PrefKey.authorization, token ?? '');
-          prefs.setString(PrefKey.userName, name ?? '');
+          // var token = responseData['data']['token'];
+          // SharedPreferences prefs = await SharedPreferences.getInstance();
+          //
+          // prefs.setString(PrefKey.authorization, token ?? '');
+          // prefs.setString(PrefKey.userName, name ?? '');
           showSnackBar(context, "${responseData["message"]}");
         }
       }
@@ -787,4 +799,45 @@ class _AuthScreenState extends State<AuthScreen> {
       showSnackBar(context, "Something went Wrong.");
     }
   }
+
+  // alertDialogError(context) {
+  //   return showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         backgroundColor: AppTheme.whiteColor,
+  //         actionsAlignment: MainAxisAlignment.center,
+  //         actions: [
+  //           Center(
+  //               child: Image.asset(
+  //             "assets/images/done.gif",
+  //             height: 120,
+  //           )),
+  //           const SizedBox(
+  //             height: 50,
+  //           ),
+  //           Center(
+  //             child: AppText.appText(
+  //               "User Created Successfully",
+  //               fontSize: 24,
+  //               textColor: AppTheme.appColor,
+  //               fontWeight: FontWeight.w600,
+  //             ),
+  //           ),
+  //           const SizedBox(
+  //             height: 20,
+  //           ),
+  //           AppButton.appButton("Okay",
+  //               onTap: () => Navigator.of(context).pop(),
+  //               height: 30,
+  //               fontWeight: FontWeight.w600,
+  //               fontSize: 20,
+  //               textColor: AppTheme.appColor,
+  //               backgroundColor: AppTheme.whiteColor,
+  //               border: false)
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }

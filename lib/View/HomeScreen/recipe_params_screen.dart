@@ -163,218 +163,225 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
           ),
         ),
       ),
-      body: Container(
-        width: width,
-        height: height,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20, top: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    AppText.appText(
-                      "Food choices:",
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      textColor: AppTheme.appColor,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        //allergies
-                        allergiesProvider.removeAllergyParams();
-                        allergiesProvider.clearAllergiesAllCheckboxStates();
-                        //restrictions
-                        restrictionsProvider.removeDietaryRestrictions();
-                        restrictionsProvider.clearDietaryRestrictionsAllCheckboxStates();
-                        //protein
-                        proteinProvider.removePreferredProtein();
-                        proteinProvider.clearProteinAllCheckboxStates();
-                        //delicacy
-                        delicacyProvider.removeRegionalDelicacy();
-                        delicacyProvider.clearRegionalDelicacyAllCheckboxStates();
-                        //kitchen
-                        kitchenProvider.removeKitchenResources();
-                        kitchenProvider.clearKitchenResourcesAllCheckboxStates();
-
-                        //food style
-                        foodStyleProvider.clearFoodStyleValue();
-
-                        showSnackBar(context, "Filters Reset Succesfully");
-                      },
-                      child: AppText.appText(
-                        "Reset filters",
-                        fontSize: 16,
-                        underLine: true,
-                        fontWeight: FontWeight.w400,
+      body: GestureDetector(
+        onTap: (){
+          setState(() {
+            showFoodStyle = false;
+          });
+        },
+        child: Container(
+          width: width,
+          height: height,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 20, top: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AppText.appText(
+                        "Food choices:",
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
                         textColor: AppTheme.appColor,
                       ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 15),
-                        GestureDetector(
-                          onTap: () {
-                            showFoodStyle = !showFoodStyle;
+                      GestureDetector(
+                        onTap: () {
+                          //allergies
+                          allergiesProvider.removeAllergyParams();
+                          allergiesProvider.clearAllergiesAllCheckboxStates();
+                          //restrictions
+                          restrictionsProvider.removeDietaryRestrictions();
+                          restrictionsProvider.clearDietaryRestrictionsAllCheckboxStates();
+                          //protein
+                          proteinProvider.removePreferredProtein();
+                          proteinProvider.clearProteinAllCheckboxStates();
+                          //delicacy
+                          delicacyProvider.removeRegionalDelicacy();
+                          delicacyProvider.clearRegionalDelicacyAllCheckboxStates();
+                          //kitchen
+                          kitchenProvider.removeKitchenResources();
+                          kitchenProvider.clearKitchenResourcesAllCheckboxStates();
 
-                            setState(() {});
-                          },
-                          child: Container(
-                            height: 55,
-                            width: 227,
-                            decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(5),
-                                  topRight: Radius.circular(5),
-                                  bottomLeft: Radius.circular(0),
-                                  bottomRight: Radius.circular(0),
+                          //food style
+                          foodStyleProvider.clearFoodStyleValue();
+
+                          showSnackBar(context, "Filters Reset Succesfully");
+                        },
+                        child: AppText.appText(
+                          "Reset filters",
+                          fontSize: 16,
+                          underLine: true,
+                          fontWeight: FontWeight.w400,
+                          textColor: AppTheme.appColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Stack(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 15),
+                          GestureDetector(
+                            onTap: () {
+                              showFoodStyle = !showFoodStyle;
+
+                              setState(() {});
+                            },
+                            child: Container(
+                              height: 55,
+                              width: 227,
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(5),
+                                    topRight: Radius.circular(5),
+                                    bottomLeft: Radius.circular(0),
+                                    bottomRight: Radius.circular(0),
+                                  ),
+                                  border: Border.all(
+                                      color: AppTheme.appColor, width: 2)),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    AppText.appText(
+                                        foodStyleProvider.foodStyle.isEmpty
+                                            ? "Food style"
+                                            : foodStyleProvider.foodStyle,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        textColor: AppTheme.appColor),
+                                    !showFoodStyle
+                                        ? Icon(
+                                            Icons.keyboard_arrow_down_outlined,
+                                            color: AppTheme.appColor,
+                                            size: 30,
+                                          )
+                                        : Icon(
+                                            Icons.keyboard_arrow_up_outlined,
+                                            color: AppTheme.appColor,
+                                            size: 30,
+                                          ),
+                                  ],
                                 ),
-                                border: Border.all(
-                                    color: AppTheme.appColor, width: 2)),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  AppText.appText(
-                                      foodStyleProvider.foodStyle.isEmpty
-                                          ? "Food style"
-                                          : foodStyleProvider.foodStyle,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                      textColor: AppTheme.appColor),
-                                  !showFoodStyle
-                                      ? Icon(
-                                          Icons.keyboard_arrow_down_outlined,
-                                          color: AppTheme.appColor,
-                                          size: 30,
-                                        )
-                                      : Icon(
-                                          Icons.keyboard_arrow_up_outlined,
-                                          color: AppTheme.appColor,
-                                          size: 30,
-                                        ),
-                                ],
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 30),
-                        //here are the allergies
-                        CustomRecipesSelection(
-                          recipeText: "Allergies",
-                          onTap: () {
-                            Provider.of<AllergiesProvider>(context,
-                                    listen: false)
-                                .showAllergiesParameterDetails(
-                                    context, "Allergies");
-                          },
-                        ),
-                        const SizedBox(height: 30),
-                        //ends allergies
+                          const SizedBox(height: 30),
+                          //here are the allergies
+                          CustomRecipesSelection(
+                            recipeText: "Allergies",
+                            onTap: () {
+                              Provider.of<AllergiesProvider>(context,
+                                      listen: false)
+                                  .showAllergiesParameterDetails(
+                                      context, "Allergies");
+                            },
+                          ),
+                          const SizedBox(height: 30),
+                          //ends allergies
 
-                        //here are the Dietary restrictions
-                        CustomRecipesSelection(
-                          recipeText: "Dietary restrictions",
-                          onTap: () {
-                            Provider.of<DietaryRestrictionsProvider>(context,
-                                    listen: false)
-                                .showDietaryRestrictionsParameterDetails(
-                                    context, "Dietary Restrictions");
-                          },
-                        ),
-                        const SizedBox(height: 30),
-                        //ends Dietary restrictions
+                          //here are the Dietary restrictions
+                          CustomRecipesSelection(
+                            recipeText: "Dietary restrictions",
+                            onTap: () {
+                              Provider.of<DietaryRestrictionsProvider>(context,
+                                      listen: false)
+                                  .showDietaryRestrictionsParameterDetails(
+                                      context, "Dietary Restrictions");
+                            },
+                          ),
+                          const SizedBox(height: 30),
+                          //ends Dietary restrictions
 
-                        //here are the Regional delicacy
-                        CustomRecipesSelection(
-                          recipeText: "Preferred protein",
-                          onTap: () {
-                            Provider.of<PreferredProteinProvider>(context,
-                                    listen: false)
-                                .showProteinParameterDetails(
-                                    context, "Preferred Protein");
-                          },
-                        ),
-                        const SizedBox(height: 30),
-                        //ends Regional delicacy
+                          //here are the Regional delicacy
+                          CustomRecipesSelection(
+                            recipeText: "Preferred protein",
+                            onTap: () {
+                              Provider.of<PreferredProteinProvider>(context,
+                                      listen: false)
+                                  .showProteinParameterDetails(
+                                      context, "Preferred Protein");
+                            },
+                          ),
+                          const SizedBox(height: 30),
+                          //ends Regional delicacy
 
-                        //here are the Regional delicacy
-                        CustomRecipesSelection(
-                          recipeText: "Regional delicacy",
-                          onTap: () {
-                            Provider.of<RegionalDelicacyProvider>(context,
-                                    listen: false)
-                                .showRegionalDelicacyParameterDetails(
-                                    context, "Regional Delicacy");
-                          },
-                        ),
-                        const SizedBox(height: 30),
-                        //ends Regional delicacy
+                          //here are the Regional delicacy
+                          CustomRecipesSelection(
+                            recipeText: "Regional delicacy",
+                            onTap: () {
+                              Provider.of<RegionalDelicacyProvider>(context,
+                                      listen: false)
+                                  .showRegionalDelicacyParameterDetails(
+                                      context, "Regional Delicacy");
+                            },
+                          ),
+                          const SizedBox(height: 30),
+                          //ends Regional delicacy
 
-                        //here are the Kitchen resources
-                        CustomRecipesSelection(
-                          recipeText: "Kitchen resources",
-                          onTap: () {
-                            Provider.of<KitchenResourcesProvider>(context,
-                                    listen: false)
-                                .showKitchenResourcesParameterDetails(
-                                    context, "Kitchen Resources");
-                          },
-                        ),
-                        const SizedBox(height: 30),
-                        //ends Kitchen resources
-                      ],
-                    ),
-                    showFoodStyle
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 69.0),
-                            child: customFoodStyle(),
-                          )
-                        : const SizedBox.shrink(),
-                  ],
-                ),
-                //kitchen resources ends
-                const SizedBox(height: 30),
-                isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: AppTheme.appColor,
-                        ),
-                      )
-                    : Center(
-                        child: AppButton.appButton(
-                          "Generate",
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          textColor: Colors.white,
-                          height: 50,
-                          width: 180,
-                          backgroundColor: AppTheme.appColor,
-                          onTap: () async {
-                            await generateRecipe(
-                                style: addFoodStyle,
-                                allergy: allergiesProvider,
-                                dietary: restrictionsProvider,
-                                regional: delicacyProvider,
-                                kitchen: kitchenProvider);
-                          },
-                        ),
+                          //here are the Kitchen resources
+                          CustomRecipesSelection(
+                            recipeText: "Kitchen resources",
+                            onTap: () {
+                              Provider.of<KitchenResourcesProvider>(context,
+                                      listen: false)
+                                  .showKitchenResourcesParameterDetails(
+                                      context, "Kitchen Resources");
+                            },
+                          ),
+                          const SizedBox(height: 30),
+                          //ends Kitchen resources
+                        ],
                       ),
-                // ignore: prefer_const_constructors
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
+                      showFoodStyle
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 69.0),
+                              child: customFoodStyle(),
+                            )
+                          : const SizedBox.shrink(),
+                    ],
+                  ),
+                  //kitchen resources ends
+                  const SizedBox(height: 30),
+                  isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: AppTheme.appColor,
+                          ),
+                        )
+                      : Center(
+                          child: AppButton.appButton(
+                            "Generate",
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            textColor: Colors.white,
+                            height: 50,
+                            width: 180,
+                            backgroundColor: AppTheme.appColor,
+                            onTap: () async {
+                              await generateRecipe(
+                                  style: addFoodStyle,
+                                  allergy: allergiesProvider,
+                                  dietary: restrictionsProvider,
+                                  regional: delicacyProvider,
+                                  kitchen: kitchenProvider);
+                            },
+                          ),
+                        ),
+                  // ignore: prefer_const_constructors
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

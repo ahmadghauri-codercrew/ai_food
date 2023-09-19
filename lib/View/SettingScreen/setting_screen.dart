@@ -311,7 +311,7 @@ class _SettingScreenState extends State<SettingScreen> {
       builder: (BuildContext context) {
         return Dialog(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
           child: SingleChildScrollView(
             child: Container(
               // width: 100,
@@ -354,7 +354,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           child: Form(
                             key: _formKeyName,
                             autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
+                            AutovalidateMode.onUserInteraction,
                             child: TextFormField(
                               controller: nameController,
                               validator: ((value) {
@@ -366,7 +366,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               cursorColor: AppTheme.whiteColor,
                               decoration: InputDecoration(
                                   contentPadding:
-                                      EdgeInsets.only(top: 20, left: 10),
+                                  EdgeInsets.only(top: 20, left: 10),
                                   hintStyle: TextStyle(
                                       color: AppTheme.whiteColor,
                                       fontSize: 16,
@@ -407,7 +407,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             cursorColor: AppTheme.whiteColor,
                             decoration: InputDecoration(
                                 contentPadding:
-                                    EdgeInsets.only(top: 20, left: 10),
+                                EdgeInsets.only(top: 20, left: 10),
                                 hintStyle: TextStyle(
                                     color: AppTheme.whiteColor,
                                     fontSize: 16,
@@ -415,7 +415,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                 hintText: "jessicahanson@gmail.com",
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: AppTheme.whiteColor)),
+                                    BorderSide(color: AppTheme.whiteColor)),
                                 enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
                                         color: AppTheme.whiteColor))),
@@ -462,7 +462,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide:
-                                    BorderSide(color: AppTheme.whiteColor))),
+                                BorderSide(color: AppTheme.whiteColor))),
                       ),
                     ),
                   ),
@@ -477,14 +477,14 @@ class _SettingScreenState extends State<SettingScreen> {
                         height: 50,
                         width: 180,
                         backgroundColor: AppTheme.whiteColor, onTap: () {
-                      if (_formKeyName.currentState!.validate() &&
-                          _formKeyEmail.currentState!.validate() &&
-                          _formKeyMessage.currentState!.validate()) {
-                        Navigator.pop(context);
-                      }
-                      // push(context, ForgotPasswordScreen());
-                      // push(context, const ForgotPasswordPage());
-                    }),
+                          if (_formKeyName.currentState!.validate() &&
+                              _formKeyEmail.currentState!.validate() &&
+                              _formKeyMessage.currentState!.validate()) {
+                            Navigator.pop(context);
+                          }
+                          // push(context, ForgotPasswordScreen());
+                          // push(context, const ForgotPasswordPage());
+                        }),
                   ),
                   const SizedBox(
                     height: 30,

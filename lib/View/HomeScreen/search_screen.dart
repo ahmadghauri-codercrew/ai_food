@@ -10,6 +10,7 @@ import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -76,137 +77,135 @@ class _SearchScreenState extends State<SearchScreen> {
                 color: AppTheme.appColor,
               ),
             )
-          : GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, bottom: 15.0, top: 15),
-                child: Column(
-                  children: [
-                    Container(
-                      width: width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: const Color(0xffd9c4ef),
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
-                            child: SizedBox(
-                              width: width * 0.65,
-                              child: TextFormField(
-                                onFieldSubmitted: (value) {
-                                  if (_searchController.text.isNotEmpty) {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    getFood(context);
-                                  }
-                                },
-                                textInputAction: TextInputAction.search,
-                                controller: _searchController,
-                                autofocus: true,
-                                cursorColor: AppTheme.appColor,
-                                style: TextStyle(color: AppTheme.whiteColor),
-                                decoration: InputDecoration.collapsed(
-                                  hintText: 'Search',
-                                  hintStyle: TextStyle(
-                                      color: AppTheme.whiteColor,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter a recipe';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {
-                                  setState(() {
-                                    _autoValidateMode =
-                                        AutovalidateMode.disabled;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              if (_searchController.text.isNotEmpty) {
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
-                                getFood(context);
-                              }
-                            },
-                            child: Container(
-                              width: 60,
-                              height: 50,
-                              decoration: const BoxDecoration(
-                                color: Color(0xffb38ade),
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(100),
-                                    bottomRight: Radius.circular(100)),
-                              ),
-                              child: const Icon(
-                                Icons.search_outlined,
-                                size: 35,
-                                color: Color(0xffFFFFFF),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+          : Padding(
+              padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 15.0, top: 15),
+              child: Column(
+                children: [
+                  Container(
+                    width: width,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: const Color(0xffd9c4ef),
+                      borderRadius: BorderRadius.circular(100),
                     ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            pushReplacement(context, const RecipeParamScreen());
-                          },
-                          child: Container(
-                              width: 150,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: AppTheme.appColor,
-                                borderRadius: BorderRadius.circular(50),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: SizedBox(
+                            width: width * 0.65,
+                            child: TextFormField(
+                              onFieldSubmitted: (value) {
+                                print("search_value $value");
+                                getFood(context);
+                              },
+                              textInputAction: TextInputAction.search,
+                              controller: _searchController,
+                              autofocus: true,
+                              cursorColor: AppTheme.appColor,
+                              style: TextStyle(color: AppTheme.appColor),
+                              decoration: InputDecoration.collapsed(
+                                hintText: 'Search',
+                                hintStyle: TextStyle(
+                                    color: AppTheme.whiteColor,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(bottom: 3.0),
-                                      child: Icon(
-                                        Icons.filter_list,
-                                        color: Color(0xFFF7F7F7),
-                                        size: 22,
-                                      ),
-                                    ),
-                                    AppText.appText(
-                                      "Advanced search",
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      textColor: AppTheme.whiteColor,
-                                    ),
-                                  ],
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a recipe';
+                                }
+                                return null;
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  _autoValidateMode = AutovalidateMode.disabled;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            if(_searchController.text == "" || _searchController.text.isEmpty){
+                              showSnackBar(context, "Please type something.");
+                            } else {
+                              getFood(context);
+                            }
+                          },
+                          child: Stack(
+                            children: [
+                              Container(
+                                width: 60,
+                                height: 50,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFB38ADE),
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(100),
+                                      bottomRight: Radius.circular(100)),
                                 ),
-                              )),
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                  child: SvgPicture.asset("assets/images/Search.svg",
+                                      width: 30, height: 30),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          pushReplacement(context, const RecipeParamScreen());
+                        },
+                        child: Container(
+                            width: 150,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: AppTheme.appColor,
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.only(bottom: 3.0),
+                                    child: Icon(
+                                      Icons.filter_list,
+                                      color: Color(0xFFF7F7F7),
+                                      size: 22,
+                                    ),
+                                  ),
+                                  AppText.appText(
+                                    "Advanced search",
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    textColor: AppTheme.whiteColor,
+                                  ),
+                                ],
+                              ),
+                            )),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
     );
@@ -221,7 +220,8 @@ class _SearchScreenState extends State<SearchScreen> {
     });
 
     var searchtext = _searchController.text;
-    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    const apiKey = '56806fa3f874403c8794d4b7e491c937';
 
     final apiUrl =
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';

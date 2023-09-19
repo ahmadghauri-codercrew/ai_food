@@ -107,9 +107,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     print("value_is ${finalValue} data ${finalValue2}");
     getSuggestedRecipes(
-      allergies: finalValue.isEmpty ? widget.allergies : finalValue,
-      dietaryRestrictions:
-          finalValue2.isEmpty ? widget.dietaryRestrictions : finalValue2,
+      allergies: finalValue,
+      dietaryRestrictions: finalValue2,
     );
   }
 
@@ -130,6 +129,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    print("allergies${widget.allergies}");
+    print("dietaryRestrictions${widget.dietaryRestrictions}");
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -179,8 +181,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       alignment: Alignment.center,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                        child: SvgPicture.asset("assets/images/Search.svg",
-                            width: 30, height: 30),
+                        child: SvgPicture.asset(
+                          "assets/images/Search.svg",
+                          width: 30,
+                          height: 30,
+                        ),
                       ),
                     ),
                   ],
@@ -218,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   type == 0
                                       ? "Recommended:"
                                       : "Search results:",
-                                  fontSize: 22,
+                                  fontSize: 20,
                                   textColor: AppTheme.appColor,
                                   fontWeight: FontWeight.w600),
                               // REGENERATE RECIPE BUTTON
@@ -523,8 +528,8 @@ class _HomeScreenState extends State<HomeScreen> {
   getSearchResult(id) async {
     print("kjbjfejfbjefbefljeblf");
 
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
-    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    const apiKey = 'd9186e5f351240e094658382be62d948';
+    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
 
     final apiUrl =
         'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey';
@@ -545,6 +550,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ////////////////////////////////////get suggested recipe////////////////////////////////////////////////////////////////////
 
   getSuggestedRecipes({allergies, dietaryRestrictions}) async {
+    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     const apiKey = '56806fa3f874403c8794d4b7e491c937';
 
     final allergiesAre =
@@ -572,7 +578,6 @@ class _HomeScreenState extends State<HomeScreen> {
       if (response.statusCode == 200) {
         setState(() {
           responseData = response.data["recipes"];
-          print("mf;fnenl$responseData");
         });
       } else if (response.statusCode == 402) {
         setState(() {
@@ -582,7 +587,6 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       } else {
         showSnackBar(context, "Something Went Wrong!");
-        return;
       }
     } catch (e) {
       print(e);
@@ -651,7 +655,8 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
-    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    const apiKey = '56806fa3f874403c8794d4b7e491c937';
 
     int currentOffset = widget.offset + 8;
 
