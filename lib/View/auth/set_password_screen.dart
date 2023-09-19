@@ -51,7 +51,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 25, right: 25, top: 70),
+          padding: const EdgeInsets.only(left: 25, right: 25, top: 105),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -61,7 +61,8 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                   fontWeight: FontWeight.w600),
               AppText.appText(
                 "Set new password",
-                fontSize: 12.sp,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
                 textColor: AppTheme.appColor,
               ),
               const SizedBox(
@@ -87,10 +88,11 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                         }
                         return null; // Validation passed
                       },
-                      texthint: "Enter password",
+                      texthint: "Enter new password",
                       controller: _passwordController,
                     ),
                   ),
+                  const SizedBox(height: 15),
                   Form(
                     autovalidateMode:
                     AutovalidateMode.onUserInteraction,
@@ -209,7 +211,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
           setState(() {
             _isLoading = false;
           });
-          pushReplacement(context, AuthScreen());
+          pushReplacement(context, const AuthScreen());
           showSnackBar(context, "${responseData["message"]}");
         }
       }

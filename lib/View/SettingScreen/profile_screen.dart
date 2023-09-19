@@ -198,10 +198,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       flex: 5,
                                       fit: FlexFit.tight,
                                       child: AppText.appText(
-                                          "DOB: ${selectedDate == null ? "${selectedDateFromPref == ""?"MM-DD-YYYY":selectedDateFromPref}" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
-                                          fontSize: 11.sp,
-                                          textColor: AppTheme.appColor,
-                                          fontWeight: FontWeight.w500,
+                                        "DOB: ${selectedDate == null ? "${selectedDateFromPref == ""?"MM-DD-YYYY":selectedDateFromPref}" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
+                                        fontSize: 11.sp,
+                                        textColor: AppTheme.appColor,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                     Flexible(
@@ -273,19 +273,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 width: 40,
                               ),
                               Flexible(
-                                  fit: FlexFit.loose,
-                                  child: Divider(
-                                    thickness: 1,
-                                    color: AppTheme.appColor,
-                                  ),),
+                                fit: FlexFit.loose,
+                                child: Divider(
+                                  thickness: 1,
+                                  color: AppTheme.appColor,
+                                ),),
                             ],
                           ),
                         ),
                         const SizedBox(
                           height: 30,
                         ),
-
-
 
                         AppText.appText(
                           "Allergies:",

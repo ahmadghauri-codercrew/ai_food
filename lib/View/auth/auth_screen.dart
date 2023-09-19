@@ -138,6 +138,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       child: SizedBox(
                                         width: 90,
                                         child: AppText.appText("Sign in",
+                                            textAlign: TextAlign.center,
                                             textColor: login == true
                                                 ? AppTheme.appColor
                                                 : const Color(0xffBFBFBF),
@@ -174,6 +175,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       child: SizedBox(
                                         width: 95,
                                         child: AppText.appText("Sign up",
+                                            textAlign: TextAlign.center,
                                             textColor: login == false
                                                 ? AppTheme.appColor
                                                 // : Colors.black.withOpacity(0.25),
@@ -223,12 +225,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                             }
                                             return null;
                                           },
-                                          texthint: "Email",
+                                          texthint: "Enter email",
                                           hintStyle: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
                                             color: AppTheme.appColor
-                                                .withOpacity(0.8),
+                                                .withOpacity(0.6),
                                           ),
                                           controller: _loginEmailController),
                                     ),
@@ -294,7 +296,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
                                             color: AppTheme.appColor
-                                                .withOpacity(0.8),
+                                                .withOpacity(0.6),
                                           ),
                                           controller: _nameController),
                                     ),
@@ -320,7 +322,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                           color: AppTheme.appColor
-                                              .withOpacity(0.8),
+                                              .withOpacity(0.6),
                                         ),
                                         controller: _emailController,
                                       ),
@@ -397,7 +399,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       SignUp(context);
                                     }
                                   }
-                                }, login == true ? "Sign in" : "Sign Up",
+                                }, login == true ? "Sign In" : "Sign Up",
                                   blurContainer: true,
                                   backgroundColor: AppTheme.appColor,
                                   textColor: Colors.white,
@@ -460,11 +462,20 @@ class _AuthScreenState extends State<AuthScreen> {
                             textColor: AppTheme.appColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w400),
-                        AppText.appText(login == true ? "Sign up" : "Sign in",
-                            textColor: AppTheme.appColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            underLine: true),
+                        Column(
+                          children: [
+                            AppText.appText(login == true ? "Sign Up" : "Sign In",
+                                textColor: AppTheme.appColor,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                ),
+                            Container(
+                              height: 1,
+                              width: 45,
+                              color: AppTheme.appColor,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   )

@@ -46,7 +46,7 @@ class _OTPScreenState extends State<OTPScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 80),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 105),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
