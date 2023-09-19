@@ -287,7 +287,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 
 
-
                         AppText.appText(
                           "Allergies:",
                           fontSize: 22,
