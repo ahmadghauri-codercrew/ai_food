@@ -11,6 +11,7 @@ import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -270,8 +271,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                       textColor: Colors.white,
-                      height: 50,
-                      width: 180,
+                      width: 44.w,
+                      height: 40,
                       backgroundColor: AppTheme.appColor,
                     ),
                   )

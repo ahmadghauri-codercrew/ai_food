@@ -226,8 +226,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                           texthint: "Email",
                                           hintStyle: TextStyle(
                                             fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: AppTheme.appColor.withOpacity(0.8),
+                                            fontWeight: FontWeight.w400,
+                                            color: AppTheme.appColor
+                                                .withOpacity(0.8),
                                           ),
                                           controller: _loginEmailController),
                                     ),
@@ -292,7 +293,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                           hintStyle: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: AppTheme.appColor.withOpacity(0.8),),
+                                            color: AppTheme.appColor
+                                                .withOpacity(0.8),
+                                          ),
                                           controller: _nameController),
                                     ),
                                     Form(
@@ -313,10 +316,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                         },
                                         // height: 50,
                                         texthint: "Enter email",
-                                        hintStyle:
-                                            TextStyle(fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: AppTheme.appColor.withOpacity(0.8),),
+                                        hintStyle: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          color: AppTheme.appColor
+                                              .withOpacity(0.8),
+                                        ),
                                         controller: _emailController,
                                       ),
                                     ),
@@ -364,6 +369,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   color: AppTheme.appColor,
                                 )
                               : AppButton.appButton(onTap: () {
+                            FocusScope.of(context).requestFocus(FocusNode());
                                   if (login == true) {
                                     if (_formKeyLoginEmail.currentState!
                                             .validate() &&
@@ -671,7 +677,8 @@ class _AuthScreenState extends State<AuthScreen> {
           var token = responseData['data']['token'];
           var name = responseData['data']['user']['name'];
           var DOB = responseData['data']['user']['DOB'];
-          var dietary_restrictions = responseData['data']['user']['dietary_restrictions'];
+          var dietary_restrictions =
+              responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
           for (var data0 in dietary_restrictions) {
             dietaryRestrictionsList.addAll({'${data0['id']}:${data0['name']}'});
@@ -679,12 +686,20 @@ class _AuthScreenState extends State<AuthScreen> {
           for (var data0 in allergies) {
             allergiesList.addAll({'${data0['id']}:${data0['name']}'});
           }
-          prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergiesList);
-          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietaryRestrictionsList);
+          prefs.setStringList(
+              PrefKey.dataonBoardScreenAllergies, allergiesList);
+          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction,
+              dietaryRestrictionsList);
           prefs.setString(PrefKey.dateOfBirth, DOB);
           prefs.setString(PrefKey.authorization, token ?? '');
           prefs.setString(PrefKey.userName, name ?? '');
-          pushReplacement(context, BottomNavView(type: 0,allergies: allergiesList,dietaryRestrictions: dietaryRestrictionsList,));
+          pushReplacement(
+              context,
+              BottomNavView(
+                type: 0,
+                allergies: allergiesList,
+                dietaryRestrictions: dietaryRestrictionsList,
+              ));
         }
       }
     } catch (e) {
@@ -752,7 +767,6 @@ class _AuthScreenState extends State<AuthScreen> {
           showSnackBar(context, "${responseData["message"]}");
           return;
         } else {
-
           var token = responseData['data']['token'];
           // if(name.isEmpty || name == ""){
           //   name = responseData['data']['user']['name'];
@@ -760,7 +774,8 @@ class _AuthScreenState extends State<AuthScreen> {
 
           // print("name_is_here ${responseData['data']['user']['name']}");
           // var DOB = responseData['data']['user']['DOB'];
-          var dietary_restrictions = responseData['data']['user']['dietary_restrictions'];
+          var dietary_restrictions =
+              responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
           for (var data0 in dietary_restrictions) {
             dietaryRestrictionsList.addAll({'${data0['id']}:${data0['name']}'});
@@ -768,8 +783,10 @@ class _AuthScreenState extends State<AuthScreen> {
           for (var data0 in allergies) {
             allergiesList.addAll({'${data0['id']}:${data0['name']}'});
           }
-          prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergiesList);
-          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietaryRestrictionsList);
+          prefs.setStringList(
+              PrefKey.dataonBoardScreenAllergies, allergiesList);
+          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction,
+              dietaryRestrictionsList);
           // prefs.setString(PrefKey.dateOfBirth, DOB);
           prefs.setString(PrefKey.authorization, token ?? '');
           prefs.setString(PrefKey.userName, name ?? '');

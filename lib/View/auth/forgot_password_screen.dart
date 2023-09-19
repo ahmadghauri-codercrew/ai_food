@@ -152,8 +152,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     forgetPassword(text: inputText);
                                   }
                                 },
-                                    width: 43.w,
-                                    height: 5.5.h,
+                                    width: 44.w,
+                                    height: 40,
                                     border: false,
                                     blurContainer: true,
                                     backgroundColor: AppTheme.appColor,
