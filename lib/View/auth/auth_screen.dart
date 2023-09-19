@@ -9,6 +9,7 @@ import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_card.dart';
+import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/View/auth/forgot_password_screen.dart';
 import 'package:ai_food/View/profile/user_profile_screen.dart';
@@ -141,7 +142,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 ? AppTheme.appColor
                                                 : const Color(0xffBFBFBF),
                                             fontSize: 24,
-                                            textAlign: TextAlign.center,
                                             fontWeight: FontWeight.w600),
                                       )),
                                   login == true
@@ -179,7 +179,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 // : Colors.black.withOpacity(0.25),
                                                 : const Color(0xffBFBFBF),
                                             fontSize: 24,
-                                            textAlign: TextAlign.center,
                                             fontWeight: FontWeight.w600),
                                       )),
                                   login == false
@@ -225,8 +224,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                             return null;
                                           },
                                           texthint: "Email",
-                                          hintStyle: TextStyle(fontWeight: FontWeight.w400,
-                                              color: AppTheme.appColor),
+                                          hintStyle: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppTheme.appColor
+                                                .withOpacity(0.8),
+                                          ),
                                           controller: _loginEmailController),
                                     ),
                                     Form(
@@ -288,7 +291,11 @@ class _AuthScreenState extends State<AuthScreen> {
                                           height: 50,
                                           texthint: "Enter full name",
                                           hintStyle: TextStyle(
-                                              color: AppTheme.appColor),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppTheme.appColor
+                                                .withOpacity(0.8),
+                                          ),
                                           controller: _nameController),
                                     ),
                                     Form(
@@ -309,8 +316,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                         },
                                         // height: 50,
                                         texthint: "Enter email",
-                                        hintStyle:
-                                            TextStyle(color: AppTheme.appColor),
+                                        hintStyle: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          color: AppTheme.appColor
+                                              .withOpacity(0.8),
+                                        ),
                                         controller: _emailController,
                                       ),
                                     ),
@@ -358,6 +369,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   color: AppTheme.appColor,
                                 )
                               : AppButton.appButton(onTap: () {
+                            FocusScope.of(context).requestFocus(FocusNode());
                                   if (login == true) {
                                     if (_formKeyLoginEmail.currentState!
                                             .validate() &&
@@ -369,7 +381,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       //         const UserProfileScreen(),
                                       //   ),
                                       // );
-                                      Login();
+                                      Login(context);
                                       print("Email:${_emailController.text}");
                                       print(
                                           "Password:${_passwordController.text}");
@@ -382,7 +394,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                             .validate() &&
                                         _formKeyConfirmPassword.currentState!
                                             .validate()) {
-                                      SignUp();
+                                      SignUp(context);
                                     }
                                   }
                                 }, login == true ? "Sign in" : "Sign Up",
@@ -528,7 +540,7 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  void SignUp() async {
+  void SignUp(context) async {
     setState(() {
       _isLoading = true;
     });
@@ -577,11 +589,11 @@ class _AuthScreenState extends State<AuthScreen> {
           setState(() {
             _isLoading = false;
           });
-          alertDialogError(context,responseData["message"]);
+          alertDialogError(context: context, message: responseData["message"]);
           return;
         } else {
           print("responseData${responseData}");
-          showSnackBar(context, "${responseData["message"]}");
+          // alertDialogError(context: context, message: responseData["message"]);
           setState(() {
             _isLoading = false;
           });
@@ -605,7 +617,7 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   //simple sign in
-  void Login() async {
+  void Login(context) async {
     setState(() {
       _isLoading = true;
     });
@@ -618,7 +630,6 @@ class _AuthScreenState extends State<AuthScreen> {
     const int responseCode401 = 401; // For Unauthorized access.
     const int responseCode404 = 404; // For For data not found
     const int responseCode500 = 500; // Internal server error.
-
     Map<String, dynamic> params = {
       "email": _loginEmailController.text,
       "password": _loginPasswordController.text,
@@ -627,45 +638,47 @@ class _AuthScreenState extends State<AuthScreen> {
       response = await dio.post(path: AppUrls.loginUrl, data: params);
       var responseData = response.data;
       if (response.statusCode == responseCode404) {
-        print("For data not found.");
+        print("For For data not found.");
         setState(() {
           _isLoading = false;
         });
-        // alertDialogError(context,responseData["message"]);
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode400) {
         print(" Bad Request.");
         setState(() {
           _isLoading = false;
         });
-        //  alertDialogError(context,responseData["message"]);
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode401) {
         print(" Unauthorized access.");
         setState(() {
           _isLoading = false;
         });
-        //  alertDialogError(context,responseData["message"]);
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode500) {
         print("Internal server error.");
         setState(() {
           _isLoading = false;
         });
-        // alertDialogError(context,responseData["message"]);
+        showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode200) {
         if (responseData["status"] == false) {
           setState(() {
             _isLoading = false;
           });
-          alertDialogError(context, responseData["message"]);
+          alertDialogError(context: context, message: responseData["message"]);
           return;
         } else {
-          alertDialogError(context, responseData["message"]);
+          print("responseData${responseData}");
+          // alertDialogError(context: context, message: responseData["message"]);
           setState(() {
             _isLoading = false;
           });
           var token = responseData['data']['token'];
           var name = responseData['data']['user']['name'];
           var DOB = responseData['data']['user']['DOB'];
-          var dietary_restrictions = responseData['data']['user']['dietary_restrictions'];
+          var dietary_restrictions =
+              responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
           for (var data0 in dietary_restrictions) {
             dietaryRestrictionsList.addAll({'${data0['id']}:${data0['name']}'});
@@ -673,12 +686,20 @@ class _AuthScreenState extends State<AuthScreen> {
           for (var data0 in allergies) {
             allergiesList.addAll({'${data0['id']}:${data0['name']}'});
           }
-          prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergiesList);
-          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietaryRestrictionsList);
+          prefs.setStringList(
+              PrefKey.dataonBoardScreenAllergies, allergiesList);
+          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction,
+              dietaryRestrictionsList);
           prefs.setString(PrefKey.dateOfBirth, DOB);
           prefs.setString(PrefKey.authorization, token ?? '');
           prefs.setString(PrefKey.userName, name ?? '');
-          pushReplacement(context, BottomNavView(type: 0,allergies: allergiesList,dietaryRestrictions: dietaryRestrictionsList,));
+          pushReplacement(
+              context,
+              BottomNavView(
+                type: 0,
+                allergies: allergiesList,
+                dietaryRestrictions: dietaryRestrictionsList,
+              ));
         }
       }
     } catch (e) {
@@ -699,6 +720,9 @@ class _AuthScreenState extends State<AuthScreen> {
       _appleLoading = true;
     });
     var response;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> dietaryRestrictionsList = [];
+    List<String> allergiesList = [];
     const int responseCode200 = 200; // For successful request.
     const int responseCode400 = 400; // For Bad Request.
     const int responseCode401 = 401; // For Unauthorized access.
@@ -743,6 +767,30 @@ class _AuthScreenState extends State<AuthScreen> {
           showSnackBar(context, "${responseData["message"]}");
           return;
         } else {
+          var token = responseData['data']['token'];
+          // if(name.isEmpty || name == ""){
+          //   name = responseData['data']['user']['name'];
+          // }
+
+          // print("name_is_here ${responseData['data']['user']['name']}");
+          // var DOB = responseData['data']['user']['DOB'];
+          var dietary_restrictions =
+              responseData['data']['user']['dietary_restrictions'];
+          var allergies = responseData['data']['user']['allergies'];
+          for (var data0 in dietary_restrictions) {
+            dietaryRestrictionsList.addAll({'${data0['id']}:${data0['name']}'});
+          }
+          for (var data0 in allergies) {
+            allergiesList.addAll({'${data0['id']}:${data0['name']}'});
+          }
+          prefs.setStringList(
+              PrefKey.dataonBoardScreenAllergies, allergiesList);
+          prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction,
+              dietaryRestrictionsList);
+          // prefs.setString(PrefKey.dateOfBirth, DOB);
+          prefs.setString(PrefKey.authorization, token ?? '');
+          prefs.setString(PrefKey.userName, name ?? '');
+
           if (isNewUser) {
             pushReplacement(context, const UserProfileScreen());
           } else {
@@ -752,11 +800,11 @@ class _AuthScreenState extends State<AuthScreen> {
           setState(() {
             _appleLoading = false;
           });
-          var token = responseData['data']['token'];
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-
-          prefs.setString(PrefKey.authorization, token ?? '');
-          prefs.setString(PrefKey.userName, name ?? '');
+          // var token = responseData['data']['token'];
+          // SharedPreferences prefs = await SharedPreferences.getInstance();
+          //
+          // prefs.setString(PrefKey.authorization, token ?? '');
+          // prefs.setString(PrefKey.userName, name ?? '');
           showSnackBar(context, "${responseData["message"]}");
         }
       }
@@ -769,52 +817,44 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  alertDialogError(context, message) {
-    return showDialog(
-      barrierColor: Colors.transparent,
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding:  EdgeInsets.only(left: 5.w,right: 5.w),
-          child: AlertDialog(
-            actionsPadding: EdgeInsets.only(top: 5,left: 0,right: 0),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
-            shadowColor: Colors.transparent,
-            elevation: 0,
-            backgroundColor: AppTheme.appColor,
-            actionsAlignment: MainAxisAlignment.center,
-            actions: [
-               SizedBox(height: 20,),
-              Center(
-                child: AppText.appText(
-                  "${message}",
-                  fontSize: 24,
-                  textAlign: TextAlign.center,
-                  textColor: AppTheme.whiteColor,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Divider(height: 1,thickness: 1,color: AppTheme.whiteColor,),
-              Center(
-                child: TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      "Ok",
-                      style: TextStyle(
-                        fontFamily: "Roboto",
-                          color: AppTheme.whiteColor,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500),
-                    )),
-              )
-            ],
-          ),
-        );
-      },
-    );
-  }
+  // alertDialogError(context) {
+  //   return showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         backgroundColor: AppTheme.whiteColor,
+  //         actionsAlignment: MainAxisAlignment.center,
+  //         actions: [
+  //           Center(
+  //               child: Image.asset(
+  //             "assets/images/done.gif",
+  //             height: 120,
+  //           )),
+  //           const SizedBox(
+  //             height: 50,
+  //           ),
+  //           Center(
+  //             child: AppText.appText(
+  //               "User Created Successfully",
+  //               fontSize: 24,
+  //               textColor: AppTheme.appColor,
+  //               fontWeight: FontWeight.w600,
+  //             ),
+  //           ),
+  //           const SizedBox(
+  //             height: 20,
+  //           ),
+  //           AppButton.appButton("Okay",
+  //               onTap: () => Navigator.of(context).pop(),
+  //               height: 30,
+  //               fontWeight: FontWeight.w600,
+  //               fontSize: 20,
+  //               textColor: AppTheme.appColor,
+  //               backgroundColor: AppTheme.whiteColor,
+  //               border: false)
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }

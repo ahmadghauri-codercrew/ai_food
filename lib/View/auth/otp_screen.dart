@@ -46,7 +46,7 @@ class _OTPScreenState extends State<OTPScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 10, top: 80),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 80),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -57,78 +57,85 @@ class _OTPScreenState extends State<OTPScreen> {
               AppText.appText(
                 "Enter OTP to continue",
                 fontSize: 16,
+                fontWeight: FontWeight.w600,
                 textColor: AppTheme.appColor,
               ),
               const SizedBox(
                 height: 60,
               ),
               Customcard(
+                  padding: 0,
                   childWidget: Column(
-                children: [
-                  const SizedBox(
-                    height: 80,
-                  ),
-                  OtpTextField(
-                    handleControllers: _handleControllers,
-                    textStyle:
-                        TextStyle(fontSize: 18, color: AppTheme.appColor),
-                    numberOfFields: 6,
-                    margin: const EdgeInsets.only(left: 15, top: 15),
-                    showFieldAsBox: false,
-                    fieldWidth: 35,
-                    hasCustomInputDecoration: true,
-                    cursorColor: AppTheme.appColor,
-                    decoration: InputDecoration(
-                      counterText: "",
-                      isDense: true,
-                      contentPadding: const EdgeInsets.all(10),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppTheme.appColor)),
-                      disabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide.none),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                        color: AppTheme.appColor,
-                      )),
-                      border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppTheme.appColor)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 40),
-                    child: Align(
-                        alignment: Alignment.centerRight,
-                        child: InkWell(
-                            onTap: () {},
-                            child: AppText.appText("Resend OTP",
-                                textColor: AppTheme.appColor,
-                                underLine: true))),
-                  ),
-                  const SizedBox(
-                    height: 160,
-                  ),
-                  isLoading == true
-                      ? Center(
-                          child: CircularProgressIndicator(
+                    children: [
+                      const SizedBox(
+                        height: 125,
+                      ),
+                      OtpTextField(
+                        handleControllers: _handleControllers,
+                        textStyle:
+                            TextStyle(fontSize: 18, color: AppTheme.appColor, fontWeight: FontWeight.bold),
+                        numberOfFields: 6,
+                        // margin: const EdgeInsets.only(left: 15, top: 15),
+                        showFieldAsBox: false,
+                        fieldWidth: 50,
+                        hasCustomInputDecoration: true,
+                        cursorColor: AppTheme.appColor,
+                        decoration: InputDecoration(
+                          counterText: "",
+                          isDense: true,
+                          // contentPadding: const EdgeInsets.all(10),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: AppTheme.appColor)),
+                          disabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide.none),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
                             color: AppTheme.appColor,
-                            strokeWidth: 4,
-                          ),
-                        )
-                      : AppButton.appButton("Continue", onTap: () {
-                          verfyOTP();
-                        },
-                          width: 43.w,
-                          height: 5.5.h,
-                          border: false,
-                          backgroundColor: AppTheme.appColor,
-                          textColor: Colors.white,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600)
-                ],
-              )),
+                          )),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: AppTheme.appColor)),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 14,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 19.0),
+                        child: Align(
+                            alignment: Alignment.centerRight,
+                            child: InkWell(
+                                onTap: () {
+                                  resendOTP(text: widget.email);
+                                },
+                                child: AppText.appText("Resend OTP",
+                                    textColor: AppTheme.appColor,
+                                    underLine: true))),
+                      ),
+                      const SizedBox(
+                        height: 180,
+                      ),
+                      isLoading == true
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: AppTheme.appColor,
+                                strokeWidth: 4,
+                              ),
+                            )
+                          : Container(
+                              child: AppButton.appButton("Continue", onTap: () {
+                                verfyOTP();
+                              },
+                                  width: 44.w,
+                                  height: 40,
+                                  border: false,
+                                  blurContainer: true,
+                                  backgroundColor: AppTheme.appColor,
+                                  textColor: Colors.white,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w600),
+                            )
+                    ],
+                  )),
             ],
           ),
         ),
@@ -156,26 +163,68 @@ class _OTPScreenState extends State<OTPScreen> {
     if (response.statusCode == 200) {
       print("response_data_is  ${response.data}");
 
-       if (responseData["status"] == false) {
-          setState(() {
-            isLoading = false;
-          });
-          showSnackBar(context, "${responseData["message"]}");
-          return;
-        } else {
-          print("responseData${responseData}");
-          setState(() {
-            isLoading = false;
-          });
-          pushReplacement(
-          context,
-          SetPasswordScreen(
-            email: widget.email,
-            otp: _smsCodeController,
-          ));
-          showSnackBar(context, "${responseData["message"]}");
-        }
-     
+      if (response.data["status"] == false) {
+        setState(() {
+          isLoading = false;
+        });
+        showSnackBar(context, "${response.data["message"]}");
+        return;
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        pushReplacement(
+            context,
+            SetPasswordScreen(
+              email: widget.email,
+              otp: _smsCodeController.text,
+            ));
+        showSnackBar(context, "${response.data["message"]}");
+      }
+    } else {
+      if (response.statusCode == 402) {
+        setState(() {
+          isLoading = false;
+        });
+        showSnackBar(context, "${response.data["message"]}");
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        print('API request failed with status code: ${response.statusCode}');
+        showSnackBar(context, "${response.data["message"]}");
+      }
+    }
+  }
+
+  void resendOTP({text}) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    Map<String, dynamic> params = {
+      "email": text,
+    };
+
+    final response =
+    await dio.post(path: AppUrls.forgetPasswordUrl, data: params);
+
+    if (response.statusCode == 200) {
+      var responseData = response.data;
+
+      if (responseData["status"] == false) {
+        setState(() {
+          isLoading = false;
+        });
+        showSnackBar(context, "${responseData["message"]}");
+        return;
+      } else {
+        print("responseData${responseData["data"]["OTP"]}");
+        showSnackBar(context, "${responseData["message"]}");
+        setState(() {
+          isLoading = false;
+        });
+      }
     } else {
       if (response.statusCode == 402) {
         setState(() {
@@ -191,4 +240,5 @@ class _OTPScreenState extends State<OTPScreen> {
       }
     }
   }
+
 }

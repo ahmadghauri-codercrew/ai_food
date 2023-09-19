@@ -11,6 +11,7 @@ import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -95,10 +96,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 50,
+                    height: 40,
                     child: TextFormField(
                       cursorColor: AppTheme.appColor,
-                      style: TextStyle(color: AppTheme.appColor),
+                      style: TextStyle(color: AppTheme.appColor, fontWeight: FontWeight.w500),
                       controller: _userNameController,
                       decoration: InputDecoration(
                           isDense: true,
@@ -121,7 +122,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               fontSize: 16)),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  // const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
                       _selectDate(context);
@@ -145,7 +146,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Divider(
                     thickness: 1,
                     color: AppTheme.appColor,
-                    endIndent: 40,
                   ),
                   Stack(
                     children: [
@@ -271,8 +271,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                       textColor: Colors.white,
-                      height: 50,
-                      width: 180,
+                      width: 44.w,
+                      height: 40,
                       backgroundColor: AppTheme.appColor,
                     ),
                   )
@@ -313,13 +313,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     if(addDietaryRestrictions.isEmpty){
       arrangeIndexParam2["dietary_restrictions[0]"] = "0";
     }else{
-    for (var data in addDietaryRestrictions.entries) {
-      String key = "dietary_restrictions[${index1}]";
-      String key2 = data.key;
-      dynamic value = data.value;
-      arrangeIndexParam2[key] = key2;
-      index1++;
-    }
+      for (var data in addDietaryRestrictions.entries) {
+        String key = "dietary_restrictions[${index1}]";
+        String key2 = data.key;
+        dynamic value = data.value;
+        arrangeIndexParam2[key] = key2;
+        index1++;
+      }
     }
     if (selectedDate == null) {
       showSnackBar(context, "select DOB");

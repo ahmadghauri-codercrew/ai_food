@@ -91,7 +91,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       fontSize: 32,
                       textColor: AppTheme.appColor,
                       fontWeight: FontWeight.w600),
-                  AppText.appText("Enter email or number",
+                  AppText.appText("Enter email",
                       fontSize: 16,
                       textColor: AppTheme.appColor,
                       fontWeight: FontWeight.w600),
@@ -111,8 +111,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             child: CustomAppFormField(
                               texthint: "Email",
                               hintStyle: TextStyle(
-                                  color: AppTheme.appColor,
-                                  fontSize: 14,
+                                  color: AppTheme.appColor.withOpacity(0.8),
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w400),
                               controller: _textController,
                               validator: (value) {
@@ -152,9 +152,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     forgetPassword(text: inputText);
                                   }
                                 },
-                                    width: 43.w,
-                                    height: 5.5.h,
+                                    width: 44.w,
+                                    height: 40,
                                     border: false,
+                                    blurContainer: true,
                                     backgroundColor: AppTheme.appColor,
                                     textColor: AppTheme.whiteColor,
                                     fontSize: 12.sp,
