@@ -67,7 +67,7 @@ class _ShoppingListState extends State<ShoppingList> {
         child: Column(
           children: [
             Container(
-              height: 330,
+              height: 340,
               child: Stack(
                 children: [
                   Container(
@@ -92,7 +92,8 @@ class _ShoppingListState extends State<ShoppingList> {
                   Positioned(
                     top: 180,
                     child: Container(
-                      height: 200,
+                      height: 240,
+
                       width: screenWidth,
                       decoration: BoxDecoration(
                         color: Colors.white,

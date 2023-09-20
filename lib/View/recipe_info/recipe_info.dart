@@ -271,7 +271,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                AppText.appText("${widget.recipeData["readyInMinutes"]} minutes",
+                                AppText.appText(
+                                    "${widget.recipeData["readyInMinutes"]} minutes",
                                     textColor: AppTheme.appColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500)
@@ -282,12 +283,15 @@ class _RecipeInfoState extends State<RecipeInfo>
                             ),
                             Row(
                               children: [
-                                 SvgPicture.asset("assets/images/Persons Icon.svg",
-                                    width: 20, height: 20),
+                                SvgPicture.asset(
+                                    "assets/images/Persons Icon.svg",
+                                    width: 20,
+                                    height: 20),
                                 const SizedBox(
                                   width: 5,
                                 ),
-                                AppText.appText("${widget.recipeData["servings"]} Person",
+                                AppText.appText(
+                                    "${widget.recipeData["servings"]} Person",
                                     textColor: AppTheme.appColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500)
@@ -408,68 +412,70 @@ class _RecipeInfoState extends State<RecipeInfo>
                                         ),
                                         const SizedBox(width: 5),
                                         Expanded(
-                                          child: Container(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  width: screenWidth * 0.65,
-                                                  child: Text(
-                                                    "${ingredient[index]["originalName"]}",
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: screenWidth * 0.55,
+                                                child: Text(
+                                                  "${ingredient[index]["originalName"]}",
+                                                  textAlign:
+                                                      TextAlign.justify,
+                                                  softWrap: true,
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppTheme.appColor,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Wrap(
+                                                
+                                                children: [
+                                                  Text(
+                                                    unit == "Metric"
+                                                        ? "${ingredient[index]["measures"]["metric"]["amount"]}"
+                                                        : "${ingredient[index]["measures"]["us"]["amount"]}",
                                                     textAlign:
                                                         TextAlign.justify,
                                                     softWrap: true,
                                                     style: TextStyle(
-                                                        color:
-                                                            AppTheme.appColor,
+                                                        color: AppTheme
+                                                            .appColor,
                                                         fontSize: 14,
                                                         fontWeight:
-                                                            FontWeight.w500),
+                                                            FontWeight
+                                                                .w500),
                                                   ),
-                                                ),
-                                                Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      unit == "Metric"
-                                                          ? "${ingredient[index]["measures"]["metric"]["amount"]}"
-                                                          : "${ingredient[index]["measures"]["us"]["amount"]}",
-                                                      textAlign:
-                                                          TextAlign.justify,
-                                                      softWrap: true,
-                                                      style: TextStyle(
-                                                          color:
-                                                              AppTheme.appColor,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 3,
-                                                    ),
-                                                    Text(
-                                                      unit == "Metric"
-                                                          ? "${ingredient[index]["measures"]["metric"]["unitShort"]}"
-                                                          : "${ingredient[index]["measures"]["us"]["unitShort"]}",
-                                                      textAlign:
-                                                          TextAlign.justify,
-                                                      softWrap: true,
-                                                      style: TextStyle(
-                                                          color:
-                                                              AppTheme.appColor,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
+                                                  const SizedBox(
+                                                    width: 3,
+                                                  ),
+                                                  Text(
+                                                    unit == "Metric"
+                                                        ? "${ingredient[index]["measures"]["metric"]["unitShort"]}"
+                                                        : "${ingredient[index]["measures"]["us"]["unitShort"]}",
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                    softWrap: true,
+                                                    style: TextStyle(
+                                                        color: AppTheme
+                                                            .appColor,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight
+                                                                .w500),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ],
