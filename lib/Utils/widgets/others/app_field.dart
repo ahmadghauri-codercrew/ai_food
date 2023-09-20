@@ -8,6 +8,7 @@ class CustomAppFormField extends StatefulWidget {
   final fontweight;
   final bool containerBorderCondition;
   final String texthint;
+  final errorText;
   final TextEditingController? controller;
   final FormFieldValidator? validator;
   final ValueChanged<String>? onChanged;
@@ -24,7 +25,12 @@ class CustomAppFormField extends StatefulWidget {
   final Widget? suffixIcon;
   final Color? prefixIconColor;
   final Color? suffixIconColor;
+  final Color? cursorColor;
   final TextStyle? hintStyle;
+  final style;
+  final errorStyle;
+  final errorBorder;
+  final focusedErrorBorder;
 
   CustomAppFormField({
     Key? key,
@@ -51,6 +57,11 @@ class CustomAppFormField extends StatefulWidget {
     this.fontweight,
     this.fontsize,
     this.hintStyle,
+    this.errorText,
+    this.style,
+    this.errorStyle,
+    this.errorBorder,
+    this.focusedErrorBorder, this.cursorColor,
   }) : super(key: key);
 
   @override
@@ -75,12 +86,16 @@ class _CustomAppFormFieldState extends State<CustomAppFormField> {
           obscureText: widget.obscureText,
           validator: widget.validator,
           controller: widget.controller,
-          cursorColor: AppTheme.appColor,
+          cursorColor: widget.cursorColor,
           style: TextStyle(
               color: AppTheme.appColor,
               fontSize: widget.fontsize,
               fontWeight: widget.fontweight),
           decoration: InputDecoration(
+              errorText: widget.errorText,
+              errorStyle: widget.errorStyle,
+              errorBorder: widget.errorBorder,
+              focusedErrorBorder: widget.focusedErrorBorder,
               isDense: true,
               prefixIconColor: widget.prefixIconColor,
               suffixIconColor: widget.suffixIconColor,
@@ -100,9 +115,7 @@ class _CustomAppFormFieldState extends State<CustomAppFormField> {
               border: UnderlineInputBorder(
                   borderSide: BorderSide(color: AppTheme.appColor)),
               hintText: "${widget.texthint}",
-              hintStyle: widget.hintStyle
-              
-              ),
+              hintStyle: widget.hintStyle),
         ));
   }
 }
@@ -112,6 +125,7 @@ class CustomAppPasswordfield extends StatefulWidget {
   final double? width;
   final bool containerBorderCondition;
   final String texthint;
+  final errorText;
   final TextEditingController? controller;
   final FormFieldValidator? validator;
   final ValueChanged<String>? onChanged;
@@ -127,6 +141,12 @@ class CustomAppPasswordfield extends StatefulWidget {
   final Widget? suffixIcon;
   final Color? prefixIconColor;
   final Color? suffixIconColor;
+  final Color? cursorColor;
+  final hintStyle;
+  final style;
+  final errorStyle;
+  final errorBorder;
+  final focusedErrorBorder;
 
   CustomAppPasswordfield(
       {Key? key,
@@ -148,7 +168,14 @@ class CustomAppPasswordfield extends StatefulWidget {
       this.prefixIcon,
       this.suffixIcon,
       this.prefixIconColor,
-      this.suffixIconColor})
+      this.suffixIconColor,
+      this.errorText,
+      this.hintStyle,
+      this.cursorColor,
+      this.style,
+      this.errorStyle,
+      this.errorBorder,
+      this.focusedErrorBorder})
       : super(key: key);
 
   @override
@@ -182,9 +209,13 @@ class _CustomAppPasswordfieldState extends State<CustomAppPasswordfield> {
       obscureText: _obscureText,
       validator: widget.validator,
       controller: widget.controller,
-      cursorColor: AppTheme.appColor,
-      style: TextStyle(color: AppTheme.appColor),
+      cursorColor: widget.cursorColor,
+      style: widget.style,
       decoration: InputDecoration(
+          errorText: widget.errorText,
+          errorStyle: widget.errorStyle,
+          errorBorder: widget.errorBorder,
+          focusedErrorBorder: widget.focusedErrorBorder,
           prefixIconColor: widget.prefixIconColor,
           suffixIconColor: widget.suffixIconColor,
           prefix: widget.prefix,
@@ -205,9 +236,7 @@ class _CustomAppPasswordfieldState extends State<CustomAppPasswordfield> {
           border: UnderlineInputBorder(
               borderSide: BorderSide(color: AppTheme.appColor)),
           hintText: widget.texthint,
-          hintStyle: TextStyle(fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: AppTheme.appColor.withOpacity(0.6),),
+          hintStyle: widget.hintStyle,
           suffixIcon: InkWell(
             onTap: () {
               setState(() {

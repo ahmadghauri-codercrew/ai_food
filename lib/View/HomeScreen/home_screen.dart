@@ -310,7 +310,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           height: 500,
                                           child: Center(
                                               child: AppText.appText(
-                                                  "No results found according to your profile")),
+                                                  "No results found. Please try adjusting your search parameters."
+                                              )),
                                         ),
                                       )
                                     : GridView.builder(
