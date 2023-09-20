@@ -70,46 +70,57 @@ class _OTPScreenState extends State<OTPScreen> {
                       const SizedBox(
                         height: 125,
                       ),
-                      OtpTextField(
-                        handleControllers: _handleControllers,
-                        textStyle:
-                            TextStyle(fontSize: 18, color: AppTheme.appColor, fontWeight: FontWeight.bold),
-                        numberOfFields: 6,
-                        // margin: const EdgeInsets.only(left: 15, top: 15),
-                        showFieldAsBox: false,
-                        fieldWidth: 50,
-                        hasCustomInputDecoration: true,
-                        cursorColor: AppTheme.appColor,
-                        decoration: InputDecoration(
-                          counterText: "",
-                          isDense: true,
-                          // contentPadding: const EdgeInsets.all(10),
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: AppTheme.appColor)),
-                          disabledBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide.none),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                            color: AppTheme.appColor,
-                          )),
-                          border: UnderlineInputBorder(
-                              borderSide: BorderSide(color: AppTheme.appColor)),
+                      Container(
+                        // margin: EdgeInsets.symmetric(horizontal: 16.0),
+                        // color: Colors.red,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            OtpTextField(
+                              handleControllers: _handleControllers,
+                              textStyle: TextStyle(
+                                  fontSize: 18,
+                                  color: AppTheme.appColor,
+                                  fontWeight: FontWeight.bold),
+                              numberOfFields: 6,
+                              // margin: const EdgeInsets.only(left: 15, top: 15),
+                              showFieldAsBox: false,
+                              fieldWidth: 40,
+                              hasCustomInputDecoration: true,
+                              cursorColor: AppTheme.appColor,
+                              decoration: InputDecoration(
+                                counterText: "",
+                                isDense: true,
+                                // contentPadding: const EdgeInsets.all(10),
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: AppTheme.appColor)),
+                                disabledBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide.none),
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: AppTheme.appColor,
+                                )),
+                                border: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: AppTheme.appColor)),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 14,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: InkWell(
+                                  onTap: () {
+                                    resendOTP(text: widget.email);
+                                  },
+                                  child: AppText.appText("Resend OTP",
+                                      textColor: AppTheme.appColor,
+                                      underLine: true)),
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 14,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 19.0),
-                        child: Align(
-                            alignment: Alignment.centerRight,
-                            child: InkWell(
-                                onTap: () {
-                                  resendOTP(text: widget.email);
-                                },
-                                child: AppText.appText("Resend OTP",
-                                    textColor: AppTheme.appColor,
-                                    underLine: true))),
                       ),
                       const SizedBox(
                         height: 180,
@@ -207,7 +218,7 @@ class _OTPScreenState extends State<OTPScreen> {
     };
 
     final response =
-    await dio.post(path: AppUrls.forgetPasswordUrl, data: params);
+        await dio.post(path: AppUrls.forgetPasswordUrl, data: params);
 
     if (response.statusCode == 200) {
       var responseData = response.data;
@@ -240,5 +251,4 @@ class _OTPScreenState extends State<OTPScreen> {
       }
     }
   }
-
 }
