@@ -203,24 +203,18 @@ class _AuthScreenState extends State<AuthScreen> {
                           login == true
                               ? Column(
                                   children: [
+                                    //enter email form
                                     Form(
                                       key: _formKeyLoginEmail,
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
+                                      // autovalidateMode: AutovalidateMode.onUserInteraction,
                                       child: CustomAppFormField(
                                           validator: (value) {
-                                            final isEmailValid = RegExp(
-                                                    r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
-                                                .hasMatch(value);
-                                            final isMobileValid = RegExp(
-                                                    r'^\+(?:[0-9] ?){6,14}[0-9]$')
-                                                .hasMatch(value);
-                                            if (value.isEmpty ||
-                                                value == null) {
+                                            final isEmailValid = RegExp(r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]').hasMatch(value);
+                                            final isMobileValid = RegExp(r'^\+(?:[0-9] ?){6,14}[0-9]$').hasMatch(value);
+                                            if (value.isEmpty || value == null) {
                                               return "Please enter your email";
                                             }
-                                            if (!isEmailValid &&
-                                                !isMobileValid) {
+                                            if (!isEmailValid && !isMobileValid) {
                                               return "Please enter a valid email";
                                             }
                                             return null;
@@ -234,16 +228,16 @@ class _AuthScreenState extends State<AuthScreen> {
                                           ),
                                           controller: _loginEmailController),
                                     ),
+                                    //enter password form
                                     Form(
                                       key: _formKeyLoginPassword,
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
+                                      // autovalidateMode: AutovalidateMode.onUserInteraction,
                                       child: CustomAppPasswordfield(
                                         validator: (value) {
                                           if (value.isEmpty) {
-                                            return "Field cannot be empty";
+                                            return "Please enter a valid password";
                                           } else if (value.length < 8) {
-                                            return "password length should atleast 8";
+                                            return "password length should be at least 8 characters";
                                           }
                                           return null;
                                         },
@@ -301,8 +295,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           controller: _nameController),
                                     ),
                                     Form(
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
                                       key: _formKeyEmail,
                                       child: CustomAppFormField(
                                         validator: (value) {
@@ -336,7 +329,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           if (value == null || value.isEmpty) {
                                             return 'Please enter your password';
                                           } else if (value.length < 8) {
-                                            return "password length should atleast 8";
+                                            return "password should be at least 8 characters";
                                           }
                                           return null; // Validation passed
                                         },
@@ -353,7 +346,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           if (value == null || value.isEmpty) {
                                             return 'Please enter your confirm Password';
                                           } else if (value.length < 8) {
-                                            return "password length should atleast 8";
+                                            return "password should be at least 8 characters";
                                           } else if (_passwordController.text !=
                                               value) {
                                             return "password does not match";
@@ -784,7 +777,7 @@ class _AuthScreenState extends State<AuthScreen> {
           // }
 
           // print("name_is_here ${responseData['data']['user']['name']}");
-          // var DOB = responseData['data']['user']['DOB'];
+          var DOB = responseData['data']['user']['DOB'];
           var dietary_restrictions =
               responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
@@ -798,7 +791,7 @@ class _AuthScreenState extends State<AuthScreen> {
               PrefKey.dataonBoardScreenAllergies, allergiesList);
           prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction,
               dietaryRestrictionsList);
-          // prefs.setString(PrefKey.dateOfBirth, DOB);
+          prefs.setString(PrefKey.dateOfBirth, DOB);
           prefs.setString(PrefKey.authorization, token ?? '');
           prefs.setString(PrefKey.userName, name ?? '');
 

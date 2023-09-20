@@ -97,8 +97,11 @@ class _SearchScreenState extends State<SearchScreen> {
                             width: width * 0.65,
                             child: TextFormField(
                               onFieldSubmitted: (value) {
-                                print("search_value $value");
-                                getFood(context);
+                                if(_searchController.text == "" || _searchController.text.isEmpty){
+                                  showSnackBar(context, "Please type something.");
+                                } else {
+                                  getFood(context);
+                                }
                               },
                               textInputAction: TextInputAction.search,
                               controller: _searchController,
