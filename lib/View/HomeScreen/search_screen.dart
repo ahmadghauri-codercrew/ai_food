@@ -24,7 +24,8 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   late AppDio dio;
   late SpoonAcularAppDio spoonDio;
-
+  bool randomData = false;
+  var errorResponse;
   AppLogger logger = AppLogger();
   bool isLoading = false;
 
@@ -78,137 +79,156 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             )
           : Padding(
-              padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 15.0, top: 15),
-              child: Column(
-                children: [
-                  Container(
-                    width: width,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xffd9c4ef),
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
-                          child: SizedBox(
-                            width: width * 0.65,
-                            child: TextFormField(
-                              onFieldSubmitted: (value) {
-                                if(_searchController.text == "" || _searchController.text.isEmpty){
-                                  showSnackBar(context, "Please type something.");
-                                } else {
-                                  getFood(context);
-                                }
-                              },
-                              textInputAction: TextInputAction.search,
-                              controller: _searchController,
-                              autofocus: true,
-                              cursorColor: AppTheme.appColor,
-                              style: TextStyle(color: AppTheme.appColor),
-                              decoration: InputDecoration.collapsed(
-                                hintText: 'Search',
-                                hintStyle: TextStyle(
-                                    color: AppTheme.whiteColor,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500),
+              padding: const EdgeInsets.only(
+                  left: 15.0, right: 15.0, bottom: 15.0, top: 15),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      width: width,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: const Color(0xffd9c4ef),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: SizedBox(
+                              width: width * 0.65,
+                              child: TextFormField(
+                                onFieldSubmitted: (value) {
+                                  if (_searchController.text == "" ||
+                                      _searchController.text.isEmpty) {
+                                    showSnackBar(
+                                        context, "Please type something.");
+                                  } else {
+                                    getFood(context);
+                                  }
+                                },
+                                textInputAction: TextInputAction.search,
+                                controller: _searchController,
+                                autofocus: true,
+                                cursorColor: AppTheme.appColor,
+                                style: TextStyle(color: AppTheme.appColor),
+                                decoration: InputDecoration.collapsed(
+                                  hintText: 'Search',
+                                  hintStyle: TextStyle(
+                                      color: AppTheme.whiteColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter a recipe';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    _autoValidateMode = AutovalidateMode.disabled;
+                                  });
+                                },
                               ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter a recipe';
-                                }
-                                return null;
-                              },
-                              onChanged: (value) {
-                                setState(() {
-                                  _autoValidateMode = AutovalidateMode.disabled;
-                                });
-                              },
                             ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            FocusScope.of(context).requestFocus(FocusNode());
-                            if(_searchController.text == "" || _searchController.text.isEmpty){
-                              showSnackBar(context, "Please type something.");
-                            } else {
-                              getFood(context);
-                            }
-                          },
-                          child: Stack(
-                            children: [
-                              Container(
-                                width: 60,
-                                height: 50,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFFB38ADE),
-                                  borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(100),
-                                      bottomRight: Radius.circular(100)),
+                          GestureDetector(
+                            onTap: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              if (_searchController.text == "" ||
+                                  _searchController.text.isEmpty) {
+                                showSnackBar(context, "Please type something.");
+                              } else {
+                                getFood(context);
+                              }
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                  width: 60,
+                                  height: 50,
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFB38ADE),
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(100),
+                                        bottomRight: Radius.circular(100)),
+                                  ),
                                 ),
-                              ),
-                              Align(
-                                alignment: Alignment.center,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                                  child: SvgPicture.asset("assets/images/Search.svg",
-                                      width: 30, height: 30),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 14.0),
+                                    child: SvgPicture.asset(
+                                        "assets/images/Search.svg",
+                                        width: 30,
+                                        height: 30),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            pushReplacement(context, const RecipeParamScreen());
+                          },
+                          child: Container(
+                              width: 150,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: AppTheme.appColor,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(bottom: 3.0),
+                                      child: Icon(
+                                        Icons.filter_list,
+                                        color: Color(0xFFF7F7F7),
+                                        size: 22,
+                                      ),
+                                    ),
+                                    AppText.appText(
+                                      "Advanced search",
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      textColor: AppTheme.whiteColor,
+                                    ),
+                                  ],
+                                ),
+                              )),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          pushReplacement(context, const RecipeParamScreen());
-                        },
-                        child: Container(
-                            width: 150,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: AppTheme.appColor,
-                              borderRadius: BorderRadius.circular(50),
+                    randomData == true
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Container(
+                              height: 500,
+                              child: Center(
+                                  child: AppText.appText("${errorResponse}")),
                             ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.only(bottom: 3.0),
-                                    child: Icon(
-                                      Icons.filter_list,
-                                      color: Color(0xFFF7F7F7),
-                                      size: 22,
-                                    ),
-                                  ),
-                                  AppText.appText(
-                                    "Advanced search",
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    textColor: AppTheme.whiteColor,
-                                  ),
-                                ],
-                              ),
-                            )),
-                      ),
-                    ],
-                  ),
-                ],
+                          )
+                        : SizedBox()
+                  ],
+                ),
               ),
             ),
     );
@@ -249,6 +269,13 @@ class _SearchScreenState extends State<SearchScreen> {
         );
 
         // _searchController.clear();
+      } else if (response.statusCode == 402) {
+        setState(() {
+          isLoading = false;
+          randomData = true;
+          errorResponse = response.data["message"];
+          print("l;nkwkdn${response.data["message"]}");
+        });
       } else {
         print('API request failed with status code: ${response.statusCode}');
       }
