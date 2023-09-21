@@ -35,7 +35,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   bool showFoodStyle = false;
 
   //start food style
-  List<String> foodStyle = [];
+  List<String>foodStyle = [];
   List<String> addFoodStyle = [];
 
   late AppDio dio;
@@ -48,28 +48,18 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   @override
   void initState() {
     dio = AppDio(context);
-    spoonDio = SpoonAcularAppDio(context);
+    spoonDio =  SpoonAcularAppDio(context);
     logger.init();
     getRecipesParameters(context);
     super.initState();
   }
 
   void getRecipesParameters(context) async {
-    final allergyProvider =
-        Provider.of<AllergiesProvider>(context, listen: false)
-            .preferredAllergiesRecipe;
-    final dietaryRestrictionsProvider =
-        Provider.of<DietaryRestrictionsProvider>(context, listen: false)
-            .preferredDietaryRestrictionsParametersRecipe;
-    final preferredProteinProvider =
-        Provider.of<PreferredProteinProvider>(context, listen: false)
-            .preferredProteinRecipe;
-    final regionalDelicacyProvider =
-        Provider.of<RegionalDelicacyProvider>(context, listen: false)
-            .preferredRegionalDelicacyParametersRecipe;
-    final kitchenResourcesProvider =
-        Provider.of<KitchenResourcesProvider>(context, listen: false)
-            .preferredKitchenResourcesParametersRecipe;
+    final allergyProvider = Provider.of<AllergiesProvider>(context,listen: false).preferredAllergiesRecipe;
+    final dietaryRestrictionsProvider = Provider.of<DietaryRestrictionsProvider>(context,listen: false).preferredDietaryRestrictionsParametersRecipe;
+    final preferredProteinProvider = Provider.of<PreferredProteinProvider>(context,listen: false).preferredProteinRecipe;
+    final regionalDelicacyProvider = Provider.of<RegionalDelicacyProvider>(context,listen: false).preferredRegionalDelicacyParametersRecipe;
+    final kitchenResourcesProvider = Provider.of<KitchenResourcesProvider>(context,listen: false).preferredKitchenResourcesParametersRecipe;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? paramsList = prefs.getString(PrefKey.parametersLists);
 
@@ -88,36 +78,35 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
       });
 
       //adding allergies list
-      if (allergyProvider.isEmpty) {
+      if(allergyProvider.isEmpty){
         allergies.forEach((key, value) {
           allergyProvider.add(RecipesParameterClass(parameter: value));
         });
       }
 
       //adding dietary restrictions list
-      if (dietaryRestrictionsProvider.isEmpty) {
+      if(dietaryRestrictionsProvider.isEmpty){
         dietaryRestrictions.forEach((key, value) {
-          dietaryRestrictionsProvider
-              .add(RecipesParameterClass(parameter: value));
+          dietaryRestrictionsProvider.add(RecipesParameterClass(parameter: value));
         });
       }
 
       //adding proteins list
-      if (preferredProteinProvider.isEmpty) {
+      if(preferredProteinProvider.isEmpty){
         preferredProteins.forEach((key, value) {
           preferredProteinProvider.add(RecipesParameterClass(parameter: value));
         });
       }
 
       //adding regional delicacy list
-      if (regionalDelicacyProvider.isEmpty) {
+      if(regionalDelicacyProvider.isEmpty){
         regionalDelicacies.forEach((key, value) {
           regionalDelicacyProvider.add(RecipesParameterClass(parameter: value));
         });
       }
 
       //adding kitchen resources list
-      if (kitchenResourcesProvider.isEmpty) {
+      if(kitchenResourcesProvider.isEmpty){
         kitchenResources.forEach((key, value) {
           kitchenResourcesProvider.add(RecipesParameterClass(parameter: value));
         });
@@ -133,8 +122,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final foodStyleProvider =
-        Provider.of<FoodStyleProvider>(context, listen: false);
+    final foodStyleProvider = Provider.of<FoodStyleProvider>(context,listen: false);
     print("food_style ${foodStyleProvider.foodStyle}");
     final allergiesProvider =
         Provider.of<AllergiesProvider>(context, listen: true);
@@ -177,7 +165,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         ),
       ),
       body: GestureDetector(
-        onTap: () {
+        onTap: (){
           setState(() {
             showFoodStyle = false;
           });
@@ -203,6 +191,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
+                          //allergies
                           if (allergiesProvider.addAllergies.isNotEmpty ||
                               restrictionsProvider
                                   .addDietaryRestrictions.isNotEmpty ||
@@ -228,10 +217,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                             kitchenProvider.removeKitchenResources();
                             kitchenProvider
                                 .clearKitchenResourcesAllCheckboxStates();
-
                             //food style
                             foodStyleProvider.clearFoodStyleValue();
-
                             showSnackBar(context, "Filters Reset Succesfully");
                           }
                         },
@@ -261,8 +248,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                               height: 55,
                               width: 227,
                               decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(5),
+                                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(5),
                                     topRight: Radius.circular(5),
                                     bottomLeft: Radius.circular(0),
                                     bottomRight: Radius.circular(0),
@@ -415,8 +401,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   }
 
   Widget customFoodStyle() {
-    final foodStyleProvider =
-        Provider.of<FoodStyleProvider>(context, listen: false);
+    final foodStyleProvider = Provider.of<FoodStyleProvider>(context,listen: false);
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.appColor,
@@ -457,11 +442,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                       color: AppTheme.appColor,
                     ),
                     child: Padding(
-                      padding: index == 0
-                          ? const EdgeInsets.only(top: 10.0)
-                          : (index == max - 1
-                              ? const EdgeInsets.only(bottom: 10.0)
-                              : const EdgeInsets.symmetric(vertical: 0.0)),
+                      padding: index == 0 ? const EdgeInsets.only(top: 10.0) : (index == max -1 ? const EdgeInsets.only(bottom: 10.0) :  const EdgeInsets.symmetric(vertical: 0.0)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -483,10 +464,10 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                 bottom: BorderSide(
                                   width: 2.0,
                                   color:
-                                      // foodStyle[index] == "Thai cuisine"
-                                      //     ? Colors.transparent
-                                      //     :
-                                      AppTheme.whiteColor,
+                                  // foodStyle[index] == "Thai cuisine"
+                                  //     ? Colors.transparent
+                                  //     :
+                                  AppTheme.whiteColor,
                                 ),
                               ),
                             ),
@@ -509,8 +490,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     setState(() {
       isLoading = true;
     });
-    final foodStyleProvider =
-        Provider.of<FoodStyleProvider>(context, listen: false);
+    final foodStyleProvider = Provider.of<FoodStyleProvider>(context,listen: false);
     final allergiesProvider =
         Provider.of<AllergiesProvider>(context, listen: false);
     final restrictionsProvider =

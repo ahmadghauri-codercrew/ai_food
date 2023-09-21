@@ -97,7 +97,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                 children: [
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 20.0, right: 20, top: 10),
+                    const EdgeInsets.only(left: 20.0, right: 20, top: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -119,28 +119,28 @@ class _RecipeInfoState extends State<RecipeInfo>
                                   onTap: () {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
-                                            builder: (context) => ShoppingList(
-                                                  image: widget
-                                                      .recipeData["image"],
-                                                  name: widget
-                                                      .recipeData["title"],
-                                                  ingredient: widget.recipeData[
-                                                      "extendedIngredients"],
-                                                )));
+                                        builder: (context) => ShoppingList(
+                                          image: widget
+                                              .recipeData["image"],
+                                          name: widget
+                                              .recipeData["title"],
+                                          ingredient: widget.recipeData[
+                                          "extendedIngredients"],
+                                        )));
                                   },
                                   child: Card(
                                     elevation: 6,
                                     shadowColor: AppTheme.appColor,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(25)),
+                                        BorderRadius.circular(25)),
                                     child: Container(
                                       height: 45,
                                       width: 45,
                                       decoration: BoxDecoration(
                                           color: AppTheme.appColor,
                                           borderRadius:
-                                              BorderRadius.circular(25)),
+                                          BorderRadius.circular(25)),
                                       child: Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: SvgPicture.asset(
@@ -158,14 +158,14 @@ class _RecipeInfoState extends State<RecipeInfo>
                                     shadowColor: AppTheme.appColor,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(25)),
+                                        BorderRadius.circular(25)),
                                     child: Container(
                                         height: 45,
                                         width: 45,
                                         decoration: BoxDecoration(
                                             color: AppTheme.appColor,
                                             borderRadius:
-                                                BorderRadius.circular(25)),
+                                            BorderRadius.circular(25)),
                                         child: Padding(
                                           padding: const EdgeInsets.all(10.0),
                                           child: SvgPicture.asset(
@@ -271,8 +271,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                AppText.appText(
-                                    "${widget.recipeData["readyInMinutes"]} minutes",
+                                AppText.appText("${widget.recipeData["readyInMinutes"]} minutes",
                                     textColor: AppTheme.appColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500)
@@ -283,15 +282,12 @@ class _RecipeInfoState extends State<RecipeInfo>
                             ),
                             Row(
                               children: [
-                                SvgPicture.asset(
-                                    "assets/images/Persons Icon.svg",
-                                    width: 20,
-                                    height: 20),
+                                SvgPicture.asset("assets/images/Persons Icon.svg",
+                                    width: 20, height: 20),
                                 const SizedBox(
                                   width: 5,
                                 ),
-                                AppText.appText(
-                                    "${widget.recipeData["servings"]} Person",
+                                AppText.appText("${widget.recipeData["servings"]} Person",
                                     textColor: AppTheme.appColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500)
@@ -327,12 +323,12 @@ class _RecipeInfoState extends State<RecipeInfo>
                           physics: ScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: widget
-                                  .recipeData["analyzedInstructions"].isEmpty
+                              .recipeData["analyzedInstructions"].isEmpty
                               ? widget.recipeData["analyzedInstructions"].length
                               : widget
-                                  .recipeData["analyzedInstructions"][0]
-                                      ["steps"]
-                                  .length,
+                              .recipeData["analyzedInstructions"][0]
+                          ["steps"]
+                              .length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(
@@ -341,18 +337,18 @@ class _RecipeInfoState extends State<RecipeInfo>
                                 children: [
                                   Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding:
-                                            const EdgeInsets.only(top: 8.0),
+                                        const EdgeInsets.only(top: 8.0),
                                         child: Container(
                                           height: 4,
                                           width: 4,
                                           decoration: BoxDecoration(
                                             color: AppTheme.appColor,
                                             borderRadius:
-                                                BorderRadius.circular(100),
+                                            BorderRadius.circular(100),
                                           ),
                                         ),
                                       ),
@@ -361,9 +357,9 @@ class _RecipeInfoState extends State<RecipeInfo>
                                         child: Container(
                                           child: Text(
                                             widget
-                                                    .recipeData[
-                                                        "analyzedInstructions"]
-                                                    .isEmpty
+                                                .recipeData[
+                                            "analyzedInstructions"]
+                                                .isEmpty
                                                 ? "steps"
                                                 : "${widget.recipeData["analyzedInstructions"][0]["steps"][index]["step"]}",
                                             textAlign: TextAlign.justify,
@@ -395,87 +391,86 @@ class _RecipeInfoState extends State<RecipeInfo>
                                   Container(
                                     child: Row(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Padding(
                                           padding:
-                                              const EdgeInsets.only(top: 8.0),
+                                          const EdgeInsets.only(top: 8.0),
                                           child: Container(
                                             height: 4,
                                             width: 4,
                                             decoration: BoxDecoration(
                                               color: AppTheme.appColor,
                                               borderRadius:
-                                                  BorderRadius.circular(100),
+                                              BorderRadius.circular(100),
                                             ),
                                           ),
                                         ),
                                         const SizedBox(width: 5),
                                         Expanded(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                width: screenWidth * 0.55,
-                                                child: Text(
-                                                  "${ingredient[index]["originalName"]}",
-                                                  textAlign:
-                                                      TextAlign.justify,
-                                                  softWrap: true,
-                                                  style: TextStyle(
-                                                      color:
-                                                          AppTheme.appColor,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w500),
+                                          child: Container(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .spaceBetween,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  width: screenWidth * 0.55,
+                                                  child: Text(
+                                                    "${ingredient[index]["originalName"]}",
+                                                    textAlign:
+                                                    TextAlign.justify,
+                                                    softWrap: true,
+                                                    style: TextStyle(
+                                                        color:
+                                                        AppTheme.appColor,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                        FontWeight.w500),
+                                                  ),
                                                 ),
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              Wrap(
-                                                
-                                                children: [
-                                                  Text(
-                                                    unit == "Metric"
-                                                        ? "${ingredient[index]["measures"]["metric"]["amount"]}"
-                                                        : "${ingredient[index]["measures"]["us"]["amount"]}",
-                                                    textAlign:
-                                                        TextAlign.justify,
-                                                    softWrap: true,
-                                                    style: TextStyle(
-                                                        color: AppTheme
-                                                            .appColor,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight
-                                                                .w500),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 3,
-                                                  ),
-                                                  Text(
-                                                    unit == "Metric"
-                                                        ? "${ingredient[index]["measures"]["metric"]["unitShort"]}"
-                                                        : "${ingredient[index]["measures"]["us"]["unitShort"]}",
-                                                    textAlign:
-                                                        TextAlign.justify,
-                                                    softWrap: true,
-                                                    style: TextStyle(
-                                                        color: AppTheme
-                                                            .appColor,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight
-                                                                .w500),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
+                                                const SizedBox(width: 5),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      unit == "Metric"
+                                                          ? "${ingredient[index]["measures"]["metric"]["amount"]}"
+                                                          : "${ingredient[index]["measures"]["us"]["amount"]}",
+                                                      textAlign:
+                                                      TextAlign.justify,
+                                                      softWrap: true,
+                                                      style: TextStyle(
+                                                          color:
+                                                          AppTheme.appColor,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                          FontWeight.w500),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 3,
+                                                    ),
+                                                    Text(
+                                                      unit == "Metric"
+                                                          ? "${ingredient[index]["measures"]["metric"]["unitShort"]}"
+                                                          : "${ingredient[index]["measures"]["us"]["unitShort"]}",
+                                                      textAlign:
+                                                      TextAlign.justify,
+                                                      softWrap: true,
+                                                      style: TextStyle(
+                                                          color:
+                                                          AppTheme.appColor,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                          FontWeight.w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ],

@@ -553,8 +553,8 @@ class _HomeScreenState extends State<HomeScreen> {
   ////////////////////////////////////get suggested recipe////////////////////////////////////////////////////////////////////
 
   getSuggestedRecipes({allergies, dietaryRestrictions}) async {
-    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    const apiKey = '56806fa3f874403c8794d4b7e491c937';
+    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
+    // const apiKey = '56806fa3f874403c8794d4b7e491c937';
     // const apiKey = 'd9186e5f351240e094658382be62d948';
 
     final allergiesAre =

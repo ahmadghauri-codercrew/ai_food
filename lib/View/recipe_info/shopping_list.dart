@@ -71,7 +71,7 @@ class _ShoppingListState extends State<ShoppingList> {
               child: Stack(
                 children: [
                   Container(
-                    height: 250,
+                    height: 240,
                     width: screenWidth,
                     child: CachedNetworkImage(
                       progressIndicatorBuilder: (context, url, progress) {
@@ -93,7 +93,6 @@ class _ShoppingListState extends State<ShoppingList> {
                     top: 180,
                     child: Container(
                       height: 240,
-
                       width: screenWidth,
                       decoration: BoxDecoration(
                         color: Colors.white,
