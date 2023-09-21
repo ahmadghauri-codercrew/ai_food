@@ -192,25 +192,35 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                       GestureDetector(
                         onTap: () {
                           //allergies
-                          allergiesProvider.removeAllergyParams();
-                          allergiesProvider.clearAllergiesAllCheckboxStates();
-                          //restrictions
-                          restrictionsProvider.removeDietaryRestrictions();
-                          restrictionsProvider.clearDietaryRestrictionsAllCheckboxStates();
-                          //protein
-                          proteinProvider.removePreferredProtein();
-                          proteinProvider.clearProteinAllCheckboxStates();
-                          //delicacy
-                          delicacyProvider.removeRegionalDelicacy();
-                          delicacyProvider.clearRegionalDelicacyAllCheckboxStates();
-                          //kitchen
-                          kitchenProvider.removeKitchenResources();
-                          kitchenProvider.clearKitchenResourcesAllCheckboxStates();
-
-                          //food style
-                          foodStyleProvider.clearFoodStyleValue();
-
-                          showSnackBar(context, "Filters Reset Succesfully");
+                          if (allergiesProvider.addAllergies.isNotEmpty ||
+                              restrictionsProvider
+                                  .addDietaryRestrictions.isNotEmpty ||
+                              proteinProvider.addProtein.isNotEmpty ||
+                              kitchenProvider.addKitchenResources.isNotEmpty ||
+                              delicacyProvider.addRegionalDelicacy.isNotEmpty ||
+                              foodStyleProvider.foodStyle.isNotEmpty) {
+                            //  allergies
+                            allergiesProvider.removeAllergyParams();
+                            allergiesProvider.clearAllergiesAllCheckboxStates();
+                            //restrictions
+                            restrictionsProvider.removeDietaryRestrictions();
+                            restrictionsProvider
+                                .clearDietaryRestrictionsAllCheckboxStates();
+                            //protein
+                            proteinProvider.removePreferredProtein();
+                            proteinProvider.clearProteinAllCheckboxStates();
+                            //delicacy
+                            delicacyProvider.removeRegionalDelicacy();
+                            delicacyProvider
+                                .clearRegionalDelicacyAllCheckboxStates();
+                            //kitchen
+                            kitchenProvider.removeKitchenResources();
+                            kitchenProvider
+                                .clearKitchenResourcesAllCheckboxStates();
+                            //food style
+                            foodStyleProvider.clearFoodStyleValue();
+                            showSnackBar(context, "Filters Reset Succesfully");
+                          }
                         },
                         child: AppText.appText(
                           "Reset filters",
@@ -495,7 +505,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
     const apiKey = 'd9186e5f351240e094658382be62d948';
     final style = foodStyleProvider.foodStyle.isNotEmpty
-        ? "&cuisine=${foodStyleProvider.foodStyle.toString().substring(1, foodStyleProvider.foodStyle.toString().length - 1)}"
+        ? "&cuisine=${foodStyleProvider.foodStyle}"
         : "";
     final kitchenResources = kitchenProvider.addKitchenResources.isNotEmpty
         ? "&equipment=${kitchenProvider.addKitchenResources.toString().substring(1, kitchenProvider.addKitchenResources.toString().length - 1)}"
@@ -549,3 +559,4 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     }
   }
 }
+      
