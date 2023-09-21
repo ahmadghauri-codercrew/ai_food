@@ -83,10 +83,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           children: [
             Container(
               height: 220,
-              width: double.infinity,
+
               margin: const EdgeInsets.only(top: 23),
               child: SvgPicture.asset(
                 AppAssetsImage.profile_updated_image,
+                width: double.infinity,
                 // color: AppTheme.whiteColor,
               ),
             ),

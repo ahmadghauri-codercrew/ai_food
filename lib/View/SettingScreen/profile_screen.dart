@@ -154,9 +154,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               SizedBox(
                 height: 220,
-                width: double.infinity,
                 child: SvgPicture.asset(
                   AppAssetsImage.profile_updated_image,
+                  fit: BoxFit.fill,
+                  width: double.infinity,
                   // color: AppTheme.whiteColor,
                 ),
               ),
