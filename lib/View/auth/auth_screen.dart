@@ -229,7 +229,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                               borderSide: BorderSide(
                                                 color: hintTextColor2Condition == false
                                                     ? AppTheme.appColor
-                                                    : Colors.red,
+                                                    : Colors.red
                                               )),
                                           errorBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
@@ -439,10 +439,19 @@ class _AuthScreenState extends State<AuthScreen> {
                               : AppButton.appButton(onTap: () {
                             FocusScope.of(context).requestFocus(FocusNode());
                                   if (login == true) {
-                                    if (_formKeyLoginEmail.currentState!
-                                            .validate() &&
-                                        _formKeyLoginPassword.currentState!
-                                            .validate()) {
+                                    if(_loginEmailController.text.isEmpty)
+                                      {
+                                        setState(() {
+                                          errormessageLoginsEmail = "Email field is empty";
+                                          hintTextColor2Condition = true;
+                                        });
+                                      }
+                                    if(_loginPasswordController.text.isEmpty){
+                                      setState(() {
+                                        errormessageLoginsPassword = "Password field is empty";
+                                        hintTextColorCondition = true;
+                                      });
+                                    }
                                       // Navigator.of(context).push(
                                       //   MaterialPageRoute(
                                       //     builder: (context) =>
@@ -453,7 +462,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       print("Email:${_emailController.text}");
                                       print(
                                           "Password:${_passwordController.text}");
-                                    }
+
                                   } else {
                                     if (_formKeyName.currentState!.validate() &&
                                         _formKeyEmail.currentState!
@@ -750,6 +759,7 @@ class _AuthScreenState extends State<AuthScreen> {
           });
           String responsemessage = responseData["message"];
           print("jidmaosmdo${responsemessage}");
+
           String errormessageconst = "The selected email is invalid.";
           String errormessageconst4 = "The email must be a valid email address.";
           if (responsemessage == errormessageconst || responsemessage == errormessageconst4) {
@@ -764,14 +774,6 @@ class _AuthScreenState extends State<AuthScreen> {
           if (responsemessage == errormessageconst2) {
             setState(() {
               errormessageLoginsPassword = responseData["messsage"] ?? "Invalid password";
-              hintTextColorCondition = true;
-
-            });
-          }
-          String errormessageconst3 = "The password field is required.";
-          if (responsemessage == errormessageconst3) {
-            setState(() {
-              errormessageLoginsPassword = responseData["messsage"] ?? "Password field is Empty";
               hintTextColorCondition = true;
 
             });
