@@ -309,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           height: 500,
                                           child: Center(
                                               child: AppText.appText(
-                                                  "No results found. Please try adjusting your search parameters.")),
+                                                  "No results found. Please try adjusting your profile parameters.")),
                                         ),
                                       )
                                     : GridView.builder(
@@ -423,11 +423,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     width: MediaQuery.of(context).size.width,
                                     child: const Center(
                                       child: Text(
-                                        "Don't find any Result",
+                                        "No results found. Please try adjusting your search parameters.",
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        ),
                                       ),
                                     ),
                                   )
