@@ -361,7 +361,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           final emailRegex = RegExp(
                                               r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
                                           if (!emailRegex.hasMatch(value)) {
-                                            return 'Invalid Email';
+                                            return 'Enter valid email';
                                           }
                                           return null;
                                         },
@@ -386,7 +386,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                           if (value == null || value.isEmpty) {
                                             return 'Please enter your password';
                                           } else if (value.length < 8) {
-                                            return "password should be at least 8 characters";
+                                            return "Password length should be at least 8 characters";
                                           }
                                           return null; // Validation passed
                                         },
@@ -409,10 +409,10 @@ class _AuthScreenState extends State<AuthScreen> {
                                       child: CustomAppPasswordfield(
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Please enter your confirm Password';
+                                            return 'Please enter your confirm password';
                                           } else if (_passwordController.text !=
                                               value) {
-                                            return "password does not match";
+                                            return "Password does not match";
                                           }
                                           return null; // Validation passed
                                         },

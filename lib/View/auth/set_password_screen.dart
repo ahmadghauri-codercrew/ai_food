@@ -87,7 +87,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your password';
                             } else if (value.length < 8) {
-                              return "password length should atleast 8";
+                              return "Password length should be at least 8 characters";
                             }
                             return null; // Validation passed
                           },

@@ -663,7 +663,7 @@ class _HomeScreenState extends State<HomeScreen> {
     int currentOffset = widget.offset + 8;
 
     final style = widget.foodStyle.isNotEmpty
-        ? "&cuisine=${widget.foodStyle.toString().substring(1, widget.foodStyle.toString().length - 1)}"
+        ? "&cuisine=${widget.foodStyle}"
         : "";
     final kitchenResources = kitchenProvider.addKitchenResources.isNotEmpty
         ? "&equipment=${kitchenProvider.addKitchenResources.toString().substring(1, kitchenProvider.addKitchenResources.toString().length - 1)}"
@@ -691,16 +691,16 @@ class _HomeScreenState extends State<HomeScreen> {
     if (response.statusCode == 200) {
       print("response_data_is  ${response.data}");
 
-      pushReplacement(
-          context,
-          BottomNavView(
-            type: 1,
-            data: response.data["results"],
-            offset: currentOffset,
-            totalResults: response.data["totalResults"],
-            foodStyle: widget.foodStyle,
-            searchType: 1,
-          ));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return BottomNavView(
+          type: 1,
+          data: response.data["results"],
+          offset: currentOffset,
+          totalResults: response.data["totalResults"],
+          foodStyle: widget.foodStyle,
+          searchType: 1,
+        );
+      }));
       setState(() {
         isLoading = false;
       });
@@ -736,17 +736,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (response.statusCode == 200) {
       print("response_data_is  ${response.data}");
-
-      pushReplacement(
-          context,
-          BottomNavView(
-            type: 1,
-            data: response.data["results"],
-            offset: currentOffset,
-            totalResults: response.data["totalResults"],
-            query: widget.query,
-            searchType: 0,
-          ));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return BottomNavView(
+          type: 1,
+          data: response.data["results"],
+          offset: currentOffset,
+          totalResults: response.data["totalResults"],
+          query: widget.query,
+          searchType: 0,
+        );
+      }));
       setState(() {
         isLoading = false;
       });
