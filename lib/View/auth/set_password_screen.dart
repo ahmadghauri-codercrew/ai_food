@@ -88,6 +88,15 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                         }
                         return null; // Validation passed
                       },
+                      style: TextStyle(
+                          color: AppTheme.appColor),
+                      cursorColor:
+                      AppTheme.appColor,
+                      hintStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: AppTheme.appColor
+                              .withOpacity(0.6)),
                       texthint: "Enter new password",
                       controller: _passwordController,
                     ),
@@ -101,15 +110,23 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your confirm Password';
-                        } else if (value.length < 8) {
-                          return "password length should atleast 8";
-                        } else if (_passwordController.text !=
+                        }  else if (_passwordController.text !=
                             value) {
                           return "password does not match";
                         }
                         return null; // Validation passed
                       },
+                      style: TextStyle(
+                          color: AppTheme.appColor),
+                      cursorColor:
+                      AppTheme.appColor,
+                      hintStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: AppTheme.appColor
+                              .withOpacity(0.6)),
                       texthint: "Confirm password",
+
                       controller: _confirmPasswordController,
                     ),
                   ),
