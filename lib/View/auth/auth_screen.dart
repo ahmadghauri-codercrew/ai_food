@@ -62,6 +62,7 @@ class _AuthScreenState extends State<AuthScreen> {
   String errormessageLoginsEmail = "";
   bool hintTextColorCondition = false;
   bool hintTextColor2Condition = false;
+  bool passwordValidCondition = false;
 
   //sign in with apple code
   String generateNonce([int length = 32]) {
@@ -210,12 +211,13 @@ class _AuthScreenState extends State<AuthScreen> {
                                   children: [
                                     Form(
                                       key: _formKeyLoginEmail,
-                                      // autovalidateMode:
-                                      //     AutovalidateMode.onUserInteraction,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                       child: CustomAppFormField(
                                           onChanged: (value) {
                                             setState(() {
                                               hintTextColor2Condition = false;
+                                              passwordValidCondition = true;
                                               errormessageLoginsEmail = "";
 
                                             });
@@ -242,22 +244,17 @@ class _AuthScreenState extends State<AuthScreen> {
                                             ),
                                           ),
 
-                                          // validator: (value) {
-                                          //   final isEmailValid = RegExp(
-                                          //           r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
-                                          //       .hasMatch(value);
-                                          //   if (value.isEmpty ||
-                                          //       value == null) {
-                                          //     if (value.isNotEmpty) {
-                                          //       return null;
-                                          //     } else {
-                                          //       return "Please enter a your email";
-                                          //     }
-                                          //   }
-                                          //   return null;
-                                          // },
+                                          validator: (value) {
+                                            if (value.isEmpty ||
+                                                value == null) {
+                                              hintTextColor2Condition = true;
+                                                return passwordValidCondition == false?"":"Email field is empty";
+                                            }else if(_loginEmailController.text.isNotEmpty){
+                                              return "";
+                                            }
+                                            return null;
+                                          },
                                           texthint: "Enter email",
-
                                           cursorColor:
                                           hintTextColor2Condition == false
                                               ? AppTheme.appColor
@@ -272,8 +269,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                     ),
                                     Form(
                                       key: _formKeyLoginPassword,
-                                      // autovalidateMode:
-                                      //     AutovalidateMode.onUserInteraction,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                       child: CustomAppPasswordfield(
                                         onChanged: (value) {
                                           setState(() {
@@ -475,7 +472,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       .requestFocus(FocusNode());
                                   if (login == true) {
                                     if (_formKeyLoginEmail.currentState!
-                                            .validate() &&
+                                            .validate() ||
                                         _formKeyLoginPassword.currentState!
                                             .validate()) {
                                       // Navigator.of(context).push(
@@ -793,6 +790,15 @@ class _AuthScreenState extends State<AuthScreen> {
             // alertDialogError(
             //     context: context, message: responseData["message"]);
           }
+          String errormessageconst4 = "The email field is required.";
+          if (responsemessage == errormessageconst4) {
+            setState(() {
+              errormessageLoginsEmail = responseData["messsage"] ?? "Email field is empty";
+              hintTextColor2Condition = true;
+            });
+            // alertDialogError(
+            //     context: context, message: responseData["message"]);
+          }
           String errormessageconst2 = "Invalid password";
           if (responsemessage == errormessageconst2) {
             setState(() {
@@ -804,7 +810,7 @@ class _AuthScreenState extends State<AuthScreen> {
           String errormessageconst3 = "The password field is required.";
           if (responsemessage == errormessageconst3) {
             setState(() {
-              errormessageLoginsPassword = responseData["messsage"] ?? "Password field is Empty";
+              errormessageLoginsPassword = responseData["messsage"] ?? "Password field is empty";
               hintTextColorCondition = true;
 
             });
