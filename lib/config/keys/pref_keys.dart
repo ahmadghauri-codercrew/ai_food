@@ -15,7 +15,7 @@ class PrefKey {
   static const String userName = "userName";
   static const String dateOfBirth = "dateOfBirth";
   static const String type = "type";
-  static const String verified = "verified";
+  static const String searchQueryParameter = "searchQueryParameter";
   static const String rememberMe = "remember_me";
   static const String lastName = "last_name";
   static const String profile = "profile_pic";

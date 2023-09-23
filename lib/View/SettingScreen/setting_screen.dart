@@ -528,6 +528,7 @@ class _SettingScreenState extends State<SettingScreen> {
   Future<void> logout(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(PrefKey.authorization);
+    await prefs.remove(PrefKey.searchQueryParameter);
     await Authentication.signOut(context: context);
   }
 }

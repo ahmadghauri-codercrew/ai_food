@@ -64,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
     dio = AppDio(context);
     spoondio = SpoonAcularAppDio(context);
     logger.init();
+    getqueryValueFromSharedPref();
     getUserCredentials();
     setRecipesParameters();
     if (widget.type == 1) {
@@ -763,5 +764,18 @@ class _HomeScreenState extends State<HomeScreen> {
         showSnackBar(context, "${response.statusMessage}");
       }
     }
+  }
+  getqueryValueFromSharedPref() async{
+    final prefs = await SharedPreferences.getInstance();
+    String? query = prefs.getString(PrefKey.searchQueryParameter);
+    if(query!.isEmpty){
+
+    }else{
+      print('aksjdklasjdklajsdkljasdkl');
+      setState(() {
+        widget.query = query!;
+      });
+    }
+
   }
 }

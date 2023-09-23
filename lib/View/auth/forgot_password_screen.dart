@@ -255,7 +255,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         // showSnackBar(context, "${responseData["message"]}");
         return;
       } else {
-        print("responseData${responseData["data"]["OTP"]}");
         showSnackBar(context, "Reset password OTP has been sent to your email");
         setState(() {
           isLoading = false;
