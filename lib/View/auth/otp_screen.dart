@@ -15,7 +15,6 @@ import 'set_password_screen.dart';
 
 class OTPScreen extends StatefulWidget {
   final email;
-
   const OTPScreen({
     super.key,
     this.email,
@@ -94,16 +93,16 @@ class _OTPScreenState extends State<OTPScreen> {
                                 // contentPadding: const EdgeInsets.all(10),
                                 enabledBorder: UnderlineInputBorder(
                                     borderSide:
-                                    BorderSide(color: AppTheme.appColor)),
+                                        BorderSide(color: AppTheme.appColor)),
                                 disabledBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide.none),
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: AppTheme.appColor,
-                                    )),
+                                  color: AppTheme.appColor,
+                                )),
                                 border: UnderlineInputBorder(
                                     borderSide:
-                                    BorderSide(color: AppTheme.appColor)),
+                                        BorderSide(color: AppTheme.appColor)),
                               ),
                             ),
                             const SizedBox(
@@ -127,24 +126,24 @@ class _OTPScreenState extends State<OTPScreen> {
                       ),
                       isLoading == true
                           ? Center(
-                        child: CircularProgressIndicator(
-                          color: AppTheme.appColor,
-                          strokeWidth: 4,
-                        ),
-                      )
+                              child: CircularProgressIndicator(
+                                color: AppTheme.appColor,
+                                strokeWidth: 4,
+                              ),
+                            )
                           : Container(
-                        child: AppButton.appButton("Continue", onTap: () {
-                          verfyOTP();
-                        },
-                            width: 44.w,
-                            height: 40,
-                            border: false,
-                            blurContainer: true,
-                            backgroundColor: AppTheme.appColor,
-                            textColor: Colors.white,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w600),
-                      )
+                              child: AppButton.appButton("Continue", onTap: () {
+                                verfyOTP();
+                              },
+                                  width: 44.w,
+                                  height: 40,
+                                  border: false,
+                                  blurContainer: true,
+                                  backgroundColor: AppTheme.appColor,
+                                  textColor: Colors.white,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w600),
+                            )
                     ],
                   )),
             ],
@@ -218,7 +217,7 @@ class _OTPScreenState extends State<OTPScreen> {
     };
 
     final response =
-    await dio.post(path: AppUrls.forgetPasswordUrl, data: params);
+        await dio.post(path: AppUrls.forgetPasswordUrl, data: params);
 
     if (response.statusCode == 200) {
       var responseData = response.data;

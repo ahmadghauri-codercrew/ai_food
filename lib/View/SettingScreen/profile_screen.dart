@@ -7,7 +7,6 @@ import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
-import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
@@ -30,11 +29,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _userNameController = TextEditingController();
   List<int> numberListShow = [];
   List<String> measuringUnitListShow = [
-    "US",
+    "Us",
     "Metric",
   ];
   bool checkAPI = false;
-  String updatedvalueM = "US";
+  String updatedvalueM = "us";
   bool showMenu = false;
   bool measuringUnit = false;
 
@@ -366,13 +365,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ],
                     ),
-                    Positioned(
-                      top: 9.1.h,
-                      right: 0,
-                      child: measuringUnit
-                          ? customMeasuringUnit()
-                          : const SizedBox.shrink(),
-                    ),
+                    measuringUnit
+                        ? Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 77),
+                              child: customMeasuringUnit(),
+                            ))
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -553,6 +553,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       "name": _userNameController.text,
       "DOB": selectedDateFromPref ??
           DateFormat('yyyy-MM-dd').format(selectedDate!),
+      "measuring_unit": updatedvalueM.toLowerCase(),
       ...arrangeIndexParam,
       ...arrangeIndexParam2,
     };
@@ -593,9 +594,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             setState(() {
               checkAPI = false;
             });
-            alertDialogError(
-                context: context, message: responseData["message"]);
-            // print("Something Went Wrong: ${responseData["message"]}");
+            showSnackBar(context, "Enter your name");
           } else {
             setState(() {
               checkAPI = false;
