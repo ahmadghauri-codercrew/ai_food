@@ -1,6 +1,10 @@
+import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
+import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/recipe_info/shopping_list.dart';
+import 'package:ai_food/config/app_urls.dart';
+import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
@@ -20,8 +24,11 @@ class RecipeInfo extends StatefulWidget {
 
 class _RecipeInfoState extends State<RecipeInfo>
     with SingleTickerProviderStateMixin {
+  late AppDio dio;
+  AppLogger logger = AppLogger();
   late TabController _tabController;
   var unit;
+  bool favoriteTap = false;
   final List<Widget> _tabs = [
     AppText.appText("Preparation",
         // textColor: AppTheme.appColor,
@@ -32,6 +39,7 @@ class _RecipeInfoState extends State<RecipeInfo>
         fontSize: 16,
         fontWeight: FontWeight.w700),
   ];
+
   getUnit() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
@@ -40,11 +48,15 @@ class _RecipeInfoState extends State<RecipeInfo>
   }
 
   var data;
+
   @override
   void initState() {
-    super.initState();
+    dio = AppDio(context);
+    logger.init();
+
     getUnit();
     _tabController = TabController(length: _tabs.length, vsync: this);
+    super.initState();
   }
 
   @override
@@ -98,7 +110,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                 children: [
                   Padding(
                     padding:
-                    const EdgeInsets.only(left: 20.0, right: 20, top: 10),
+                        const EdgeInsets.only(left: 20.0, right: 20, top: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -120,28 +132,28 @@ class _RecipeInfoState extends State<RecipeInfo>
                                   onTap: () {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
-                                        builder: (context) => ShoppingList(
-                                          image: widget
-                                              .recipeData["image"],
-                                          name: widget
-                                              .recipeData["title"],
-                                          ingredient: widget.recipeData[
-                                          "extendedIngredients"],
-                                        )));
+                                            builder: (context) => ShoppingList(
+                                                  image: widget
+                                                      .recipeData["image"],
+                                                  name: widget
+                                                      .recipeData["title"],
+                                                  ingredient: widget.recipeData[
+                                                      "extendedIngredients"],
+                                                )));
                                   },
                                   child: Card(
                                     elevation: 6,
                                     shadowColor: AppTheme.appColor,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(25)),
+                                            BorderRadius.circular(25)),
                                     child: Container(
                                       height: 45,
                                       width: 45,
                                       decoration: BoxDecoration(
                                           color: AppTheme.appColor,
                                           borderRadius:
-                                          BorderRadius.circular(25)),
+                                              BorderRadius.circular(25)),
                                       child: Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: SvgPicture.asset(
@@ -153,29 +165,75 @@ class _RecipeInfoState extends State<RecipeInfo>
                                   ),
                                 ),
                                 const SizedBox(width: 10),
-                                GestureDetector(
-                                  child: Card(
-                                    elevation: 6,
-                                    shadowColor: AppTheme.appColor,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(25)),
-                                    child: Container(
-                                        height: 45,
-                                        width: 45,
-                                        decoration: BoxDecoration(
-                                            color: AppTheme.appColor,
-                                            borderRadius:
-                                            BorderRadius.circular(25)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: SvgPicture.asset(
-                                            "assets/images/Favorite Icon.svg",
-                                            color: AppTheme.whiteColor,
-                                          ),
-                                        )),
-                                  ),
-                                ),
+                                favoriteTap == false
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            favoriteTap = true;
+                                          });
+                                          favoriteAPI(
+                                              recpieid: widget.recipeData["id"],
+                                              title: widget.recipeData["title"],
+                                              image: widget.recipeData["image"],
+                                              link: widget.recipeData["spoonacularSourceUrl"]);
+
+                                        },
+                                        child: Card(
+                                          elevation: 6,
+                                          shadowColor: AppTheme.appColor,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(25)),
+                                          child: Container(
+                                              height: 45,
+                                              width: 45,
+                                              decoration: BoxDecoration(
+                                                  color: AppTheme.appColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25)),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: SvgPicture.asset(
+                                                  "assets/images/Favorite Icon.svg",
+                                                  color: AppTheme.whiteColor,
+                                                ),
+                                              )),
+                                        ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            favoriteTap = false;
+                                          });
+                                          unFavoriteAPI(
+                                              recpieid: widget.recipeData["id"]);
+                                        },
+                                        child: Card(
+                                          elevation: 6,
+                                          shadowColor: AppTheme.appColor,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(25)),
+                                          child: Container(
+                                              height: 45,
+                                              width: 45,
+                                              decoration: BoxDecoration(
+                                                  color: AppTheme.appColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25)),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: SvgPicture.asset(
+                                                  "assets/images/Fill heart icon.svg",
+                                                  color: AppTheme.whiteColor,
+                                                ),
+                                              )),
+                                        ),
+                                      ),
                               ],
                             )
                           ],
@@ -313,7 +371,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                   TabBar(
                     indicator: UnderlineTabIndicator(
                         borderSide:
-                        BorderSide(width: 3.0, color: AppTheme.appColor),
+                            BorderSide(width: 3.0, color: AppTheme.appColor),
                         insets: EdgeInsets.symmetric(horizontal: 30.0)),
                     indicatorColor: AppTheme.appColor,
                     indicatorWeight: 3,
@@ -331,12 +389,12 @@ class _RecipeInfoState extends State<RecipeInfo>
                           physics: const ScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: widget
-                              .recipeData["analyzedInstructions"].isEmpty
+                                  .recipeData["analyzedInstructions"].isEmpty
                               ? widget.recipeData["analyzedInstructions"].length
                               : widget
-                              .recipeData["analyzedInstructions"][0]
-                          ["steps"]
-                              .length,
+                                  .recipeData["analyzedInstructions"][0]
+                                      ["steps"]
+                                  .length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(
@@ -345,18 +403,18 @@ class _RecipeInfoState extends State<RecipeInfo>
                                 children: [
                                   Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding:
-                                        const EdgeInsets.only(top: 8.0),
+                                            const EdgeInsets.only(top: 8.0),
                                         child: Container(
                                           height: 4,
                                           width: 4,
                                           decoration: BoxDecoration(
                                             color: AppTheme.appColor,
                                             borderRadius:
-                                            BorderRadius.circular(100),
+                                                BorderRadius.circular(100),
                                           ),
                                         ),
                                       ),
@@ -365,9 +423,9 @@ class _RecipeInfoState extends State<RecipeInfo>
                                         child: Container(
                                           child: Text(
                                             widget
-                                                .recipeData[
-                                            "analyzedInstructions"]
-                                                .isEmpty
+                                                    .recipeData[
+                                                        "analyzedInstructions"]
+                                                    .isEmpty
                                                 ? "steps"
                                                 : "${widget.recipeData["analyzedInstructions"][0]["steps"][index]["step"]}",
                                             textAlign: TextAlign.justify,
@@ -399,18 +457,18 @@ class _RecipeInfoState extends State<RecipeInfo>
                                   Container(
                                     child: Row(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Padding(
                                           padding:
-                                          const EdgeInsets.only(top: 8.0),
+                                              const EdgeInsets.only(top: 8.0),
                                           child: Container(
                                             height: 4,
                                             width: 4,
                                             decoration: BoxDecoration(
                                               color: AppTheme.appColor,
                                               borderRadius:
-                                              BorderRadius.circular(100),
+                                                  BorderRadius.circular(100),
                                             ),
                                           ),
                                         ),
@@ -419,45 +477,45 @@ class _RecipeInfoState extends State<RecipeInfo>
                                           child: Container(
                                             child: Row(
                                               mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Container(
                                                   width: screenWidth * 0.55,
                                                   child: Text(
                                                     capitalize(ingredient[index]
-                                                    ["originalName"]),
+                                                        ["originalName"]),
                                                     textAlign:
-                                                    TextAlign.justify,
+                                                        TextAlign.justify,
                                                     softWrap: true,
                                                     style: TextStyle(
                                                         color:
-                                                        AppTheme.appColor,
+                                                            AppTheme.appColor,
                                                         fontSize: 14,
                                                         fontWeight:
-                                                        FontWeight.w500),
+                                                            FontWeight.w500),
                                                   ),
                                                 ),
                                                 const SizedBox(width: 5),
                                                 Row(
                                                   crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
                                                       unit == "Metric"
                                                           ? "${ingredient[index]["measures"]["metric"]["amount"]}"
                                                           : "${ingredient[index]["measures"]["us"]["amount"]}",
                                                       textAlign:
-                                                      TextAlign.justify,
+                                                          TextAlign.justify,
                                                       softWrap: true,
                                                       style: TextStyle(
                                                           color:
-                                                          AppTheme.appColor,
+                                                              AppTheme.appColor,
                                                           fontSize: 14,
                                                           fontWeight:
-                                                          FontWeight.w500),
+                                                              FontWeight.w500),
                                                     ),
                                                     const SizedBox(
                                                       width: 3,
@@ -467,14 +525,14 @@ class _RecipeInfoState extends State<RecipeInfo>
                                                           ? "${ingredient[index]["measures"]["metric"]["unitShort"]}"
                                                           : "${ingredient[index]["measures"]["us"]["unitShort"]}",
                                                       textAlign:
-                                                      TextAlign.justify,
+                                                          TextAlign.justify,
                                                       softWrap: true,
                                                       style: TextStyle(
                                                           color:
-                                                          AppTheme.appColor,
+                                                              AppTheme.appColor,
                                                           fontSize: 14,
                                                           fontWeight:
-                                                          FontWeight.w500),
+                                                              FontWeight.w500),
                                                     ),
                                                   ],
                                                 ),
@@ -505,5 +563,143 @@ class _RecipeInfoState extends State<RecipeInfo>
   String capitalize(String input) {
     if (input.isEmpty) return input;
     return input[0].toUpperCase() + input.substring(1);
+  }
+
+  favoriteAPI({recpieid, title, image, link}) async {
+    var response;
+
+    const int responseCode200 = 200; // For successful request.
+    const int responseCode400 = 400; // For Bad Request.
+    const int responseCode401 = 401; // For Unauthorized access.
+    const int responseCode404 = 404; // For For data not found
+    const int responseCode500 = 500; // Internal server error.
+
+    Map<String, dynamic> params = {
+      "recipe_id": recpieid,
+      "title": title,
+      "image": image,
+      "url": link,
+    };
+    try {
+      response = await dio.post(
+        path: AppUrls.favouriteURl,
+        data: params,
+      );
+      var responseData = response.data;
+      switch (response.statusCode) {
+        case responseCode400:
+          setState(() {
+            favoriteTap = false;
+          });
+          print("Bad Request.");
+          break;
+        case responseCode401:
+          setState(() {
+            favoriteTap = false;
+          });
+          print("Unauthorized access.");
+          break;
+        case responseCode404:
+          setState(() {
+            favoriteTap = false;
+          });
+          print(
+              "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+          break;
+        case responseCode500:
+          setState(() {
+            favoriteTap = false;
+          });
+          print("Internal server error.");
+          break;
+        case responseCode200:
+          if (responseData["status"] == false) {
+            setState(() {
+              favoriteTap = false;
+            });
+            showSnackBar(context, "Something went wrong");
+          } else {
+
+          }
+          break;
+        default:
+          setState(() {
+            favoriteTap = false;
+          });
+          // Handle other response codes here if needed.
+          break;
+      }
+    } catch (e) {
+      //check if there is any other issue with the data from server
+      setState(() {
+        favoriteTap = false;
+      });
+      print("Something went Wrong ${e}");
+    }
+  }
+  unFavoriteAPI({recpieid}) async {
+    var response;
+
+    const int responseCode200 = 200; // For successful request.
+    const int responseCode400 = 400; // For Bad Request.
+    const int responseCode401 = 401; // For Unauthorized access.
+    const int responseCode404 = 404; // For For data not found
+    const int responseCode500 = 500; // Internal server error.
+
+    try {
+      response = await dio.get(
+        path: AppUrls.unFavouriteURl+"/${recpieid}",
+      );
+      var responseData = response.data;
+      switch (response.statusCode) {
+        case responseCode400:
+          setState(() {
+            favoriteTap = false;
+          });
+          print("Bad Request.");
+          break;
+        case responseCode401:
+          setState(() {
+            favoriteTap = false;
+          });
+          print("Unauthorized access.");
+          break;
+        case responseCode404:
+          setState(() {
+            favoriteTap = false;
+          });
+          print(
+              "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+          break;
+        case responseCode500:
+          setState(() {
+            favoriteTap = false;
+          });
+          print("Internal server error.");
+          break;
+        case responseCode200:
+          if (responseData["status"] == false) {
+            setState(() {
+              favoriteTap = false;
+            });
+            showSnackBar(context, "Something went wrong");
+          } else {
+            print("everything is alright");
+          }
+          break;
+        default:
+          setState(() {
+            favoriteTap = false;
+          });
+          // Handle other response codes here if needed.
+          break;
+      }
+    } catch (e) {
+      //check if there is any other issue with the data from server
+      setState(() {
+        favoriteTap = false;
+      });
+      print("Something went Wrong ${e}");
+    }
   }
 }

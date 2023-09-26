@@ -14,10 +14,12 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: AppText.appText("Favourite Recipes", fontSize: 24, fontWeight: FontWeight.w600, textColor: AppTheme.appColor)
-      ),
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: AppText.appText("Favourite Recipes",
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+              textColor: AppTheme.appColor)),
     );
   }
 }
