@@ -36,6 +36,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     dio = AppDio(context);
     spoonDio = SpoonAcularAppDio(context);
+
     logger.init();
     getqueryValueFromSharedPref();
     super.initState();
@@ -46,9 +47,11 @@ class _SearchScreenState extends State<SearchScreen> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 65,
         leadingWidth: 60,
@@ -232,7 +235,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<void> getFood(context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-
     // Set isLoading to true when the API call starts
     setState(() {
       isLoading = true;
@@ -242,9 +244,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if(searchtext.isNotEmpty){
       pref.setString(PrefKey.searchQueryParameter, searchtext);
     }else{}
-    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '5bae53d0d61b4380b505fd1a01c93c31';
 
     final apiUrl =
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';
@@ -262,6 +262,7 @@ class _SearchScreenState extends State<SearchScreen> {
             searchType: 0,
             type: 1,
             data: response.data["results"],
+            searchList: List.generate(response.data["results"].length, (index) => false),
             query: searchtext,
             offset: response.data["offset"],
           ),
@@ -285,17 +286,18 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-   getqueryValueFromSharedPref() async{
-     final prefs = await SharedPreferences.getInstance();
-     String? query = prefs.getString(PrefKey.searchQueryParameter);
-     if(query!.isEmpty){
+  getqueryValueFromSharedPref() async{
+    final prefs = await SharedPreferences.getInstance();
+    String? query = prefs.getString(PrefKey.searchQueryParameter);
+    if(query!.isEmpty){
 
-     }else{
-       print('aksjdklasjdklajsdkljasdkl');
-       setState(() {
-         _searchController.text = query!;
-       });
-     }
+    }else{
+      print('aksjdklasjdklajsdkljasdkl');
+      setState(() {
+        _searchController.text = query!;
+      });
+    }
 
-   }
+  }
+
 }

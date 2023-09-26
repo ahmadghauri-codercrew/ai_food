@@ -126,11 +126,11 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                       children: [
                         loadingProvider.isLoading
                             ? Image.asset(
-                                "assets/images/loader.gif",
-                                // width: 100,
-                                height: 50,
-                                color: AppTheme.appColor,
-                              )
+                          "assets/images/loader.gif",
+                          // width: 100,
+                          height: 50,
+                          color: AppTheme.appColor,
+                        )
                             : const SizedBox.shrink(),
                         TextField(
                           onSubmitted: (value) {
@@ -156,17 +156,17 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                             ),
                             border: const OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(80.0)),
+                              BorderRadius.all(Radius.circular(80.0)),
                             ),
                             focusedBorder: const OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(80)),
+                              BorderRadius.all(Radius.circular(80)),
                               borderSide: BorderSide(
                                   width: 1, color: Colors.transparent),
                             ),
                             enabledBorder: const OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(80)),
+                              BorderRadius.all(Radius.circular(80)),
                               borderSide: BorderSide(
                                   width: 1, color: Colors.transparent),
                             ),
@@ -201,9 +201,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   void chatBotTalk() async {
     final chatsProvider = Provider.of<ChatBotProvider>(context, listen: false);
     chatsProvider.messageLoading(true);
-    const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    // const apiKey = '56806fa3f874403c8794d4b7e491c937';
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '5bae53d0d61b4380b505fd1a01c93c31';
     final apiUrl =
         'https://api.spoonacular.com/food/converse?text=${_messageController.text}&apiKey=$apiKey';
     final response = await AppDio(context).get(path: apiUrl);
@@ -245,12 +243,12 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
                 child: Container(
                   margin:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+                  const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
                   padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   decoration: BoxDecoration(
                     color: AppTheme.whiteColor,
                     borderRadius: const BorderRadius.only(
@@ -270,79 +268,75 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
               resData['media'] == null || resData['media'].isEmpty
                   ? const SizedBox.shrink()
                   : Column(
-                      children: resData['media']
-                          .map<Widget>(
-                            (item) => Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: CachedNetworkImage(
-                                        width: 300,
-                                        height: 200,
-                                        imageUrl: "${item['image']}",
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 300,
-                                    child: Center(
-                                      child: AppText.appText(
-                                        item['title'],
-                                        textAlign: TextAlign.center,
-                                        // justifyText: true,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      var inputString = item['link'];
+                children: resData['media']
+                    .map<Widget>(
+                      (item) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: CachedNetworkImage(
+                              width: 300,
+                              height: 200,
+                              imageUrl: "${item['image']}",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 300,
+                          child: Center(
+                            child: AppText.appText(
+                              item['title'],
+                              textAlign: TextAlign.center,
+                              // justifyText: true,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            var inputString = item['link'];
 
-                                      RegExp urlRegex = RegExp(
-                                          r'https:\/\/spoonacular\.com\/recipes\/(.+)-(\d+)');
+                            RegExp urlRegex = RegExp(
+                                r'https:\/\/spoonacular\.com\/recipes\/(.+)-(\d+)');
 
-                                      final match =
-                                          urlRegex.firstMatch(inputString);
+                            final match =
+                            urlRegex.firstMatch(inputString);
 
-                                      if (match != null) {
-                                        String? substring = match.group(1);
-                                        String? digits = match.group(2);
-                                        getRecipeInformation(id: digits);
+                            if (match != null) {
+                              String? substring = match.group(1);
+                              String? digits = match.group(2);
+                              getRecipeInformation(id: digits);
 
-                                        print("Substring: $substring");
-                                        print("Digits: $digits");
-                                      } else {
-                                        print("No match found");
-                                      }
-                                    },
-                                    child: SizedBox(
-                                      width: 300,
-                                      child: Center(
-                                        child: AppText.appText(
-                                          item['link'],
-                                          textAlign: TextAlign.center,
-                                          // justifyText: true,
-                                          textColor: AppTheme.blackColor,
-                                          fontWeight: FontWeight.bold,
-                                          underLine: true,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              print("Substring: $substring");
+                              print("Digits: $digits");
+                            } else {
+                              print("No match found");
+                            }
+                          },
+                          child: SizedBox(
+                            width: 300,
+                            child: Center(
+                              child: AppText.appText(
+                                item['link'],
+                                textAlign: TextAlign.center,
+                                // justifyText: true,
+                                textColor: AppTheme.whiteColor,
+                                underLine: true,
+                                fontSize: 10,
                               ),
                             ),
-                          )
-                          .toList(),
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
+                )
+                    .toList(),
+              ),
             ],
           ),
         );

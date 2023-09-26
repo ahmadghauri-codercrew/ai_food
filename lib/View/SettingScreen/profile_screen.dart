@@ -7,7 +7,6 @@ import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
-import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
@@ -57,8 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             primaryColor: AppTheme.appColor, // Change the primary color
             colorScheme: ColorScheme.light(
                 primary: AppTheme.appColor), // Change overall color scheme
-            buttonTheme:
-                const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
         );
@@ -87,7 +85,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _userNameController.dispose();
     super.dispose();
   }
-
   void loadselectParamsfromAPI() async {
     var recipesParams;
 
@@ -97,18 +94,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (recipesParamsJson != null) {
       try {
         recipesParams = jsonDecode(recipesParamsJson);
-        allergies = recipesParams["data"]["allergies"];
-        dietaryRestrictions = recipesParams["data"]["dietaryRestrictions"];
+        allergies=recipesParams["data"]["allergies"];
+        dietaryRestrictions=recipesParams["data"]["dietaryRestrictions"];
       } catch (e) {
         print("Error decoding JSON: $e");
       }
     } else {
       print("recipesParamsJson is null");
     }
-    selectedDateFromPref = prefs.getString(PrefKey.dateOfBirth);
+    selectedDateFromPref= prefs.getString(PrefKey.dateOfBirth);
     print("check if i recieve the data of birth${selectedDateFromPref}");
-    List<String> storedData =
-        prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
+    List<String> storedData =prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
 
     for (String entry in storedData) {
       String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
@@ -119,8 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         addAllergies[key] = value;
       }
     }
-    List<String> storedData2 =
-        prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction)!;
+    List<String> storedData2 =prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction)!;
     for (String entry in storedData2) {
       String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
       List<String> parts = result.split(':');
@@ -130,10 +125,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         addDietaryRestrictions[key] = value;
       }
     }
-    _userNameController.text = prefs.getString(PrefKey.userName)!;
-    updatedvalueM = prefs.getString(PrefKey.unit)!;
+    _userNameController.text= prefs.getString(PrefKey.userName)!;
+    updatedvalueM =  prefs.getString(PrefKey.unit)!;
   }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -154,10 +148,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               SizedBox(
                 height: 220,
+                width: double.infinity,
                 child: SvgPicture.asset(
                   AppAssetsImage.profile_updated_image,
-                  fit: BoxFit.fill,
-                  width: double.infinity,
                   // color: AppTheme.whiteColor,
                 ),
               ),
@@ -176,9 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             texthint: "User name",
                             controller: _userNameController,
                             fontweight: FontWeight.w500,
-                            hintStyle: TextStyle(
-                                color: AppTheme.appColor,
-                                fontWeight: FontWeight.w500),
+                            hintStyle: TextStyle(color: AppTheme.appColor,fontWeight: FontWeight.w500),
                           ),
                         ),
                         const SizedBox(height: 25),
@@ -201,7 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       flex: 5,
                                       fit: FlexFit.tight,
                                       child: AppText.appText(
-                                        "DOB: ${selectedDate == null ? "${selectedDateFromPref == "" ? "MM-DD-YYYY" : selectedDateFromPref}" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
+                                        "DOB: ${selectedDate == null ? "${selectedDateFromPref == ""?"MM-DD-YYYY":selectedDateFromPref}" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
                                         fontSize: 11.sp,
                                         textColor: AppTheme.appColor,
                                         fontWeight: FontWeight.w500,
@@ -233,7 +224,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Flexible(
                                       fit: FlexFit.loose,
@@ -262,8 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ],
                         ),
-                        Container(
-                          height: 2,
+                        Container(height: 2,
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -281,14 +271,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: Divider(
                                   thickness: 1,
                                   color: AppTheme.appColor,
-                                ),
-                              ),
+                                ),),
                             ],
                           ),
                         ),
                         const SizedBox(
                           height: 30,
                         ),
+
                         AppText.appText(
                           "Allergies:",
                           fontSize: 22,
@@ -336,27 +326,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Wrap(
                           spacing: 10,
                           runSpacing: 10,
-                          children:
-                              dietaryRestrictions.entries.map((restriction) {
+                          children: dietaryRestrictions.entries.map((restriction) {
                             String key = restriction.key;
                             dynamic value = restriction.value;
                             return CustomContainer(
                               borderColor:
-                                  addDietaryRestrictions.containsKey(key)
-                                      ? AppTheme.whiteColor
-                                      : AppTheme.appColor,
+                              addDietaryRestrictions.containsKey(key)
+                                  ? AppTheme.whiteColor
+                                  : AppTheme.appColor,
                               containerColor:
-                                  addDietaryRestrictions.containsKey(key)
-                                      ? AppTheme.appColor
-                                      : Colors.white,
-                              textColor: addDietaryRestrictions.containsKey(key)
+                              addDietaryRestrictions.containsKey(key)
+                                  ? AppTheme.appColor
+                                  : Colors.white,
+                              textColor:
+                              addDietaryRestrictions.containsKey(key)
                                   ? Colors.white
                                   : AppTheme.appColor,
                               text: value.toString(),
                               onTap: () {
                                 setState(() {
-                                  if (addDietaryRestrictions.containsKey(key)) {
-                                    addDietaryRestrictions.remove(key);
+                                  if (addDietaryRestrictions
+                                      .containsKey(key)) {
+                                    addDietaryRestrictions
+                                        .remove(key);
                                   } else {
                                     addDietaryRestrictions[key] = value;
                                   }
@@ -367,13 +359,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ],
                     ),
-                    Positioned(
-                      top: 9.1.h,
-                      right: 0,
-                      child: measuringUnit
-                          ? customMeasuringUnit()
-                          : const SizedBox.shrink(),
-                    ),
+                    measuringUnit
+                        ? Align(alignment: Alignment.topRight,child: Padding(
+                          padding: const EdgeInsets.only(top: 77),
+                          child: customMeasuringUnit(),
+                        ))
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -382,36 +373,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               checkAPI == false
                   ? Center(
-                      child: AppButton.appButton(
-                        "Save",
-                        onTap: () async {
-                          setState(() {
-                            checkAPI = true;
-                          });
-                          SaveUnit();
-                          List<String> allergiesList = addAllergies.entries
-                              .map((value) => value.toString())
-                              .toList();
-                          List<String> dietaryRestrictionsList =
-                              addDietaryRestrictions.entries
-                                  .map((value) => value.toString())
-                                  .toList();
-                          await StoreDatainSharedPref(
-                              allergiesList, dietaryRestrictionsList);
-                          await UpdateSetupProfileOnUpdateAPI();
-                        },
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        textColor: Colors.white,
-                        width: 200,
-                        height: 48,
-                        backgroundColor: AppTheme.appColor,
-                      ),
-                    )
-                  : Center(
-                      child:
-                          CircularProgressIndicator(color: AppTheme.appColor),
-                    ),
+                child: AppButton.appButton(
+                  "Save",
+                  onTap: ()async {
+                    setState(() {
+                      checkAPI = true;
+                    });
+                    SaveUnit();
+                    List<String> allergiesList = addAllergies.entries
+                        .map((value) => value.toString())
+                        .toList();
+                    List<String> dietaryRestrictionsList = addDietaryRestrictions.entries
+                        .map((value) => value.toString())
+                        .toList();
+                    await StoreDatainSharedPref(allergiesList,dietaryRestrictionsList);
+                    await UpdateSetupProfileOnUpdateAPI();
+                  },
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  textColor: Colors.white,
+                  width: 200,
+                  height: 48,
+                  backgroundColor: AppTheme.appColor,
+                ),
+              ): Center(child: CircularProgressIndicator(color: AppTheme.appColor),),
               const SizedBox(height: 30),
             ],
           ),
@@ -500,13 +485,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(PrefKey.unit, updatedvalueM);
   }
-
   LoadingSelectedDataFromSetupProfileScreen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {});
+    setState(() {
+
+    });
     // showSnackBar(context, "Data is Loaded from SharedPreference");
   }
-
   UpdateSetupProfileOnUpdateAPI() async {
     var response;
     Map<String, dynamic> arrangeIndexParam = {};
@@ -520,9 +505,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     const int responseCode500 = 500; // Internal server error.
 
     //here creates map like allergies[0]: 4,... using for loop to insert the data;
-    if (addAllergies.isEmpty) {
+    if(addAllergies.isEmpty){
       arrangeIndexParam["allergies[0]"] = "0";
-    } else {
+    }else {
       for (var data in addAllergies.entries) {
         String key = "allergies[${index}]";
         String key2 = data.key;
@@ -531,9 +516,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         index++;
       }
     }
-    if (addDietaryRestrictions.isEmpty) {
+    if(addDietaryRestrictions.isEmpty){
       arrangeIndexParam2["dietary_restrictions[0]"] = "0";
-    } else {
+    }else{
       for (var data in addDietaryRestrictions.entries) {
         String key = "dietary_restrictions[${index1}]";
         String key2 = data.key;
@@ -552,8 +537,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     Map<String, dynamic> params = {
       "name": _userNameController.text,
-      "DOB": selectedDateFromPref ??
-          DateFormat('yyyy-MM-dd').format(selectedDate!),
+      "DOB": selectedDateFromPref?? DateFormat('yyyy-MM-dd').format(selectedDate!),
       ...arrangeIndexParam,
       ...arrangeIndexParam2,
     };
@@ -580,8 +564,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           setState(() {
             checkAPI = false;
           });
-          print(
-              "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+          print("The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
           break;
         case responseCode500:
           setState(() {
@@ -594,9 +577,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             setState(() {
               checkAPI = false;
             });
-            alertDialogError(
-                context: context, message: responseData["message"]);
-            // print("Something Went Wrong: ${responseData["message"]}");
+            showSnackBar(context, "Enter your name");
           } else {
             setState(() {
               checkAPI = false;
@@ -612,6 +593,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           // Handle other response codes here if needed.
           break;
       }
+
     } catch (e) {
       //check if there is any other issue with the data from server
       setState(() {
@@ -620,17 +602,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       print("Something went Wrong ${e}");
     }
   }
-
   StoreDatainSharedPref(allergies, dietryRestriction) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(PrefKey.userName, _userNameController.text);
-    selectedDate == null
-        ? prefs.setString(PrefKey.dateOfBirth, selectedDateFromPref!)
-        : prefs.setString(PrefKey.dateOfBirth,
-            DateFormat('MM-dd-yyyy').format(selectedDate!));
+    selectedDate == null?prefs.setString(PrefKey.dateOfBirth, selectedDateFromPref!):prefs.setString(PrefKey.dateOfBirth, DateFormat('MM-dd-yyyy').format(selectedDate!));
     prefs.setStringList(PrefKey.dataonBoardScreenAllergies, allergies);
-    prefs.setStringList(
-        PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
+    prefs.setStringList(PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
     // showSnackBar(context, "Data is saved in SharedPreference");
   }
 }
@@ -644,11 +621,11 @@ class CustomContainer extends StatelessWidget {
 
   CustomContainer(
       {super.key,
-      this.text,
-      required this.onTap,
-      required this.textColor,
-      required this.containerColor,
-      this.borderColor});
+        this.text,
+        required this.onTap,
+        required this.textColor,
+        required this.containerColor,
+        this.borderColor});
 
   @override
   Widget build(BuildContext context) {

@@ -64,7 +64,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
+          padding: const EdgeInsets.only(left: 25, right: 25, top: 25, bottom: 25),
           child: Column(
             children: [
               Padding(
@@ -108,36 +108,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 120.0),
-                          // child: Form(
-                          //   autovalidateMode:
-                          //       AutovalidateMode.onUserInteraction,
-                          //   key: _formKey,
-                          //   child: CustomAppFormField(
-                          //     texthint: "Email",
-                          //     hintStyle: TextStyle(
-                          //         color: AppTheme.appColor.withOpacity(0.6),
-                          //         fontSize: 16,
-                          //         fontWeight: FontWeight.w400),
-                          //     controller: _textController,
-                          //     validator: (value) {
-                          //       final isEmailValid = RegExp(
-                          //               r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
-                          //           .hasMatch(value);
-                          //
-                          //       if (value.isEmpty || value == null) {
-                          //         return "Please enter your email";
-                          //       }
-                          //       if (!isEmailValid) {
-                          //         return "Please enter a valid email";
-                          //       }
-                          //       return null;
-                          //     },
-                          //   ),
-                          // ),
                           child: Form(
                             key: _formKey,
-                            // autovalidateMode:
-                            //     AutovalidateMode.onUserInteraction,
                             child: CustomAppFormField(
                                 onChanged: (value) {
                                   setState(() {
@@ -200,7 +172,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                       r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
 
                                   if (_formKey.currentState!.validate()) {
-                                    forgetPassword(text: inputText);
+                                    if(_textController.text.isNotEmpty){
+                                      forgetPassword(text: inputText);
+                                    }
+                                    else{
+                                      setState(() {
+                                        errormessageLoginsEmail= "Enter email";
+                                        hintTextColor2Condition=  true;
+
+                                      });
+                                    }
                                   }
                                 },
                                     width: 44.w,
@@ -252,7 +233,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             hintTextColor2Condition = true;
           });
         }
-        // showSnackBar(context, "${responseData["message"]}");
         return;
       } else {
         showSnackBar(context, "Reset password OTP has been sent to your email");

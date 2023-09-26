@@ -135,9 +135,10 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: true);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 65,
         leadingWidth: 60,
@@ -257,7 +258,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                       color: AppTheme.appColor, width: 2)),
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                    const EdgeInsets.symmetric(horizontal: 15.0),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -384,7 +385,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                   dietary: restrictionsProvider,
                                   regional: delicacyProvider,
                                   kitchen: kitchenProvider);
+                              removeSearchQueryValueFromPref();
                             },
+
                           ),
                         ),
                   // ignore: prefer_const_constructors
@@ -398,6 +401,11 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         ),
       ),
     );
+  }
+
+  removeSearchQueryValueFromPref() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(PrefKey.searchQueryParameter);
   }
 
   Widget customFoodStyle() {
@@ -501,9 +509,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
-    // const apiKey = 'd9186e5f351240e094658382be62d948';
-    // const apiKey = '6fee21631c5c432dba9b34b9070a2d31';
-    const apiKey = 'd9186e5f351240e094658382be62d948';
+    const apiKey = '5bae53d0d61b4380b505fd1a01c93c31';
     final style = foodStyleProvider.foodStyle.isNotEmpty
         ? "&cuisine=${foodStyleProvider.foodStyle}"
         : "";
@@ -537,6 +543,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
             offset: response.data["offset"],
             totalResults: response.data["totalResults"],
             foodStyle: foodStyleProvider.foodStyle,
+            searchList: List.generate(response.data["results"].length, (index) => false),
             searchType: 1,
             data: response.data["results"],
           ));
@@ -559,4 +566,3 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
     }
   }
 }
-      

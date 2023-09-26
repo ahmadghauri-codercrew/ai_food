@@ -6,6 +6,7 @@ import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/Utils/widgets/others/custom_card.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:sizer/sizer.dart';
@@ -26,12 +27,15 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends State<OTPScreen> {
   final TextEditingController _smsCodeController = TextEditingController();
+  List<TextEditingController> otpControllers =
+      List.generate(6, (_) => TextEditingController());
+  List<FocusNode> focusNodes = List.generate(6, (_) => FocusNode());
+  String otpError = '';
+
   late AppDio dio;
   AppLogger logger = AppLogger();
   var responseData;
   bool isLoading = false;
-  var errorMessageFromVerifyOTP;
-  bool hintTextColorCondition = false;
 
   @override
   void initState() {
@@ -42,103 +46,151 @@ class _OTPScreenState extends State<OTPScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var screenWidth = MediaQuery.of(context).size.width;
     print("otp${widget.email}");
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 80),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AppText.appText("Forgot Password",
-                  fontSize: 32,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 80),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppText.appText("Forgot Password",
+                    fontSize: 32,
+                    textColor: AppTheme.appColor,
+                    fontWeight: FontWeight.w600),
+                AppText.appText(
+                  "Enter OTP to continue",
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
                   textColor: AppTheme.appColor,
-                  fontWeight: FontWeight.w600),
-              AppText.appText(
-                "Enter OTP to continue",
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                textColor: AppTheme.appColor,
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              Customcard(
-                  padding: 0,
-                  childWidget: Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Column(
+                ),
+                const SizedBox(
+                  height: 60,
+                ),
+                Customcard(
+                    padding: 0,
+                    childWidget: Column(
                       children: [
                         const SizedBox(
                           height: 125,
                         ),
-                        OtpTextField(
-                          handleControllers: _handleControllers,
-                          textStyle: TextStyle(
-                              fontSize: 18,
-                              color: AppTheme.appColor,
-                              fontWeight: FontWeight.bold),
-                          numberOfFields: 6,
-                          // margin: const EdgeInsets.only(left: 15, top: 15),
-                          showFieldAsBox: false,
-                          fieldWidth: (screenWidth/100)*13.2,
-                          hasCustomInputDecoration: true,
-                          cursorColor: AppTheme.appColor,
-                          decoration: InputDecoration(
-                            counterText: "",
-                            isDense: true,
-                            // contentPadding: const EdgeInsets.all(10),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: AppTheme.appColor)),
-                            disabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide.none),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppTheme.appColor,
-                                )),
-                            border: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: AppTheme.appColor)),
-                          ),
-                          onCodeChanged: (value) {
-                            setState(() {
-                              errorMessageFromVerifyOTP = "";
-                              hintTextColorCondition = false;
-                            });
-
-                          },
-                        ),
-                        Padding(padding: EdgeInsets.only(top: 7),
-                          child: Row(
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text(
-                                "${errorMessageFromVerifyOTP}", style: TextStyle(
-                                  color: hintTextColorCondition == false? AppTheme.appColor:Color(0xFFD11E22),fontWeight: FontWeight.w500),),
+                              Container(
+                                  // color: Colors.blueGrey,
+                                  width: double.infinity,
+                                  child:
+                                      // OtpTextField(
+                                      //   handleControllers: _handleControllers,
+                                      //   textStyle: TextStyle(
+                                      //       fontSize: 18,
+                                      //       color: AppTheme.appColor,
+                                      //       fontWeight: FontWeight.bold),
+                                      //   numberOfFields: 6,
+                                      //   showFieldAsBox: false,
+                                      //   hasCustomInputDecoration: true,
+                                      //   cursorColor: AppTheme.appColor,
+                                      //   decoration: InputDecoration(
+                                      //     counterText: "",
+                                      //     isDense: true,
+                                      //     // contentPadding: const EdgeInsets.all(10),
+                                      //     enabledBorder: UnderlineInputBorder(
+                                      //         borderSide:
+                                      //         BorderSide(color: AppTheme.appColor)),
+                                      //     disabledBorder: const UnderlineInputBorder(
+                                      //         borderSide: BorderSide.none),
+                                      //     focusedBorder: UnderlineInputBorder(
+                                      //         borderSide: BorderSide(
+                                      //           color: AppTheme.appColor,
+                                      //         )),
+                                      //     border: UnderlineInputBorder(
+                                      //         borderSide:
+                                      //         BorderSide(color: AppTheme.appColor)),
+                                      //   ),
+                                      // ),
+                                      Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: List.generate(
+                                      6,
+                                      (index) => SizedBox(
+                                        width: 40.0,
+                                        child: TextFormField(
+                                          controller: otpControllers[index],
+                                          textAlign: TextAlign.center,
+                                          textAlignVertical:
+                                              TextAlignVertical.bottom,
+                                          keyboardType: TextInputType.number,
+                                          maxLength: 1,
+                                          focusNode: focusNodes[index],
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                              color: AppTheme.appColor,
+                                              fontWeight: FontWeight.bold),
+                                          decoration: InputDecoration(
+                                            counterText: "",
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: AppTheme.appColor),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: AppTheme.appColor),
+                                            ),
+                                          ),
+                                          onChanged: (value) {
+                                            // Handle OTP input for each field
+                                            if (value.isNotEmpty) {
+                                              // Move focus to the next field if not the last field
+                                              if (index < 5) {
+                                                FocusScope.of(context)
+                                                    .requestFocus(
+                                                        focusNodes[index + 1]);
+                                              }
+                                            } else {
+                                              // Move focus to the previous field if not the first field
+                                              if (index > 0) {
+                                                FocusScope.of(context)
+                                                    .requestFocus(
+                                                        focusNodes[index - 1]);
+                                              }
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                              const SizedBox(
+                                height: 14,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  if (otpError.isNotEmpty)
+                                    Text(
+                                      otpError,
+                                      style: const TextStyle(
+                                        color: Colors.red, // You can choose your own color
+                                      ),),
+                                  SizedBox(),
+                                  InkWell(
+                                      onTap: () {
+                                        resendOTP(text: widget.email);
+                                      },
+                                      child: AppText.appText("Resend OTP",
+                                          textColor: AppTheme.appColor,
+                                          underLine: true)),
+                                ],
+                              ),
                             ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 14,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Align(alignment: Alignment.centerRight,
-                            child: Row(mainAxisSize: MainAxisSize.min,crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                InkWell(
-                                    onTap: () {
-                                      resendOTP(text: widget.email);
-                                    },
-                                    child: AppText.appText("Resend OTP",
-                                        textColor: AppTheme.appColor,
-                                        underLine: true)),
-                              ],
-                            ),
                           ),
                         ),
                         const SizedBox(
@@ -146,28 +198,36 @@ class _OTPScreenState extends State<OTPScreen> {
                         ),
                         isLoading == true
                             ? Center(
-                          child: CircularProgressIndicator(
-                            color: AppTheme.appColor,
-                            strokeWidth: 4,
-                          ),
-                        )
+                                child: CircularProgressIndicator(
+                                  color: AppTheme.appColor,
+                                  strokeWidth: 4,
+                                ),
+                              )
                             : Container(
-                          child: AppButton.appButton("Continue", onTap: () {
-                            verfyOTP();
-                          },
-                              width: 44.w,
-                              height: 40,
-                              border: false,
-                              blurContainer: true,
-                              backgroundColor: AppTheme.appColor,
-                              textColor: Colors.white,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600),
-                        )
+                                child: AppButton.appButton("Continue",
+                                    onTap: () {
+                                  if (otpControllers.every((controller) =>
+                                      controller.text.isNotEmpty)) {
+                                    verfyOTP();
+                                  } else {
+                                   setState(() {
+                                     otpError = "Fields can't be empty";
+                                   });
+                                  }
+                                },
+                                    width: 44.w,
+                                    height: 40,
+                                    border: false,
+                                    blurContainer: true,
+                                    backgroundColor: AppTheme.appColor,
+                                    textColor: Colors.white,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w600),
+                              )
                       ],
-                    ),
-                  )),
-            ],
+                    )),
+              ],
+            ),
           ),
         ),
       ),
@@ -186,25 +246,19 @@ class _OTPScreenState extends State<OTPScreen> {
 
     Map<String, dynamic> params = {
       "email": widget.email,
-      "OTP": _smsCodeController.text
+      "OTP": otpControllers.map((controller) => controller.text).join(),
     };
 
     final response = await dio.post(path: AppUrls.verifyUrl, data: params);
 
     if (response.statusCode == 200) {
+      print("response_data_is  ${response.data}");
+
       if (response.data["status"] == false) {
         setState(() {
           isLoading = false;
+          otpError = "Invalid OTP";
         });
-        var messageFromAPI = response.data["message"];
-        print(messageFromAPI);
-        var conditionalMessage = "The selected o t p is invalid.";
-        if (messageFromAPI == conditionalMessage) {
-          setState(() {
-            errorMessageFromVerifyOTP = "Invalid OTP";
-            hintTextColorCondition = true;
-          });
-        }
         return;
       } else {
         setState(() {
@@ -214,9 +268,8 @@ class _OTPScreenState extends State<OTPScreen> {
             context,
             SetPasswordScreen(
               email: widget.email,
-              otp: _smsCodeController.text,
+              otp: otpControllers.map((controller) => controller.text).join(),
             ));
-        showSnackBar(context, "${response.data["message"]}");
       }
     } else {
       if (response.statusCode == 402) {
@@ -244,7 +297,7 @@ class _OTPScreenState extends State<OTPScreen> {
     };
 
     final response =
-    await dio.post(path: AppUrls.forgetPasswordUrl, data: params);
+        await dio.post(path: AppUrls.forgetPasswordUrl, data: params);
 
     if (response.statusCode == 200) {
       var responseData = response.data;
@@ -256,6 +309,7 @@ class _OTPScreenState extends State<OTPScreen> {
         showSnackBar(context, "${responseData["message"]}");
         return;
       } else {
+        // print("responseData${responseData["data"]["OTP"]}");
         showSnackBar(context, "${responseData["message"]}");
         setState(() {
           isLoading = false;

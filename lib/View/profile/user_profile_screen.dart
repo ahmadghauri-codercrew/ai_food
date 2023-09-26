@@ -28,7 +28,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   //initializing Global variables for DIO package
   late AppDio dio;
   AppLogger logger = AppLogger();
-  String myName = "Howdy Sir!";
+  String myName = "Enter name";
 
   //final data stores and sent to UpdateAPI
   final _userNameController = TextEditingController();
@@ -83,10 +83,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           children: [
             Container(
               height: 220,
+              width: double.infinity,
               margin: const EdgeInsets.only(top: 23),
               child: SvgPicture.asset(
                 AppAssetsImage.profile_updated_image,
-                width: double.infinity,
                 // color: AppTheme.whiteColor,
               ),
             ),
@@ -319,13 +319,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         index1++;
       }
     }
-    if (selectedDate == null) {
-      showSnackBar(context, "select DOB");
+    if (_userNameController.text.isEmpty) {
+      showSnackBar(context, "Enter your name");
       setState(() {
         checkAPI = false;
       });
-    } else if (_userNameController.text.isEmpty) {
-      showSnackBar(context, "field cannot be empty");
+      return;
+    } else if (selectedDate == null) {
+      showSnackBar(context, "Enter your date of birth");
       setState(() {
         checkAPI = false;
       });
@@ -397,45 +398,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           break;
       }
 
-      // if (response.statusCode == responseCode400) {
-      //   setState(() {
-      //     checkAPI =false;
-      //   });
-      //   print("Bad Request.");
-      // } else if (response.statusCode == responseCode401) {
-      //   setState(() {
-      //     checkAPI =false;
-      //   });
-      //   print("Unauthorized access.");
-      // } else if (response.statusCode == responseCode404) {
-      //   setState(() {
-      //     checkAPI =false;
-      //   });
-      //   print(
-      //       "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
-      // } else if (response.statusCode == responseCode500) {
-      //   setState(() {
-      //     checkAPI =false;
-      //   });
-      //   print("Internal server error.");
-      // } else if (response.statusCode == responseCode200) {
-      //   if(responseData["status"] == false){
-      //     setState(() {
-      //       checkAPI =false;
-      //     });
-      //     print("Something Went Wrong: ${responseData["message"]}");
-      //   } else {
-      //     print("every thing is alright");
-      //
-      //     // pushReplacement(
-      //     //     context,
-      //     //     BottomNavView(
-      //     //       allergies: addAllergies,
-      //     //       dietaryRestrictions: addDietaryRestrictions,
-      //     //     ));
-      //   }
-      //
-      // }
     } catch (e) {
       setState(() {
         checkAPI = false;
@@ -447,12 +409,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   StoreDatainSharedPref(allergies, dietryRestriction) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_userNameController.text.isEmpty) {
-      showSnackBar(context, "field cannot be empty");
       setState(() {
         checkAPI == false;
       });
     } else if (selectedDate == null) {
-      showSnackBar(context, "select DOB");
       setState(() {
         checkAPI == false;
       });

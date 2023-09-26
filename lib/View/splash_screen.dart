@@ -91,8 +91,9 @@ if(storedData!=null&&storedData2!=null){
     );
   }
 
-   removeSearchQueryValueFromPref() async{
-     SharedPreferences prefs = await SharedPreferences.getInstance();
-     await prefs.remove(PrefKey.searchQueryParameter);
-   }
+  removeSearchQueryValueFromPref() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(PrefKey.searchQueryParameter);
+  }
+
 }
