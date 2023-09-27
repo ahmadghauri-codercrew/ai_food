@@ -244,7 +244,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if(searchtext.isNotEmpty){
       pref.setString(PrefKey.searchQueryParameter, searchtext);
     }else{}
-    const apiKey = '5bae53d0d61b4380b505fd1a01c93c31';
+    const apiKey = 'ee50916f81bf4ae8b3240793edbd53ab';
 
     final apiUrl =
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';

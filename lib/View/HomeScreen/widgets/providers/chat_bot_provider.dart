@@ -50,4 +50,12 @@ class ChatBotProvider extends ChangeNotifier {
     _isLoading = value;
     notifyListeners();
   }
+
+  bool _regenerateLoader = false;
+  bool get regenerateLoader => _regenerateLoader;
+
+  void regenerateLoaderLoading(value){
+    _regenerateLoader = value;
+    notifyListeners();
+  }
 }

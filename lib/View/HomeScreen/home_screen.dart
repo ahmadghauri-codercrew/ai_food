@@ -350,7 +350,7 @@ class _HomeScreenState extends State<HomeScreen> {
       showProgressindicators[index] = true;
       print("jbjbdjsbdjbdjsb $showProgressindicators");
     });
-    const apiKey = '5bae53d0d61b4380b505fd1a01c93c31';
+    const apiKey = 'ee50916f81bf4ae8b3240793edbd53ab';
 
     final apiUrl =
         'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey';
@@ -375,7 +375,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ////////////////////////////////////get suggested recipe////////////////////////////////////////////////////////////////////
 
   getSuggestedRecipes({allergies, dietaryRestrictions}) async {
-    const apiKey = '5bae53d0d61b4380b505fd1a01c93c31';
+    const apiKey = 'ee50916f81bf4ae8b3240793edbd53ab';
 
     final allergiesAre =
         allergies.isNotEmpty ? "${allergies.join(',').toLowerCase()}" : "";
@@ -481,7 +481,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
-    const apiKey = '5bae53d0d61b4380b505fd1a01c93c31';
+    const apiKey = 'ee50916f81bf4ae8b3240793edbd53ab';
 
     int currentOffset = widget.offset + 8;
 
@@ -547,7 +547,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isLoading = true;
     });
-    const apiKey = '5bae53d0d61b4380b505fd1a01c93c31';
+    const apiKey = 'ee50916f81bf4ae8b3240793edbd53ab';
 
     int currentOffset = widget.offset + 8;
 
