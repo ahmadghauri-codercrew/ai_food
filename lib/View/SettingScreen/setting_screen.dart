@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
@@ -40,6 +41,20 @@ class _SettingScreenState extends State<SettingScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController messageController = TextEditingController();
+  var data;
+  var getEmail;
+  getDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    data = prefs.getString(PrefKey.userName);
+    getEmail = prefs.getString(PrefKey.email);
+    print("getting_email ${getEmail}");
+  }
+
+  @override
+  void initState() {
+    getDetails();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -230,17 +245,18 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   showLogOutALert(BuildContext context, {controller}) {
-    final foodStyleProvider = Provider.of<FoodStyleProvider>(context,listen: false);
+    final foodStyleProvider =
+        Provider.of<FoodStyleProvider>(context, listen: false);
     final allergiesProvider =
-    Provider.of<AllergiesProvider>(context, listen: false);
+        Provider.of<AllergiesProvider>(context, listen: false);
     final restrictionsProvider =
-    Provider.of<DietaryRestrictionsProvider>(context, listen: false);
+        Provider.of<DietaryRestrictionsProvider>(context, listen: false);
     final proteinProvider =
-    Provider.of<PreferredProteinProvider>(context, listen: false);
+        Provider.of<PreferredProteinProvider>(context, listen: false);
     final delicacyProvider =
-    Provider.of<RegionalDelicacyProvider>(context, listen: false);
+        Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
-    Provider.of<KitchenResourcesProvider>(context, listen: false);
+        Provider.of<KitchenResourcesProvider>(context, listen: false);
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -307,12 +323,15 @@ class _SettingScreenState extends State<SettingScreen> {
                                 restrictionsProvider
                                     .addDietaryRestrictions.isNotEmpty ||
                                 proteinProvider.addProtein.isNotEmpty ||
-                                kitchenProvider.addKitchenResources.isNotEmpty ||
-                                delicacyProvider.addRegionalDelicacy.isNotEmpty ||
+                                kitchenProvider
+                                    .addKitchenResources.isNotEmpty ||
+                                delicacyProvider
+                                    .addRegionalDelicacy.isNotEmpty ||
                                 foodStyleProvider.foodStyle.isNotEmpty) {
                               //  allergies
                               allergiesProvider.removeAllergyParams();
-                              allergiesProvider.clearAllergiesAllCheckboxStates();
+                              allergiesProvider
+                                  .clearAllergiesAllCheckboxStates();
                               //restrictions
                               restrictionsProvider.removeDietaryRestrictions();
                               restrictionsProvider
@@ -384,7 +403,7 @@ class _SettingScreenState extends State<SettingScreen> {
       builder: (BuildContext context) {
         return Dialog(
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
           child: SingleChildScrollView(
             child: Container(
               // width: 100,
@@ -425,26 +444,27 @@ class _SettingScreenState extends State<SettingScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: Form(
-                            key: _formKeyName,
-                            autovalidateMode:
-                            AutovalidateMode.onUserInteraction,
+                            // key: _formKeyName,
+                            // autovalidateMode:
+                            //     AutovalidateMode.onUserInteraction,
                             child: TextFormField(
+                              readOnly: true,
                               controller: nameController,
-                              validator: ((value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Please Enter Name";
-                                }
-                              }),
+                              // validator: ((value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return "Please Enter Name";
+                              //   }
+                              // }),
                               style: TextStyle(color: AppTheme.whiteColor),
                               cursorColor: AppTheme.whiteColor,
                               decoration: InputDecoration(
                                   contentPadding:
-                                  EdgeInsets.only(top: 20, left: 10),
+                                      EdgeInsets.only(top: 20, left: 10),
                                   hintStyle: TextStyle(
                                       color: AppTheme.whiteColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400),
-                                  hintText: "jessica hanson",
+                                  hintText: "${data}",
                                   focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
                                           color: AppTheme.whiteColor)),
@@ -462,33 +482,35 @@ class _SettingScreenState extends State<SettingScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Form(
-                          key: _formKeyEmail,
+                          // key: _formKeyEmail,
                           child: TextFormField(
+                            readOnly: true,
                             controller: emailController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter your email';
-                              }
-                              final emailRegex = RegExp(
-                                  r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-                              if (!emailRegex.hasMatch(value)) {
-                                return 'Invalid Email';
-                              }
-                              return null;
-                            },
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return 'Please enter your email';
+                            //   }
+                            //   final emailRegex = RegExp(
+                            //       r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+                            //   if (!emailRegex.hasMatch(value)) {
+                            //     return 'Invalid Email';
+                            //   }
+                            //   return null;
+                            // },
                             style: TextStyle(color: AppTheme.whiteColor),
                             cursorColor: AppTheme.whiteColor,
                             decoration: InputDecoration(
                                 contentPadding:
-                                EdgeInsets.only(top: 20, left: 10),
+                                    EdgeInsets.only(top: 20, left: 10),
                                 hintStyle: TextStyle(
                                     color: AppTheme.whiteColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w400),
-                                hintText: "jessicahanson@gmail.com",
+                                hintText: "${getEmail}",
+                                // labelText: "sdkcdmc",?S
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide:
-                                    BorderSide(color: AppTheme.whiteColor)),
+                                        BorderSide(color: AppTheme.whiteColor)),
                                 enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
                                         color: AppTheme.whiteColor))),
@@ -535,7 +557,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide:
-                                BorderSide(color: AppTheme.whiteColor))),
+                                    BorderSide(color: AppTheme.whiteColor))),
                       ),
                     ),
                   ),
@@ -550,14 +572,12 @@ class _SettingScreenState extends State<SettingScreen> {
                         width: 44.w,
                         height: 40,
                         backgroundColor: AppTheme.whiteColor, onTap: () {
-                          if (_formKeyName.currentState!.validate() &&
-                              _formKeyEmail.currentState!.validate() &&
-                              _formKeyMessage.currentState!.validate()) {
-                            Navigator.pop(context);
-                          }
-                          // push(context, ForgotPasswordScreen());
-                          // push(context, const ForgotPasswordPage());
-                        }),
+                      if (_formKeyMessage.currentState!.validate()) {
+                        Navigator.pop(context);
+                      }
+                      // push(context, ForgotPasswordScreen());
+                      // push(context, const ForgotPasswordPage());
+                    }),
                   ),
                   const SizedBox(
                     height: 30,
