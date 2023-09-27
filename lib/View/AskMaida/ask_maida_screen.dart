@@ -1,7 +1,7 @@
-import 'package:ai_food/Constants/apikey.dart';
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
+import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/chat_bot_provider.dart';
 import 'package:ai_food/View/recipe_info/recipe_info.dart';
@@ -12,6 +12,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'result_container_askMaida.dart';
 
 class AskMaidaScreen extends StatefulWidget {
   const AskMaidaScreen({Key? key}) : super(key: key);
@@ -25,8 +27,10 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   late ScrollController _scrollController;
   late AppDio dio;
   late SpoonAcularAppDio spoonDio;
-
   AppLogger logger = AppLogger();
+  var queryText;
+  var savePreviousQuery;
+
   @override
   void initState() {
     dio = AppDio(context);
@@ -127,17 +131,74 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                       children: [
                         loadingProvider.isLoading
                             ? Image.asset(
-                          "assets/images/loader.gif",
-                          // width: 100,
-                          height: 50,
-                          color: AppTheme.appColor,
-                        )
+                                "assets/images/loader.gif",
+                                // width: 100,
+                                height: 50,
+                                color: AppTheme.appColor,
+                              )
                             : const SizedBox.shrink(),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Visibility(
+                            visible: loadingProvider.regenerateLoader,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  queryText = "more ${savePreviousQuery}";
+                                });
+                                chatBotTalk();
+                              },
+                              child: Container(
+                                height: 35,
+                                decoration: BoxDecoration(
+                                  color: AppTheme.whiteColor,
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: Border.all(color: AppTheme.appColor),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, right: 10),
+                                  child: Row(mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Icon(
+                                        Icons.autorenew,
+                                        color: AppTheme.appColor,
+                                        size: 18,
+                                      ),
+                                      const SizedBox(
+                                        width: 4,
+                                      ),
+                                      AppText.appText(
+                                        "Regenerate result",
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        textColor: AppTheme.appColor,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         TextField(
                           onSubmitted: (value) {
+                            queryText = null;
                             if (_messageController.text.isNotEmpty) {
+                              savePreviousQuery = _messageController.text;
+                              print(
+                                  "burger is save or not here?${savePreviousQuery}");
+
                               chatBotTalk();
                             }
+                          },
+                          onChanged: (value) {
+                            loadingProvider.regenerateLoaderLoading(false);
                           },
                           controller: _messageController,
                           cursorColor: AppTheme.whiteColor,
@@ -157,17 +218,17 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                             ),
                             border: const OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(80.0)),
+                                  BorderRadius.all(Radius.circular(80.0)),
                             ),
                             focusedBorder: const OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(80)),
+                                  BorderRadius.all(Radius.circular(80)),
                               borderSide: BorderSide(
                                   width: 1, color: Colors.transparent),
                             ),
                             enabledBorder: const OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(80)),
+                                  BorderRadius.all(Radius.circular(80)),
                               borderSide: BorderSide(
                                   width: 1, color: Colors.transparent),
                             ),
@@ -175,6 +236,13 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                               padding: const EdgeInsets.only(right: 15.0),
                               child: GestureDetector(
                                 onTap: () {
+                                  setState(() {
+                                    queryText = null;
+                                    savePreviousQuery = _messageController.text;
+                                    print(
+                                        "burger is save or not here?${savePreviousQuery}");
+                                  });
+
                                   if (_messageController.text.isNotEmpty) {
                                     chatBotTalk();
                                   }
@@ -199,11 +267,13 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
     );
   }
 
-  void chatBotTalk() async {
+  chatBotTalk() async {
     final chatsProvider = Provider.of<ChatBotProvider>(context, listen: false);
     chatsProvider.messageLoading(true);
+    chatsProvider.regenerateLoaderLoading(true);
+    const apiKey = 'ee50916f81bf4ae8b3240793edbd53ab';
     final apiUrl =
-        'https://api.spoonacular.com/food/converse?text=${_messageController.text}&apiKey=$apiKey';
+        'https://api.spoonacular.com/food/converse?text=${queryText == null ? _messageController.text : queryText}&apiKey=$apiKey';
     final response = await AppDio(context).get(path: apiUrl);
     if (response.statusCode == 200) {
       final resData = response.data;
@@ -234,7 +304,8 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
                             topRight: Radius.circular(0),
                           ),
                         ),
-                        child: AppText.appText(_messageController.text,
+                        child: AppText.appText(
+                            "${queryText == null ? _messageController.text : queryText}",
                             textColor: AppTheme.whiteColor),
                       ),
                     ),
@@ -243,12 +314,12 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
                 child: Container(
                   margin:
-                  const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
                   padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   decoration: BoxDecoration(
                     color: AppTheme.whiteColor,
                     borderRadius: const BorderRadius.only(
@@ -268,101 +339,21 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
               resData['media'] == null || resData['media'].isEmpty
                   ? const SizedBox.shrink()
                   : Column(
-                children: resData['media']
-                    .map<Widget>(
-                      (item) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: CachedNetworkImage(
-                              width: 300,
-                              height: 200,
-                              imageUrl: "${item['image']}",
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 300,
-                          child: Center(
-                            child: AppText.appText(
-                              item['title'],
-                              textAlign: TextAlign.center,
-                              // justifyText: true,
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            var inputString = item['link'];
-
-                            RegExp urlRegex = RegExp(
-                                r'https:\/\/spoonacular\.com\/recipes\/(.+)-(\d+)');
-
-                            final match =
-                            urlRegex.firstMatch(inputString);
-
-                            if (match != null) {
-                              String? substring = match.group(1);
-                              String? digits = match.group(2);
-                              getRecipeInformation(id: digits);
-
-                              print("Substring: $substring");
-                              print("Digits: $digits");
-                            } else {
-                              print("No match found");
-                            }
-                          },
-                          child: SizedBox(
-                            width: 300,
-                            child: Center(
-                              child: AppText.appText(
-                                item['link'],
-                                textAlign: TextAlign.center,
-                                // justifyText: true,
-                                textColor: AppTheme.whiteColor,
-                                underLine: true,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      children: resData['media']
+                          .map<Widget>(
+                            (item) => resultContainer(data: item),
+                          )
+                          .toList(),
                     ),
-                  ),
-                )
-                    .toList(),
-              ),
             ],
           ),
         );
-        _messageController.clear();
+        // _messageController.clear();
         chatsProvider.messageLoading(false);
       }
     } else {
       print('API request failed with status code: ${response.statusCode}');
       chatsProvider.messageLoading(false);
-    }
-  }
-
-  getRecipeInformation({id}) async {
-    print("gurirug23r3rhi3hrihior");
-    var url =
-        "${AppUrls.spoonacularBaseUrl}/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";
-    final response = await spoonDio.get(path: url);
-
-    if (response.statusCode == 200) {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => RecipeInfo(
-          recipeData: response.data,
-        ),
-      ));
-    } else {
-      print('API request failed with status code: ${response.statusCode}');
     }
   }
 }
