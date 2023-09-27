@@ -1,3 +1,4 @@
+import 'package:ai_food/Constants/apikey.dart';
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
@@ -201,7 +202,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   void chatBotTalk() async {
     final chatsProvider = Provider.of<ChatBotProvider>(context, listen: false);
     chatsProvider.messageLoading(true);
-    const apiKey = '5bae53d0d61b4380b505fd1a01c93c31';
     final apiUrl =
         'https://api.spoonacular.com/food/converse?text=${_messageController.text}&apiKey=$apiKey';
     final response = await AppDio(context).get(path: apiUrl);
@@ -351,7 +351,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
 
   getRecipeInformation({id}) async {
     print("gurirug23r3rhi3hrihior");
-    const apiKey = '1acf1e54a67342b3bfa0f3d0b7888c6e';
     var url =
         "${AppUrls.spoonacularBaseUrl}/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";
     final response = await spoonDio.get(path: url);

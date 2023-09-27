@@ -1,3 +1,4 @@
+import 'package:ai_food/Constants/apikey.dart';
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
@@ -244,7 +245,6 @@ class _SearchScreenState extends State<SearchScreen> {
     if(searchtext.isNotEmpty){
       pref.setString(PrefKey.searchQueryParameter, searchtext);
     }else{}
-    const apiKey = '5bae53d0d61b4380b505fd1a01c93c31';
 
     final apiUrl =
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?query=$searchtext&apiKey=$apiKey';

@@ -15,8 +15,10 @@ import 'package:sizer/sizer.dart';
 
 class RecipeInfo extends StatefulWidget {
   final recipeData;
+  final isFav;
 
-  const RecipeInfo({super.key, this.recipeData});
+
+  const RecipeInfo({super.key, this.recipeData, this.isFav});
 
   @override
   State<RecipeInfo> createState() => _RecipeInfoState();
@@ -53,7 +55,9 @@ class _RecipeInfoState extends State<RecipeInfo>
   void initState() {
     dio = AppDio(context);
     logger.init();
-
+    if (widget.isFav == 1){
+      favoriteTap = true;
+    }
     getUnit();
     _tabController = TabController(length: _tabs.length, vsync: this);
     super.initState();
@@ -69,7 +73,7 @@ class _RecipeInfoState extends State<RecipeInfo>
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var ingredient = widget.recipeData["extendedIngredients"];
-    print("njefbkjbfjk${ingredient.length}");
+    print("njefbkjbfjk${favoriteTap}");
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -702,4 +706,5 @@ class _RecipeInfoState extends State<RecipeInfo>
       print("Something went Wrong ${e}");
     }
   }
+
 }
