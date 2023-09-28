@@ -48,6 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate ?? DateTime.now(),
+      initialEntryMode:DatePickerEntryMode.calendarOnly,
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
       builder: (BuildContext context, Widget? child) {

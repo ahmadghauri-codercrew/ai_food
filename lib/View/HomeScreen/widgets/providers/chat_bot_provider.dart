@@ -37,6 +37,7 @@ class ChatBotProvider extends ChangeNotifier {
   List<Widget> get displayChatsWidget => _displayChatsWidget;
 
   List<Widget> displayChatWidgets (Widget chatsWidget){
+
     _displayChatsWidget.add(chatsWidget);
     notifyListeners();
     return _displayChatsWidget;
