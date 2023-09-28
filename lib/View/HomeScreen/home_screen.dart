@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:ai_food/Constants/apikey.dart';
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
+import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/HomeScreen/search_screen.dart';
@@ -63,13 +65,15 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isHiting = false;
   bool recipeInfoLoader = false;
   List showProgressindicators = [];
+  List? apiRecipeIds;
+
   @override
   void initState() {
-    print("type$type");
     dio = AppDio(context);
     spoondio = SpoonAcularAppDio(context);
     logger.init();
     getqueryValueFromSharedPref();
+    getFavouriteRecipes();
     getUserCredentials();
     setRecipesParameters();
     if (widget.type == 1) {
@@ -112,7 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     }
-    print("value_is ${finalValue} data ${finalValue2}");
     getSuggestedRecipes(
       allergies: finalValue,
       dietaryRestrictions: finalValue2,
@@ -123,8 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(PrefKey.authorization);
     String? name = prefs.getString(PrefKey.userName);
-    print("home_token $token");
-    print("home_name $name");
   }
 
   @override
@@ -136,8 +137,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    print("allergies${widget.allergies}");
-    print("dietaryRestrictions${showProgressindicators}");
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -169,8 +168,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: Text(
-               widget.type == 1 && widget.searchType == 0 ?
-               "${widget.query }": "Search",
+                      widget.type == 1 && widget.searchType == 0
+                          ? "${widget.query}"
+                          : "Search",
                       style: const TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w500),
                     ),
@@ -330,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: Text(
                                         widget.searchType == 1
                                             ? "No results found. Please try adjusting your search parameters."
-                                            :"No results found." ,
+                                            : "No results found.",
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
@@ -344,13 +344,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   getSearchResult({id, index}) async {
-    print("kjbjfejfbjefbefljeblf");
+    print("kjbjfejfbjefbefljeblf$id");
     setState(() {
       isHiting = true;
       showProgressindicators[index] = true;
       print("jbjbdjsbdjbdjsb $showProgressindicators");
     });
-    const apiKey = 'ee50916f81bf4ae8b3240793edbd53ab';
 
     final apiUrl =
         'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey';
@@ -362,11 +361,17 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         isHiting = false;
         showProgressindicators[index] = false;
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => RecipeInfo(
-            recipeData: response.data,
+        final idAsInt = int.tryParse(id.toString());
+        final bool isFav = apiRecipeIds!.contains(idAsInt);
+
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => RecipeInfo(
+              recipeData: response.data,
+              isFav: isFav ? 1 : 0,
+            ),
           ),
-        ));
+        );
       });
     } else {
       print('API request failed with status code: ${response.statusCode}');
@@ -375,8 +380,6 @@ class _HomeScreenState extends State<HomeScreen> {
   ////////////////////////////////////get suggested recipe////////////////////////////////////////////////////////////////////
 
   getSuggestedRecipes({allergies, dietaryRestrictions}) async {
-    const apiKey = 'ee50916f81bf4ae8b3240793edbd53ab';
-
     final allergiesAre =
         allergies.isNotEmpty ? "${allergies.join(',').toLowerCase()}" : "";
     final dietaryRestrictionsAre = dietaryRestrictions.isNotEmpty
@@ -409,7 +412,6 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           randomData = true;
           errorResponse = response.data["message"];
-          print("l;nkwkdn${response.data["message"]}");
         });
       } else {
         showSnackBar(context, "Something Went Wrong!");
@@ -434,28 +436,20 @@ class _HomeScreenState extends State<HomeScreen> {
       response = await dio.get(path: AppUrls.searchParameterUrl);
       var responseData = response.data;
       if (response.statusCode == responseCode405) {
-        print("For For data not found.");
         // showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode404) {
-        print("For For data not found.");
         // showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode400) {
-        print(" Bad Request.");
         // showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode401) {
-        print(" Unauthorized access.");
         // showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode500) {
-        print("Internal server error.");
         // showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode200) {
         if (responseData["status"] == false) {
-          print("Status code is false.");
           // showSnackBar(context, "${responseData["message"]}");
         } else {
-          print("responseData${responseData}");
           var encodeData = jsonEncode(responseData);
-          print("encoded_data is $encodeData");
           prefs.setString(PrefKey.parametersLists, encodeData);
         }
       }
@@ -481,7 +475,6 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
-    const apiKey = 'ee50916f81bf4ae8b3240793edbd53ab';
 
     int currentOffset = widget.offset + 8;
 
@@ -511,7 +504,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await dio.get(path: apiUrl);
 
     if (response.statusCode == 200) {
-      print("response_data_is  ${response.data}");
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return BottomNavView(
           type: 1,
@@ -547,7 +539,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isLoading = true;
     });
-    const apiKey = 'ee50916f81bf4ae8b3240793edbd53ab';
 
     int currentOffset = widget.offset + 8;
 
@@ -557,7 +548,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await dio.get(path: apiUrl);
 
     if (response.statusCode == 200) {
-      print("response_data_is  ${response.data}");
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return BottomNavView(
           type: 1,
@@ -586,6 +576,47 @@ class _HomeScreenState extends State<HomeScreen> {
         print('API request failed with status code: ${response.statusCode}');
         showSnackBar(context, "${response.statusMessage}");
       }
+    }
+  }
+
+  void getFavouriteRecipes() async {
+    var response;
+    int responseCode200 = 200; // For successful request.
+    int responseCode400 = 400; // For Bad Request.
+    int responseCode401 = 401; // For Unauthorized access.
+    int responseCode404 = 404; // For For data not found
+    int responseCode500 = 500; // Internal server error.
+
+    try {
+      response = await dio.get(path: AppUrls.getFavouriteRecipes);
+      var responseData = response.data;
+      if (response.statusCode == responseCode400) {
+
+        print("Bad Request.");
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode401) {
+        print("Unauthorized access.");
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode404) {
+        print(
+            "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode500) {
+        print("Internal server error.");
+        showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode200) {
+        if (responseData["status"] == false) {
+          alertDialogError(context: context, message: responseData["message"]);
+          return;
+        } else {
+          setState(() {
+            apiRecipeIds = responseData["data"]["recipe_ids"];
+          });
+        }
+      }
+    } catch (e) {
+      print("Something went Wrong ${e}");
+      showSnackBar(context, "Something went Wrong.");
     }
   }
 
@@ -649,8 +680,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (isHiting == false) {
                             getSearchResult(
                                 id: "${data[index]["id"]}", index: index);
-                            print(
-                                "bjfebbfebfjkebjkfbebfbejbjbekjfbejfjebfjbejbfbekjb");
+                           
                           }
                         },
                         child: Container(
@@ -689,18 +719,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  getqueryValueFromSharedPref() async{
+  getqueryValueFromSharedPref() async {
     final prefs = await SharedPreferences.getInstance();
     String? query = prefs.getString(PrefKey.searchQueryParameter);
-    if(query!.isEmpty){
-
-    }else{
-      print('aksjdklasjdklajsdkljasdkl');
+    if (query!.isEmpty) {
+    } else {
       setState(() {
         widget.query = query!;
       });
     }
-
   }
-
 }

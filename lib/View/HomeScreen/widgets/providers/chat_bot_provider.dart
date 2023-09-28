@@ -13,7 +13,7 @@ class ChatBotProvider extends ChangeNotifier {
   }
 
   final List<String> _addChatAnswer = [];
-
+  
   List<String> get addChatAnswer => _addChatAnswer;
 
   List<String> addChatsAnswer (String chatsAnswer){

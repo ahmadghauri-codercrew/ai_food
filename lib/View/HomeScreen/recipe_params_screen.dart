@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ai_food/Constants/apikey.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
@@ -509,7 +510,6 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         Provider.of<RegionalDelicacyProvider>(context, listen: false);
     final kitchenProvider =
         Provider.of<KitchenResourcesProvider>(context, listen: false);
-    const apiKey = 'ee50916f81bf4ae8b3240793edbd53ab';
     final style = foodStyleProvider.foodStyle.isNotEmpty
         ? "&cuisine=${foodStyleProvider.foodStyle}"
         : "";
