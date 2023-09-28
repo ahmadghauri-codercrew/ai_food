@@ -1,3 +1,4 @@
+import 'package:ai_food/Constants/apikey.dart';
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
@@ -134,7 +135,6 @@ class _resultContainerState extends State<resultContainer> {
   }
 
   getRecipeInformation({id}) async {
-    const apiKey = 'ee50916f81bf4ae8b3240793edbd53ab';
     var url =
         "${AppUrls.spoonacularBaseUrl}/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";
     final response = await spoonDio.get(path: url);

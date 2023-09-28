@@ -1,3 +1,4 @@
+import 'package:ai_food/Constants/apikey.dart';
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
@@ -393,7 +394,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
 
   getRecipeInformation({id}) async {
     print("gurirug23r3rhi3hrihior");
-    const apiKey = '1acf1e54a67342b3bfa0f3d0b7888c6e';
     var url =
         "${AppUrls.spoonacularBaseUrl}/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";
     final response = await spoonDio.get(path: url);
