@@ -302,7 +302,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
     final chatsProvider = Provider.of<ChatBotProvider>(context, listen: false);
     chatsProvider.messageLoading(true);
     chatsProvider.regenerateLoaderLoading(true);
-    const apiKey = 'ee50916f81bf4ae8b3240793edbd53ab';
     final apiUrl =
         'https://api.spoonacular.com/food/converse?text=${queryText == null ? savePreviousQuery : queryText}&apiKey=$apiKey';
     final response = await AppDio(context).get(path: apiUrl);
@@ -389,23 +388,6 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
     } else {
       print('API request failed with status code: ${response.statusCode}');
       chatsProvider.messageLoading(false);
-    }
-  }
-
-  getRecipeInformation({id}) async {
-    print("gurirug23r3rhi3hrihior");
-    var url =
-        "${AppUrls.spoonacularBaseUrl}/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";
-    final response = await spoonDio.get(path: url);
-
-    if (response.statusCode == 200) {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => RecipeInfo(
-          recipeData: response.data,
-        ),
-      ));
-    } else {
-      print('API request failed with status code: ${response.statusCode}');
     }
   }
 }
