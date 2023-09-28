@@ -5,6 +5,7 @@ import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/HomeScreen/search_screen.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
@@ -66,12 +67,12 @@ class _HomeScreenState extends State<HomeScreen> {
   bool recipeInfoLoader = false;
   List showProgressindicators = [];
   List? apiRecipeIds;
-
   @override
   void initState() {
     dio = AppDio(context);
     spoondio = SpoonAcularAppDio(context);
     logger.init();
+    getqueryValueFromSharedPref();
     getqueryValueFromSharedPref();
     getFavouriteRecipes();
     getUserCredentials();
@@ -504,6 +505,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await dio.get(path: apiUrl);
 
     if (response.statusCode == 200) {
+      print("response_data_is  ${response.data}");
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return BottomNavView(
           type: 1,
@@ -680,7 +682,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (isHiting == false) {
                             getSearchResult(
                                 id: "${data[index]["id"]}", index: index);
-                           
+
                           }
                         },
                         child: Container(

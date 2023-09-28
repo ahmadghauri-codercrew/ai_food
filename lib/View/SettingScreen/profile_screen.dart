@@ -29,11 +29,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _userNameController = TextEditingController();
   List<int> numberListShow = [];
   List<String> measuringUnitListShow = [
-    "US",
+    "Us",
     "Metric",
   ];
   bool checkAPI = false;
-  String updatedvalueM = "US";
+  String updatedvalueM = "us";
   bool showMenu = false;
   bool measuringUnit = false;
 
@@ -539,6 +539,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Map<String, dynamic> params = {
       "name": _userNameController.text,
       "DOB": selectedDateFromPref?? DateFormat('yyyy-MM-dd').format(selectedDate!),
+      "measuring_unit": updatedvalueM.toLowerCase(),
       ...arrangeIndexParam,
       ...arrangeIndexParam2,
     };

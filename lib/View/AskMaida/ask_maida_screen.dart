@@ -27,6 +27,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   late ScrollController _scrollController;
   late AppDio dio;
   late SpoonAcularAppDio spoonDio;
+
   AppLogger logger = AppLogger();
   var queryText;
   var savePreviousQuery;
@@ -387,6 +388,24 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
     } else {
       print('API request failed with status code: ${response.statusCode}');
       chatsProvider.messageLoading(false);
+    }
+  }
+
+  getRecipeInformation({id}) async {
+    print("gurirug23r3rhi3hrihior");
+    const apiKey = '1acf1e54a67342b3bfa0f3d0b7888c6e';
+    var url =
+        "${AppUrls.spoonacularBaseUrl}/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";
+    final response = await spoonDio.get(path: url);
+
+    if (response.statusCode == 200) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RecipeInfo(
+          recipeData: response.data,
+        ),
+      ));
+    } else {
+      print('API request failed with status code: ${response.statusCode}');
     }
   }
 }
