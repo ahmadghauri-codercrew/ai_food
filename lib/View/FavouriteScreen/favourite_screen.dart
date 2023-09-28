@@ -159,7 +159,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                                         decoration:
                                                             BoxDecoration(
                                                           color:
-                                                              AppTheme.appColor,
+                                                              AppTheme.whiteColor,
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(
@@ -169,7 +169,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                                           child: Icon(
                                                             Icons.favorite,
                                                             color: AppTheme
-                                                                .whiteColor,
+                                                                .appColor,
                                                           ),
                                                         ),
                                                       ),
