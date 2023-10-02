@@ -72,56 +72,53 @@ class _HomeScreenState extends State<HomeScreen> {
     dio = AppDio(context);
     spoondio = SpoonAcularAppDio(context);
     logger.init();
-    getqueryValueFromSharedPref();
-    getqueryValueFromSharedPref();
     getFavouriteRecipes();
-    getUserCredentials();
-    setRecipesParameters();
+    // getUserCredentials();
     if (widget.type == 1) {
       type = widget.type;
       showProgressindicators = widget.searchList;
     } else {
-      LoadingDataFromSharedPreffromProfile();
+      // LoadingDataFromSharedPreffromProfile();
     }
 
     super.initState();
   }
 
-  void LoadingDataFromSharedPreffromProfile() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? value;
-    String? value2;
-    List<String> finalValue = [];
-    List<String> finalValue2 = [];
-    List<String>? storedData =
-        prefs.getStringList(PrefKey.dataonBoardScreenAllergies);
-    List<String>? storedData2 =
-        prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction);
-    if (storedData != null && storedData2 != null) {
-      for (String entry in storedData) {
-        String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
-        List<String> parts = result.split(':');
-        if (parts.length == 2) {
-          String key = parts[0].trim();
-          value = parts[1].trim();
-          finalValue.add(value);
-        }
-      }
-      for (String entry in storedData2) {
-        String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
-        List<String> parts = result.split(':');
-        if (parts.length == 2) {
-          String key = parts[0].trim();
-          value2 = parts[1].trim();
-          finalValue2.add(value2);
-        }
-      }
-    }
-    getSuggestedRecipes(
-      allergies: finalValue,
-      dietaryRestrictions: finalValue2,
-    );
-  }
+  // void LoadingDataFromSharedPreffromProfile() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? value;
+  //   String? value2;
+  //   List<String> finalValue = [];
+  //   List<String> finalValue2 = [];
+  //   List<String>? storedData =
+  //       prefs.getStringList(PrefKey.dataonBoardScreenAllergies);
+  //   List<String>? storedData2 =
+  //       prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction);
+  //   if (storedData != null && storedData2 != null) {
+  //     for (String entry in storedData) {
+  //       String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+  //       List<String> parts = result.split(':');
+  //       if (parts.length == 2) {
+  //         String key = parts[0].trim();
+  //         value = parts[1].trim();
+  //         finalValue.add(value);
+  //       }
+  //     }
+  //     for (String entry in storedData2) {
+  //       String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+  //       List<String> parts = result.split(':');
+  //       if (parts.length == 2) {
+  //         String key = parts[0].trim();
+  //         value2 = parts[1].trim();
+  //         finalValue2.add(value2);
+  //       }
+  //     }
+  //   }
+  //   getSuggestedRecipes(
+  //     allergies: finalValue,
+  //     dietaryRestrictions: finalValue2,
+  //   );
+  // }
 
   void getUserCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -142,68 +139,34 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        toolbarHeight: 100,
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         elevation: 0,
-        title: Padding(
-          padding: const EdgeInsets.only(top: 28.0),
-          child: GestureDetector(
-            onTap: () {
-              if (type == 1) {
-                pushReplacement(context, const SearchScreen());
-              } else {
-                push(context, const SearchScreen());
-              }
-            },
-            child: Container(
-              width: width,
-              height: 50,
-              decoration: BoxDecoration(
-                color: const Color(0xffd9c4ef),
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Text(
-                      widget.type == 1 && widget.searchType == 0
-                          ? "${widget.query}"
-                          : "Search",
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  Stack(
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFB38ADE),
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(100),
-                              bottomRight: Radius.circular(100)),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                          child: SvgPicture.asset(
-                            "assets/images/Search.svg",
-                            width: 30,
-                            height: 30,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+
+        toolbarHeight: 75,
+
+        leadingWidth: 60,
+        leading: InkWell(
+          onTap: () {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => BottomNavView(),));
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: 15.0,
+              top: 20,
+              bottom: 11
             ),
+            child: Container(
+                height: 25,
+                width: 25,
+                decoration: BoxDecoration(
+                    color: AppTheme.appColor,
+                    borderRadius: BorderRadius.circular(100)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Icon(Icons.arrow_back_ios,
+                      size: 25, color: AppTheme.whiteColor),
+                )),
           ),
         ),
       ),
@@ -242,11 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               type == 1
                                   ? InkWell(
                                       onTap: () async {
-                                        if (widget.searchType == 1) {
-                                          await reGenerateRecipe(context);
-                                        } else {
-                                          await reGenerateRecipeQuery(context);
-                                        }
+                                        await reGenerateRecipe(context);
                                       },
                                       child: Container(
                                         height: 35,
@@ -380,85 +339,50 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   ////////////////////////////////////get suggested recipe////////////////////////////////////////////////////////////////////
 
-  getSuggestedRecipes({allergies, dietaryRestrictions}) async {
-    final allergiesAre =
-        allergies.isNotEmpty ? "${allergies.join(',').toLowerCase()}" : "";
-    final dietaryRestrictionsAre = dietaryRestrictions.isNotEmpty
-        ? "${dietaryRestrictions.join(',').toLowerCase()}"
-        : "";
-    String apiFinalUrl;
-    if (allergiesAre.isEmpty && dietaryRestrictionsAre.isNotEmpty) {
-      apiFinalUrl =
-          '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?number=8&tags=${dietaryRestrictionsAre}&apiKey=$apiKey';
-    } else if (allergiesAre.isNotEmpty && dietaryRestrictionsAre.isEmpty) {
-      apiFinalUrl =
-          'https://api.spoonacular.com/recipes/complexSearch?number=8&intolerances=${allergiesAre}&apiKey=$apiKey';
-    } else if (allergiesAre.isNotEmpty && dietaryRestrictionsAre.isNotEmpty) {
-      apiFinalUrl =
-          'https://api.spoonacular.com/recipes/complexSearch?number=8&intolerances=${allergiesAre}&tags=${dietaryRestrictionsAre}&apiKey=$apiKey';
-    } else {
-      apiFinalUrl =
-          'https://api.spoonacular.com/recipes/complexSearch?number=8&apiKey=$apiKey';
-    }
-    try {
-      var response;
-      response = await spoondio.get(path: apiFinalUrl);
-      if (response.statusCode == 200) {
-        setState(() {
-          responseData = response.data["results"];
-          showProgressindicators =
-              List.generate(responseData.length, (index) => false);
-        });
-      } else if (response.statusCode == 402) {
-        setState(() {
-          randomData = true;
-          errorResponse = response.data["message"];
-        });
-      } else {
-        showSnackBar(context, "Something Went Wrong!");
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  // getSuggestedRecipes({allergies, dietaryRestrictions}) async {
+  //   final allergiesAre =
+  //       allergies.isNotEmpty ? "${allergies.join(',').toLowerCase()}" : "";
+  //   final dietaryRestrictionsAre = dietaryRestrictions.isNotEmpty
+  //       ? "${dietaryRestrictions.join(',').toLowerCase()}"
+  //       : "";
+  //   String apiFinalUrl;
+  //   if (allergiesAre.isEmpty && dietaryRestrictionsAre.isNotEmpty) {
+  //     apiFinalUrl =
+  //         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?number=8&tags=${dietaryRestrictionsAre}&apiKey=$apiKey';
+  //   } else if (allergiesAre.isNotEmpty && dietaryRestrictionsAre.isEmpty) {
+  //     apiFinalUrl =
+  //         'https://api.spoonacular.com/recipes/complexSearch?number=8&intolerances=${allergiesAre}&apiKey=$apiKey';
+  //   } else if (allergiesAre.isNotEmpty && dietaryRestrictionsAre.isNotEmpty) {
+  //     apiFinalUrl =
+  //         'https://api.spoonacular.com/recipes/complexSearch?number=8&intolerances=${allergiesAre}&tags=${dietaryRestrictionsAre}&apiKey=$apiKey';
+  //   } else {
+  //     apiFinalUrl =
+  //         'https://api.spoonacular.com/recipes/complexSearch?number=8&apiKey=$apiKey';
+  //   }
+  //   try {
+  //     var response;
+  //     response = await spoondio.get(path: apiFinalUrl);
+  //     if (response.statusCode == 200) {
+  //       setState(() {
+  //         responseData = response.data["results"];
+  //         showProgressindicators =
+  //             List.generate(responseData.length, (index) => false);
+  //       });
+  //     } else if (response.statusCode == 402) {
+  //       setState(() {
+  //         randomData = true;
+  //         errorResponse = response.data["message"];
+  //       });
+  //     } else {
+  //       showSnackBar(context, "Something Went Wrong!");
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   //get recipes data api
-  void setRecipesParameters() async {
-    var response;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    const int responseCode200 = 200; // For successful request.
-    const int responseCode400 = 400; // For Bad Request.
-    const int responseCode401 = 401; // For Unauthorized access.
-    const int responseCode404 = 404; // For For data not found
-    const int responseCode405 = 405; // Method not allowed
-    const int responseCode500 = 500; // Internal server error.
 
-    try {
-      response = await dio.get(path: AppUrls.searchParameterUrl);
-      var responseData = response.data;
-      if (response.statusCode == responseCode405) {
-        // showSnackBar(context, "${responseData["message"]}");
-      } else if (response.statusCode == responseCode404) {
-        // showSnackBar(context, "${responseData["message"]}");
-      } else if (response.statusCode == responseCode400) {
-        // showSnackBar(context, "${responseData["message"]}");
-      } else if (response.statusCode == responseCode401) {
-        // showSnackBar(context, "${responseData["message"]}");
-      } else if (response.statusCode == responseCode500) {
-        // showSnackBar(context, "${responseData["message"]}");
-      } else if (response.statusCode == responseCode200) {
-        if (responseData["status"] == false) {
-          // showSnackBar(context, "${responseData["message"]}");
-        } else {
-          var encodeData = jsonEncode(responseData);
-          prefs.setString(PrefKey.parametersLists, encodeData);
-        }
-      }
-    } catch (e) {
-      print("Something went Wrong ${e}");
-      // showSnackBar(context, "Something went Wrong.");
-    }
-  }
 
 //////////////////////////////
 //Here is the function for regenrating recipes
@@ -537,49 +461,49 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future reGenerateRecipeQuery(context) async {
-    setState(() {
-      isLoading = true;
-    });
-
-    int currentOffset = widget.offset + 8;
-
-    final apiUrl =
-        'https://api.spoonacular.com/recipes/complexSearch?query=${widget.query}&number=8&offset=$currentOffset&apiKey=$apiKey';
-
-    final response = await dio.get(path: apiUrl);
-
-    if (response.statusCode == 200) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-        return BottomNavView(
-          type: 1,
-          data: response.data["results"],
-          offset: currentOffset,
-          totalResults: response.data["totalResults"],
-          query: widget.query,
-          searchType: 0,
-          searchList:
-              List.generate(response.data["results"].length, (index) => false),
-        );
-      }));
-      setState(() {
-        isLoading = false;
-      });
-    } else {
-      if (response.statusCode == 402) {
-        setState(() {
-          isLoading = false;
-        });
-        showSnackBar(context, "${response.statusMessage}");
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        print('API request failed with status code: ${response.statusCode}');
-        showSnackBar(context, "${response.statusMessage}");
-      }
-    }
-  }
+  // Future reGenerateRecipeQuery(context) async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //
+  //   int currentOffset = widget.offset + 8;
+  //
+  //   final apiUrl =
+  //       'https://api.spoonacular.com/recipes/complexSearch?query=${widget.query}&number=8&offset=$currentOffset&apiKey=$apiKey';
+  //
+  //   final response = await dio.get(path: apiUrl);
+  //
+  //   if (response.statusCode == 200) {
+  //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+  //       return BottomNavView(
+  //         type: 1,
+  //         data: response.data["results"],
+  //         offset: currentOffset,
+  //         totalResults: response.data["totalResults"],
+  //         query: widget.query,
+  //         searchType: 0,
+  //         searchList:
+  //             List.generate(response.data["results"].length, (index) => false),
+  //       );
+  //     }));
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   } else {
+  //     if (response.statusCode == 402) {
+  //       setState(() {
+  //         isLoading = false;
+  //       });
+  //       showSnackBar(context, "${response.statusMessage}");
+  //     } else {
+  //       setState(() {
+  //         isLoading = false;
+  //       });
+  //       print('API request failed with status code: ${response.statusCode}');
+  //       showSnackBar(context, "${response.statusMessage}");
+  //     }
+  //   }
+  // }
 
   void getFavouriteRecipes() async {
     var response;
@@ -721,14 +645,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  getqueryValueFromSharedPref() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? query = prefs.getString(PrefKey.searchQueryParameter);
-    if (query!.isEmpty) {
-    } else {
-      setState(() {
-        widget.query = query!;
-      });
-    }
-  }
+
 }

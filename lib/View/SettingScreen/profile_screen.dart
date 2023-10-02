@@ -29,11 +29,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _userNameController = TextEditingController();
   List<int> numberListShow = [];
   List<String> measuringUnitListShow = [
-    "Us",
+    "US",
     "Metric",
   ];
   bool checkAPI = false;
-  String updatedvalueM = "us";
+  var updatedvalueM;
   bool showMenu = false;
   bool measuringUnit = false;
 
@@ -149,9 +149,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               SizedBox(
                 height: 220,
-                width: double.infinity,
                 child: SvgPicture.asset(
                   AppAssetsImage.profile_updated_image,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.fill,
+
                   // color: AppTheme.whiteColor,
                 ),
               ),
@@ -433,45 +435,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 20.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                measuringUnit = false;
-                                updatedvalueM = "US";
-                              });
-                            },
-                            child: AppText.appText(
-                              "US",
-                              fontSize: 18,
-                              textColor: AppTheme.whiteColor,
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  width: 1.0,
-                                  color: AppTheme.whiteColor,
+                        children: measuringUnitListShow.map((value) {
+                          return Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    measuringUnit = false;
+                                    updatedvalueM = value;
+                                  });
+                                },
+                                child: AppText.appText(
+                                  value,
+                                  fontSize: 18,
+                                  textColor: AppTheme.whiteColor,
                                 ),
                               ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                measuringUnit = false;
-                                updatedvalueM = "Metric";
-                              });
-                            },
-                            child: AppText.appText(
-                              "Metric",
-                              fontSize: 18,
-                              textColor: AppTheme.whiteColor,
-                            ),
-                          ),
-                        ],
+                              Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      width: 1.0,
+                                      color: AppTheme.whiteColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+
+                        } ).toList()
                       ),
                     ),
                   )),

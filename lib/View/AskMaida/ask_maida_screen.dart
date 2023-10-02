@@ -301,9 +301,8 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   chatBotTalk() async {
     final chatsProvider = Provider.of<ChatBotProvider>(context, listen: false);
     chatsProvider.messageLoading(true);
-    chatsProvider.regenerateLoaderLoading(true);
-    final apiUrl =
-        'https://api.spoonacular.com/food/converse?text=${queryText == null ? savePreviousQuery : queryText}&apiKey=$apiKey';
+
+    final apiUrl = 'https://api.spoonacular.com/food/converse?text=${queryText == null ? savePreviousQuery : queryText}&apiKey=$apiKey';
     final response = await AppDio(context).get(path: apiUrl);
     if (response.statusCode == 200) {
       final resData = response.data;
@@ -382,6 +381,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
             ],
           ),
         );
+        chatsProvider.regenerateLoaderLoading(true);
         _messageController.clear();
         chatsProvider.messageLoading(false);
       }

@@ -1,11 +1,8 @@
-import 'dart:developer';
-import 'dart:io';
+
 
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
-import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
-import 'package:ai_food/Utils/widgets/others/custom_app_bar.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/food_style_provider.dart';
@@ -596,7 +593,7 @@ class _SettingScreenState extends State<SettingScreen> {
   Future<void> logout(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(PrefKey.authorization);
-    await prefs.remove(PrefKey.searchQueryParameter);
+   // await prefs.remove(PrefKey.searchQueryParameter);
     await Authentication.signOut(context: context);
   }
 }
