@@ -72,8 +72,9 @@ class _RecipeInfoState extends State<RecipeInfo>
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
+
     var ingredient = widget.recipeData["extendedIngredients"];
-    print("njefbkjbfjk${favoriteTap}");
+    // print("njefbkjbfjk${favoriteTap}");
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -105,13 +106,16 @@ class _RecipeInfoState extends State<RecipeInfo>
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              // color: Colors.amber,
-              height: 390,
-              child: Column(
+        child: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/logo.png"),
+                  opacity: 0.10,
+                  scale: 0.5)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Column(
                 children: [
                   Padding(
                     padding:
@@ -153,8 +157,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                                         borderRadius:
                                             BorderRadius.circular(25)),
                                     child: Container(
-                                      height: 45,
-                                      width: 45,
+                                      height: 40,
+                                      width: 40,
                                       decoration: BoxDecoration(
                                           color: AppTheme.appColor,
                                           borderRadius:
@@ -190,8 +194,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                                               borderRadius:
                                                   BorderRadius.circular(25)),
                                           child: Container(
-                                              height: 45,
-                                              width: 45,
+                                              height: 40,
+                                              width: 40,
                                               decoration: BoxDecoration(
                                                   color: AppTheme.appColor,
                                                   borderRadius:
@@ -223,8 +227,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                                               borderRadius:
                                                   BorderRadius.circular(25)),
                                           child: Container(
-                                              height: 45,
-                                              width: 45,
+                                              height: 40,
+                                              width: 40,
                                               decoration: BoxDecoration(
                                                   color: AppTheme.appColor,
                                                   borderRadius:
@@ -251,14 +255,15 @@ class _RecipeInfoState extends State<RecipeInfo>
                     height: 10,
                   ),
                   Container(
-                    height: 310,
+                    height: 300,
+                    // color: Colors.red,
                     width: screenWidth,
                     child: Stack(children: [
                       Positioned(
                         top: 60,
                         child: Container(
-                          height: screenHeight * 0.35,
-                          width: screenHeight * 0.2,
+                          height: 228,
+                          width: 40.w,
                           decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
@@ -277,7 +282,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                       ),
                       Positioned(
                         top: 10,
-                        left: 60,
+                        left: 70,
                         child: Hero(
                           tag: "hero-shopping",
                           transitionOnUserGestures: true,
@@ -287,14 +292,13 @@ class _RecipeInfoState extends State<RecipeInfo>
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
                             child: Container(
-                              height: screenHeight * 0.33,
-                              width: screenWidth * .6,
-                              // width: 193,
+                              height: 193,
+                              width: 55.w,
                               decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.15),
-                                    spreadRadius: 3,
+                                    // spreadRadius: 3,
                                     blurRadius: 1,
                                     offset: const Offset(5,
                                         5), // This controls the vertical offset (bottom)
@@ -322,7 +326,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                         ),
                       ),
                       Positioned(
-                        top: 245,
+                        top: 225,
                         left: 45.w,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -370,99 +374,46 @@ class _RecipeInfoState extends State<RecipeInfo>
                   ),
                 ],
               ),
-            ),
-            Container(
-              height: 300,
-              child: Column(
-                children: [
-                  TabBar(
-                    indicator: UnderlineTabIndicator(
-                        borderSide:
-                            BorderSide(width: 3.0, color: AppTheme.appColor),
-                        insets: EdgeInsets.symmetric(horizontal: 30.0)),
-                    indicatorColor: AppTheme.appColor,
-                    indicatorWeight: 3,
-                    labelColor: AppTheme.appColor,
-                    unselectedLabelColor: const Color(0xffd9c4ef),
-                    tabs: _tabs,
-                    labelPadding: const EdgeInsets.only(top: 20.0, bottom: 8.0),
-                    controller: _tabController,
-                  ),
-                  Expanded(
-                    child: TabBarView(
+              SizedBox(
+                height: 300,
+                child: Column(
+                  children: [
+                    TabBar(
+                      indicator: UnderlineTabIndicator(
+                          borderSide:
+                              BorderSide(width: 3.0, color: AppTheme.appColor),
+                          insets: EdgeInsets.symmetric(horizontal: 30.0)),
+                      indicatorColor: AppTheme.appColor,
+                      indicatorWeight: 3,
+                      labelColor: AppTheme.appColor,
+                      unselectedLabelColor: const Color(0xffd9c4ef),
+                      tabs: _tabs,
+                      labelPadding:
+                          const EdgeInsets.only(top: 20.0, bottom: 8.0),
                       controller: _tabController,
-                      children: [
-                        ListView.builder(
-                          physics: const ScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: widget
-                                  .recipeData["analyzedInstructions"].isEmpty
-                              ? widget.recipeData["analyzedInstructions"].length
-                              : widget
-                                  .recipeData["analyzedInstructions"][0]
-                                      ["steps"]
-                                  .length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 8),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 8.0),
-                                        child: Container(
-                                          height: 4,
-                                          width: 4,
-                                          decoration: BoxDecoration(
-                                            color: AppTheme.appColor,
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Expanded(
-                                        child: Container(
-                                          child: Text(
-                                            widget
-                                                    .recipeData[
-                                                        "analyzedInstructions"]
-                                                    .isEmpty
-                                                ? "steps"
-                                                : "${widget.recipeData["analyzedInstructions"][0]["steps"][index]["step"]}",
-                                            textAlign: TextAlign.justify,
-                                            style: TextStyle(
-                                                color: AppTheme.appColor,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500),
-                                            softWrap: true,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                        ListView.builder(
-                          physics: const ScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: ingredient.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 8),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    child: Row(
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          ListView.builder(
+                            physics: const ScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: widget
+                                    .recipeData["analyzedInstructions"].isEmpty
+                                ? widget
+                                    .recipeData["analyzedInstructions"].length
+                                : widget
+                                    .recipeData["analyzedInstructions"][0]
+                                        ["steps"]
+                                    .length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 8),
+                                child: Column(
+                                  children: [
+                                    Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -482,86 +433,145 @@ class _RecipeInfoState extends State<RecipeInfo>
                                         const SizedBox(width: 5),
                                         Expanded(
                                           child: Container(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  width: screenWidth * 0.55,
-                                                  child: Text(
-                                                    capitalize(ingredient[index]
-                                                        ["originalName"]),
-                                                    textAlign:
-                                                        TextAlign.justify,
-                                                    softWrap: true,
-                                                    style: TextStyle(
-                                                        color:
-                                                            AppTheme.appColor,
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 5),
-                                                Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      unit == "Metric"
-                                                          ? "${ingredient[index]["measures"]["metric"]["amount"]}"
-                                                          : "${ingredient[index]["measures"]["us"]["amount"]}",
-                                                      textAlign:
-                                                          TextAlign.justify,
-                                                      softWrap: true,
-                                                      style: TextStyle(
-                                                          color:
-                                                              AppTheme.appColor,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 3,
-                                                    ),
-                                                    Text(
-                                                      unit == "Metric"
-                                                          ? "${ingredient[index]["measures"]["metric"]["unitShort"]}"
-                                                          : "${ingredient[index]["measures"]["us"]["unitShort"]}",
-                                                      textAlign:
-                                                          TextAlign.justify,
-                                                      softWrap: true,
-                                                      style: TextStyle(
-                                                          color:
-                                                              AppTheme.appColor,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                                            child: Text(
+                                              widget
+                                                      .recipeData[
+                                                          "analyzedInstructions"]
+                                                      .isEmpty
+                                                  ? "steps"
+                                                  : "${widget.recipeData["analyzedInstructions"][0]["steps"][index]["step"]}",
+                                              textAlign: TextAlign.justify,
+                                              style: TextStyle(
+                                                  color: AppTheme.appColor,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500),
+                                              softWrap: true,
                                             ),
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                          ListView.builder(
+                            physics: const ScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: ingredient.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 8),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 8.0),
+                                            child: Container(
+                                              height: 4,
+                                              width: 4,
+                                              decoration: BoxDecoration(
+                                                color: AppTheme.appColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Expanded(
+                                            child: Container(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    width: screenWidth * 0.55,
+                                                    child: Text(
+                                                      capitalize(
+                                                          ingredient[index]
+                                                              ["originalName"]),
+                                                      textAlign:
+                                                          TextAlign.justify,
+                                                      softWrap: true,
+                                                      style: TextStyle(
+                                                          color:
+                                                              AppTheme.appColor,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        unit == "Metric"
+                                                            ? "${ingredient[index]["measures"]["metric"]["amount"]}"
+                                                            : "${ingredient[index]["measures"]["us"]["amount"]}",
+                                                        textAlign:
+                                                            TextAlign.justify,
+                                                        softWrap: true,
+                                                        style: TextStyle(
+                                                            color: AppTheme
+                                                                .appColor,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 3,
+                                                      ),
+                                                      Text(
+                                                        unit == "Metric"
+                                                            ? "${ingredient[index]["measures"]["metric"]["unitShort"]}"
+                                                            : "${ingredient[index]["measures"]["us"]["unitShort"]}",
+                                                        textAlign:
+                                                            TextAlign.justify,
+                                                        softWrap: true,
+                                                        style: TextStyle(
+                                                            color: AppTheme
+                                                                .appColor,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -76,7 +76,6 @@ class _resultContainerState extends State<resultContainer> {
             seeDetails == false
                 ? InkWell(
                     onTap: () async {
-
                       setState(() {
                         seeDetails = true;
                       });
@@ -126,7 +125,8 @@ class _resultContainerState extends State<resultContainer> {
                     ),
                   )
                 : Center(
-                    child: CircularProgressIndicator(color: AppTheme.whiteColor),
+                    child:
+                        CircularProgressIndicator(color: AppTheme.whiteColor),
                   )
           ],
         ),
@@ -137,11 +137,23 @@ class _resultContainerState extends State<resultContainer> {
   getRecipeInformation({id}) async {
     var url =
         "${AppUrls.spoonacularBaseUrl}/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";
+    var url2 =
+        "${AppUrls.spoonacularBaseUrl}/recipes/$id/information?includeNutrition=false&apiKey=$apiKey2";
     final response = await spoonDio.get(path: url);
 
     if (response.statusCode == 200) {
       setState(() {
-        seeDetails =false;
+        seeDetails = false;
+      });
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RecipeInfo(
+          recipeData: response.data,
+        ),
+      ));
+    } else if (response.statusCode == 402) {
+      final response = await spoonDio.get(path: url2);
+      setState(() {
+        seeDetails = false;
       });
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => RecipeInfo(
