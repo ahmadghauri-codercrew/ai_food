@@ -10,9 +10,6 @@ class AppUrls {
   static const String logoutUrl = "/api/logout";
   static const String searchParameterUrl = "/api/seach-parameters";
   static const String getFavouriteRecipes = "/api/favourite-recipe";
-
   static const String favouriteURl = "/api/favourite-recipe";
   static const String unFavouriteURl = "/api/unfavourite-recipe";
-
-
 }
