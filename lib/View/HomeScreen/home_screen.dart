@@ -139,208 +139,217 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        toolbarHeight: 100,
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        title: Padding(
-          padding: const EdgeInsets.only(top: 28.0),
-          child: GestureDetector(
-            onTap: () {
-              if (type == 1) {
-                pushReplacement(context, const SearchScreen());
-              } else {
-                push(context, const SearchScreen());
-              }
-            },
-            child: Container(
-              width: width,
-              height: 50,
-              decoration: BoxDecoration(
-                color: const Color(0xffd9c4ef),
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Text(
-                      widget.type == 1 && widget.searchType == 0
-                          ? "${widget.query}"
-                          : "Search",
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  Stack(
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFB38ADE),
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(100),
-                              bottomRight: Radius.circular(100)),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                          child: SvgPicture.asset(
-                            "assets/images/Search.svg",
-                            width: 30,
-                            height: 30,
+        // appBar: AppBar(
+        //   toolbarHeight: 100,
+        //   backgroundColor: Colors.white,
+        //   automaticallyImplyLeading: false,
+        //   elevation: 0,
+        //   title: Padding(
+        //     padding: const EdgeInsets.only(top: 28.0),
+        //     child: GestureDetector(
+        //       onTap: () {
+        //         if (type == 1) {
+        //           pushReplacement(context, const SearchScreen());
+        //         } else {
+        //           push(context, const SearchScreen());
+        //         }
+        //       },
+        //       child: Container(
+        //         width: width,
+        //         height: 50,
+        //         decoration: BoxDecoration(
+        //           color: const Color(0xffd9c4ef),
+        //           borderRadius: BorderRadius.circular(100),
+        //         ),
+        //         child: Row(
+        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //           children: [
+        //             Padding(
+        //               padding: const EdgeInsets.only(left: 20.0),
+        //               child: Text(
+        //                 widget.type == 1 && widget.searchType == 0
+        //                     ? "${widget.query}"
+        //                     : "Search",
+        //                 style: const TextStyle(
+        //                     fontSize: 15, fontWeight: FontWeight.w500),
+        //               ),
+        //             ),
+        //             Stack(
+        //               children: [
+        //                 Container(
+        //                   width: 60,
+        //                   height: 50,
+        //                   decoration: const BoxDecoration(
+        //                     color: Color(0xFFB38ADE),
+        //                     borderRadius: BorderRadius.only(
+        //                         topRight: Radius.circular(100),
+        //                         bottomRight: Radius.circular(100)),
+        //                   ),
+        //                 ),
+        //                 Align(
+        //                   alignment: Alignment.center,
+        //                   child: Padding(
+        //                     padding: const EdgeInsets.symmetric(horizontal: 14.0),
+        //                     child: SvgPicture.asset(
+        //                       "assets/images/Search.svg",
+        //                       width: 30,
+        //                       height: 30,
+        //                     ),
+        //                   ),
+        //                 ),
+        //               ],
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        body: isLoading
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: AppTheme.appColor,
+                ),
+              )
+            : Container(
+                width: width,
+                // color: Colors.blueGrey,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 10),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            height: 20,
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-      body: isLoading
-          ? Center(
-              child: CircularProgressIndicator(
-                color: AppTheme.appColor,
-              ),
-            )
-          : Container(
-              width: width,
-              // color: Colors.blueGrey,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 10),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10.0, right: 10, bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              AppText.appText(
-                                  type == 0
-                                      ? "Recommended:"
-                                      : "Search results:",
-                                  fontSize: 20,
-                                  textColor: AppTheme.appColor,
-                                  fontWeight: FontWeight.w600),
-                              // REGENERATE RECIPE BUTTON
-                              type == 1
-                                  ? InkWell(
-                                      onTap: () async {
-                                        if (widget.searchType == 1) {
-                                          await reGenerateRecipe(context);
-                                        } else {
-                                          await reGenerateRecipeQuery(context);
-                                        }
-                                      },
-                                      child: Container(
-                                        height: 35,
-                                        decoration: BoxDecoration(
-                                          color: AppTheme.whiteColor,
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          border: Border.all(
-                                              color: AppTheme.appColor),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10.0, right: 10),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Icon(
-                                                Icons.autorenew,
-                                                color: AppTheme.appColor,
-                                                size: 18,
-                                              ),
-                                              const SizedBox(
-                                                width: 4,
-                                              ),
-                                              AppText.appText(
-                                                "Regenerate result",
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                                textColor: AppTheme.appColor,
-                                              ),
-                                            ],
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 10.0, right: 10, bottom: 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                AppText.appText(
+                                    // type == 0
+                                    //     ? "Recommended:"
+                                    // :
+                                    "Search results:",
+                                    fontSize: 20,
+                                    textColor: AppTheme.appColor,
+                                    fontWeight: FontWeight.w600),
+                                // REGENERATE RECIPE BUTTON
+                                type == 1
+                                    ? InkWell(
+                                        onTap: () async {
+                                          if (widget.searchType == 1) {
+                                            await reGenerateRecipe(context);
+                                          } else {
+                                            await reGenerateRecipeQuery(
+                                                context);
+                                          }
+                                        },
+                                        child: Container(
+                                          height: 35,
+                                          decoration: BoxDecoration(
+                                            color: AppTheme.whiteColor,
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            border: Border.all(
+                                                color: AppTheme.appColor),
                                           ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10.0, right: 10),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Icon(
+                                                  Icons.autorenew,
+                                                  color: AppTheme.appColor,
+                                                  size: 18,
+                                                ),
+                                                const SizedBox(
+                                                  width: 4,
+                                                ),
+                                                AppText.appText(
+                                                  "Regenerate result",
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600,
+                                                  textColor: AppTheme.appColor,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
+                              ],
+                            ),
+                          ),
+                          type == 0
+                              ? responseData == null
+                                  ? randomData == false
+                                      ? Container(
+                                          height: 500,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: Center(
+                                            child: CircularProgressIndicator(
+                                              color: AppTheme.appColor,
+                                            ),
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20.0),
+                                          child: Container(
+                                            height: 500,
+                                            child: Center(
+                                                child: AppText.appText(
+                                                    "${errorResponse}")),
+                                          ),
+                                        )
+                                  : responseData.isEmpty
+                                      ? Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20.0),
+                                          child: Container(
+                                            height: 500,
+                                            child: Center(
+                                                child: AppText.appText(
+                                                    "No results found. Please try adjusting your profile parameters.")),
+                                          ),
+                                        )
+                                      : gridView(data: responseData)
+                              : widget.data.length == 0
+                                  ? Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.6,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Center(
+                                        child: Text(
+                                          widget.searchType == 1
+                                              ? "No results found. Please try adjusting your search parameters."
+                                              : "No results found.",
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
                                     )
-                                  : const SizedBox.shrink(),
-                            ],
-                          ),
-                        ),
-                        type == 0
-                            ? responseData == null
-                                ? randomData == false
-                                    ? Container(
-                                        height: 500,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                            color: AppTheme.appColor,
-                                          ),
-                                        ),
-                                      )
-                                    : Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20.0),
-                                        child: Container(
-                                          height: 500,
-                                          child: Center(
-                                              child: AppText.appText(
-                                                  "${errorResponse}")),
-                                        ),
-                                      )
-                                : responseData.isEmpty
-                                    ? Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20.0),
-                                        child: Container(
-                                          height: 500,
-                                          child: Center(
-                                              child: AppText.appText(
-                                                  "No results found. Please try adjusting your profile parameters.")),
-                                        ),
-                                      )
-                                    : gridView(data: responseData)
-                            : widget.data.length == 0
-                                ? Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.6,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Center(
-                                      child: Text(
-                                        widget.searchType == 1
-                                            ? "No results found. Please try adjusting your search parameters."
-                                            : "No results found.",
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  )
-                                : gridView(data: widget.data)
-                      ]),
+                                  : gridView(data: widget.data)
+                        ]),
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 
@@ -593,7 +602,6 @@ class _HomeScreenState extends State<HomeScreen> {
       response = await dio.get(path: AppUrls.getFavouriteRecipes);
       var responseData = response.data;
       if (response.statusCode == responseCode400) {
-
         print("Bad Request.");
         showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode401) {
@@ -682,7 +690,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (isHiting == false) {
                             getSearchResult(
                                 id: "${data[index]["id"]}", index: index);
-
                           }
                         },
                         child: Container(
