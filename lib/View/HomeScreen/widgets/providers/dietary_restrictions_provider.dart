@@ -21,6 +21,21 @@ class DietaryRestrictionsProvider extends ChangeNotifier {
     notifyListeners();
     return addDietaryRestrictions;
   }
+  // final List<int> _listIndex = [];
+  //
+  // List<int> get listIndex => _listIndex;
+  //
+  // List<int> addDietaryRestrictionslistIndex(int index) {
+  //   _listIndex.add(index);
+  //   notifyListeners();
+  //   return listIndex;
+  // }
+  // List<int> removeDietaryRestrictionslistIndex(int index) {
+  //   _listIndex.removeAt(index);
+  //   notifyListeners();
+  //   return listIndex;
+  // }
+
 
   final List<RecipesParameterClass> _dietaryRestrictionsRecipesParameters = [];
 
