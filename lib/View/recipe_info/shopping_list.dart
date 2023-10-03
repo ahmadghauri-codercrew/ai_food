@@ -162,7 +162,7 @@ class _ShoppingListState extends State<ShoppingList> {
           image: DecorationImage(
               image: AssetImage("assets/images/logo.png"),
               scale: 0.5,
-              opacity: 0.10)),
+              opacity: 0.11)),
       child: Padding(
         padding: const EdgeInsets.only(left: 20.0, right: 20, top: 10),
         child: Column(

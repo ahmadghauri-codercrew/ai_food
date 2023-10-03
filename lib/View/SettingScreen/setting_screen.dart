@@ -70,7 +70,7 @@ class _SettingScreenState extends State<SettingScreen> {
             image: DecorationImage(
                 image: AssetImage("assets/images/logo.png"),
                 scale: 0.5,
-                opacity: 0.10)),
+                opacity: 0.11)),
         child: Padding(
           padding: EdgeInsets.only(left: 5.w, right: 5.w),
           child: Column(children: [

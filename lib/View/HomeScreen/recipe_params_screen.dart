@@ -200,7 +200,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
               image: DecorationImage(
                   image: AssetImage("assets/images/logo.png"),
                   scale: 0.5,
-                  opacity: 0.10)),
+                  opacity: 0.11)),
           width: width,
           height: height,
           child: SingleChildScrollView(
@@ -457,87 +457,91 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   Widget customFoodStyle() {
     final foodStyleProvider =
         Provider.of<FoodStyleProvider>(context, listen: false);
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.appColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(10),
-          bottomRight: Radius.circular(10),
+    return Padding(
+      padding: const EdgeInsets.only(top: 70.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppTheme.appColor,
+          borderRadius: BorderRadius.circular(10),
         ),
-        child: SizedBox(
-          width: 227,
-          height: 260,
-          child: GestureDetector(
-            onTap: () {
-              // This handles the tap outside the list
-              setState(() {
-                showFoodStyle = false;
-              });
-            },
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: foodStyle.length,
-              itemBuilder: (context, int index) {
-                int max = foodStyle.length;
-                return InkWell(
-                  onTap: () {
-                    setState(() {
-                      foodStyleProvider.clearFoodStyleValue();
-                      showFoodStyle = false;
-                      addFoodStyle.insert(0, foodStyle[index]);
-                      foodStyleProvider.setFoodStyleValue(foodStyle[index]);
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppTheme.appColor,
-                    ),
-                    child: Padding(
-                      padding: index == 0
-                          ? const EdgeInsets.only(top: 10.0)
-                          : (index == max - 1
-                              ? const EdgeInsets.only(bottom: 10.0)
-                              : const EdgeInsets.symmetric(vertical: 0.0)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 18.0),
-                            child: AppText.appText(
-                              foodStyle[index],
-                              fontSize: 18,
-                              textColor: AppTheme.whiteColor,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+          ),
+          child: SizedBox(
+            width: 227,
+            height: 260,
+            child: GestureDetector(
+              onTap: () {
+                // This handles the tap outside the list
+                setState(() {
+                  showFoodStyle = false;
+                });
+              },
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: foodStyle.length,
+                itemBuilder: (context, int index) {
+                  int max = foodStyle.length;
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        foodStyleProvider.clearFoodStyleValue();
+                        showFoodStyle = false;
+                        addFoodStyle.insert(0, foodStyle[index]);
+                        foodStyleProvider.setFoodStyleValue(foodStyle[index]);
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppTheme.appColor,
+                      ),
+                      child: Padding(
+                        padding: index == 0
+                            ? const EdgeInsets.only(top: 10.0)
+                            : (index == max - 1
+                                ? const EdgeInsets.only(bottom: 10.0)
+                                : const EdgeInsets.symmetric(vertical: 0.0)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 10),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 18.0),
+                              child: AppText.appText(
+                                foodStyle[index],
+                                fontSize: 18,
+                                textColor: AppTheme.whiteColor,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 3),
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 14),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  width: 2.0,
-                                  color:
-                                      // foodStyle[index] == "Thai cuisine"
-                                      //     ? Colors.transparent
-                                      //     :
-                                      AppTheme.whiteColor,
+                            const SizedBox(height: 3),
+                            Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 14),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 2.0,
+                                    color:
+                                        // foodStyle[index] == "Thai cuisine"
+                                        //     ? Colors.transparent
+                                        //     :
+                                        AppTheme.whiteColor,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 10),
-                        ],
+                            const SizedBox(height: 10),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         ),

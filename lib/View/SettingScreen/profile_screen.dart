@@ -150,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               image: DecorationImage(
                   image: AssetImage("assets/images/logo.png"),
                   scale: 0.5,
-                  opacity: 0.10)),
+                  opacity: 0.11)),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,

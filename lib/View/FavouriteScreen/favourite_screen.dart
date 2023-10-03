@@ -60,7 +60,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                         image: DecorationImage(
                             image: AssetImage("assets/images/logo.png"),
                             scale: 0.5,
-                            opacity: 0.10)),
+                            opacity: 0.11)),
                     child: Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -84,13 +84,14 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                       ),
                     ),
                   )
-                : Container(height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/logo.png"),
-                  scale: 0.5,
-                  opacity: 0.10)),
-                  child: Padding(
+                : Container(
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage("assets/images/logo.png"),
+                            scale: 0.5,
+                            opacity: 0.11)),
+                    child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SingleChildScrollView(
                         child: Column(
@@ -155,12 +156,14 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsets.all(8.0),
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: GestureDetector(
                                                       onTap: () {
                                                         unFavoriteAPI(
                                                             recpieid:
-                                                                responseID[index]
+                                                                responseID[
+                                                                        index]
                                                                     ["id"]);
                                                       },
                                                       child: Align(
@@ -193,8 +196,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                               ),
                                             )),
                                         Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 10.0),
+                                          padding: const EdgeInsets.only(
+                                              right: 10.0),
                                           child: AppText.appText(
                                               "${responseID[index]["title"]}",
                                               textAlign: TextAlign.left,
@@ -220,8 +223,9 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                               color: AppTheme.whiteColor,
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 16.0),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16.0),
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -229,7 +233,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                                 children: [
                                                   AppText.appText(
                                                     "See details",
-                                                    textColor: AppTheme.appColor,
+                                                    textColor:
+                                                        AppTheme.appColor,
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.w500,
                                                   ),
@@ -253,7 +258,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                         ),
                       ),
                     ),
-                ));
+                  ));
   }
 
   void getFavouriteRecipes() async {

@@ -382,9 +382,10 @@ class _RecipeInfoState extends State<RecipeInfo>
                   ),
                 ],
               ),
-              SizedBox(
-                height: 300,
+              Container(
+                height: (screenHeight / 100) * 50,
                 child: Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     TabBar(
                       indicator: UnderlineTabIndicator(
@@ -575,6 +576,9 @@ class _RecipeInfoState extends State<RecipeInfo>
                         ],
                       ),
                     ),
+                    SizedBox(
+                      height: 10,
+                    )
                   ],
                 ),
               )
