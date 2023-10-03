@@ -100,60 +100,55 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
           final kitchenResourcesProvider =
               Provider.of<KitchenResourcesProvider>(context, listen: false)
                   .preferredKitchenResourcesParametersRecipe;
-          try {
-            var foodStyles = responseData["data"]["foodStyles"];
-            var allergies = responseData["data"]["allergies"];
-            var dietaryRestrictions =
-                responseData["data"]["dietaryRestrictions"];
-            var preferredProteins = responseData["data"]["preferredProteins"];
-            var regionalDelicacies = responseData["data"]["regionalDelicacies"];
-            var kitchenResources = responseData["data"]["kitchenResources"];
+          var foodStyles = responseData["data"]["foodStyles"];
+          var allergies = responseData["data"]["allergies"];
+          var dietaryRestrictions = responseData["data"]["dietaryRestrictions"];
+          var preferredProteins = responseData["data"]["preferredProteins"];
+          var regionalDelicacies = responseData["data"]["regionalDelicacies"];
+          var kitchenResources = responseData["data"]["kitchenResources"];
 
-            //adding food styles list
-            foodStyles.forEach((key, value) {
-              foodStyle.add(value);
+          //adding food styles list
+          foodStyles.forEach((key, value) {
+            foodStyle.add(value);
+          });
+
+          //adding allergies list
+          if (allergyProvider.isEmpty) {
+            allergies.forEach((key, value) {
+              allergyProvider.add(RecipesParameterClass(parameter: value));
             });
+          }
 
-            //adding allergies list
-            if (allergyProvider.isEmpty) {
-              allergies.forEach((key, value) {
-                allergyProvider.add(RecipesParameterClass(parameter: value));
-              });
-            }
+          //adding dietary restrictions list
+          if (dietaryRestrictionsProvider.isEmpty) {
+            dietaryRestrictions.forEach((key, value) {
+              dietaryRestrictionsProvider
+                  .add(RecipesParameterClass(parameter: value));
+            });
+          }
 
-            //adding dietary restrictions list
-            if (dietaryRestrictionsProvider.isEmpty) {
-              dietaryRestrictions.forEach((key, value) {
-                dietaryRestrictionsProvider
-                    .add(RecipesParameterClass(parameter: value));
-              });
-            }
+          //adding proteins list
+          if (preferredProteinProvider.isEmpty) {
+            preferredProteins.forEach((key, value) {
+              preferredProteinProvider
+                  .add(RecipesParameterClass(parameter: value));
+            });
+          }
 
-            //adding proteins list
-            if (preferredProteinProvider.isEmpty) {
-              preferredProteins.forEach((key, value) {
-                preferredProteinProvider
-                    .add(RecipesParameterClass(parameter: value));
-              });
-            }
+          //adding regional delicacy list
+          if (regionalDelicacyProvider.isEmpty) {
+            regionalDelicacies.forEach((key, value) {
+              regionalDelicacyProvider
+                  .add(RecipesParameterClass(parameter: value));
+            });
+          }
 
-            //adding regional delicacy list
-            if (regionalDelicacyProvider.isEmpty) {
-              regionalDelicacies.forEach((key, value) {
-                regionalDelicacyProvider
-                    .add(RecipesParameterClass(parameter: value));
-              });
-            }
-
-            //adding kitchen resources list
-            if (kitchenResourcesProvider.isEmpty) {
-              kitchenResources.forEach((key, value) {
-                kitchenResourcesProvider
-                    .add(RecipesParameterClass(parameter: value));
-              });
-            }
-          } catch (e) {
-            print("Error decoding JSON data: $e");
+          //adding kitchen resources list
+          if (kitchenResourcesProvider.isEmpty) {
+            kitchenResources.forEach((key, value) {
+              kitchenResourcesProvider
+                  .add(RecipesParameterClass(parameter: value));
+            });
           }
         }
       }
