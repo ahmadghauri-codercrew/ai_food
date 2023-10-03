@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     "Metric",
   ];
   bool checkAPI = false;
-  var updatedvalueM;
+  String updatedvalueM = "US";
   bool showMenu = false;
   bool measuringUnit = false;
 
@@ -126,8 +126,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         addDietaryRestrictions[key] = value;
       }
     }
-    _userNameController.text= prefs.getString(PrefKey.userName)!;
-    updatedvalueM =  prefs.getString(PrefKey.unit)!;
+      _userNameController.text= prefs.getString(PrefKey.userName)!;
+      updatedvalueM =  prefs.getString(PrefKey.unit)!;
+
   }
   @override
   Widget build(BuildContext context) {
@@ -233,7 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       fit: FlexFit.loose,
                                       flex: 4,
                                       child: AppText.appText(
-                                          updatedvalueM == ""
+                                          updatedvalueM == null
                                               ? "Measuring Unit"
                                               : updatedvalueM,
                                           fontSize: 11.sp,
