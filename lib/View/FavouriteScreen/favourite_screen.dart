@@ -84,169 +84,176 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                       ),
                     ),
                   )
-                : Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          GridView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: width / (2.26 * 225),
-                            ),
-                            shrinkWrap: true,
-                            itemCount: responseID.length,
-                            itemBuilder: (context, int index) {
-                              return Container(
-                                width: width / 2.26,
-                                height: 225,
-                                decoration: BoxDecoration(
-                                  color: AppTheme.appColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 8),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                          padding: const EdgeInsets.only(
-                                              top: 12, bottom: 8),
-                                          child: Center(
-                                            child: Stack(
-                                              children: [
-                                                Container(
-                                                  height: 130,
-                                                  width: 200,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    child: CachedNetworkImage(
-                                                      fit: BoxFit.cover,
-                                                      imageUrl:
-                                                          "${responseID[index]["image"]}",
-                                                      height: 130,
-                                                      width: width,
-                                                      errorWidget: (context,
-                                                              url, error) =>
-                                                          const Icon(
-                                                              Icons.error),
+                : Container(height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/logo.png"),
+                  scale: 0.5,
+                  opacity: 0.10)),
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            GridView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: width / (2.26 * 225),
+                              ),
+                              shrinkWrap: true,
+                              itemCount: responseID.length,
+                              itemBuilder: (context, int index) {
+                                return Container(
+                                  width: width / 2.26,
+                                  height: 225,
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.appColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 8),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            padding: const EdgeInsets.only(
+                                                top: 12, bottom: 8),
+                                            child: Center(
+                                              child: Stack(
+                                                children: [
+                                                  Container(
+                                                    height: 130,
+                                                    width: 200,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      child: CachedNetworkImage(
+                                                        fit: BoxFit.cover,
+                                                        imageUrl:
+                                                            "${responseID[index]["image"]}",
+                                                        height: 130,
+                                                        width: width,
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            const Icon(
+                                                                Icons.error),
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      unFavoriteAPI(
-                                                          recpieid:
-                                                              responseID[index]
-                                                                  ["id"]);
-                                                    },
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.topRight,
-                                                      child: Container(
-                                                        height: 35,
-                                                        width: 35,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: AppTheme
-                                                              .whiteColor,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      100),
-                                                        ),
-                                                        child: Center(
-                                                          child: Icon(
-                                                            Icons.favorite,
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8.0),
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        unFavoriteAPI(
+                                                            recpieid:
+                                                                responseID[index]
+                                                                    ["id"]);
+                                                      },
+                                                      child: Align(
+                                                        alignment:
+                                                            Alignment.topRight,
+                                                        child: Container(
+                                                          height: 35,
+                                                          width: 35,
+                                                          decoration:
+                                                              BoxDecoration(
                                                             color: AppTheme
-                                                                .appColor,
+                                                                .whiteColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        100),
+                                                          ),
+                                                          child: Center(
+                                                            child: Icon(
+                                                              Icons.favorite,
+                                                              color: AppTheme
+                                                                  .appColor,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
+                                            )),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 10.0),
+                                          child: AppText.appText(
+                                              "${responseID[index]["title"]}",
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              textColor: AppTheme.whiteColor,
+                                              fontWeight: FontWeight.w800),
+                                        ),
+                                        const SizedBox(height: 14),
+                                        InkWell(
+                                          onTap: () {
+                                            push(
+                                                context,
+                                                RecipeInfo(
+                                                  recipeData: responseID[index],
+                                                  isFav: 1,
+                                                ));
+                                          },
+                                          child: Container(
+                                            height: 32,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(32),
+                                              color: AppTheme.whiteColor,
                                             ),
-                                          )),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 10.0),
-                                        child: AppText.appText(
-                                            "${responseID[index]["title"]}",
-                                            textAlign: TextAlign.left,
-                                            overflow: TextOverflow.ellipsis,
-                                            textColor: AppTheme.whiteColor,
-                                            fontWeight: FontWeight.w800),
-                                      ),
-                                      const SizedBox(height: 14),
-                                      InkWell(
-                                        onTap: () {
-                                          push(
-                                              context,
-                                              RecipeInfo(
-                                                recipeData: responseID[index],
-                                                isFav: 1,
-                                              ));
-                                        },
-                                        child: Container(
-                                          height: 32,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(32),
-                                            color: AppTheme.whiteColor,
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 16.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                AppText.appText(
-                                                  "See details",
-                                                  textColor: AppTheme.appColor,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                                Icon(
-                                                  Icons.arrow_forward_ios,
-                                                  color: AppTheme.appColor,
-                                                  size: 18,
-                                                )
-                                              ],
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 16.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  AppText.appText(
+                                                    "See details",
+                                                    textColor: AppTheme.appColor,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                  Icon(
+                                                    Icons.arrow_forward_ios,
+                                                    color: AppTheme.appColor,
+                                                    size: 18,
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                          )
-                        ],
+                                );
+                              },
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ));
+                ));
   }
 
   void getFavouriteRecipes() async {
