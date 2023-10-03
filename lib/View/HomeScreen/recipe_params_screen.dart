@@ -164,6 +164,11 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
           });
         },
         child: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/logo.png"),
+                  scale: 0.5,
+                  opacity: 0.10)),
           width: width,
           height: height,
           child: SingleChildScrollView(

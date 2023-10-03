@@ -135,116 +135,124 @@ class _RecipeInfoState extends State<RecipeInfo>
                                   maxlines: 2,
                                   fontWeight: FontWeight.w700),
                             ),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                            builder: (context) => ShoppingList(
-                                                  image: widget
-                                                      .recipeData["image"],
-                                                  name: widget
-                                                      .recipeData["title"],
-                                                  ingredient: widget.recipeData[
-                                                      "extendedIngredients"],
-                                                )));
-                                  },
-                                  child: Card(
-                                    elevation: 6,
-                                    shadowColor: AppTheme.appColor,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25)),
-                                    child: Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                          color: AppTheme.appColor,
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ShoppingList(
+                                                    image: widget
+                                                        .recipeData["image"],
+                                                    name: widget
+                                                        .recipeData["title"],
+                                                    ingredient: widget
+                                                            .recipeData[
+                                                        "extendedIngredients"],
+                                                  )));
+                                    },
+                                    child: Card(
+                                      elevation: 6,
+                                      shadowColor: AppTheme.appColor,
+                                      shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(25)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: SvgPicture.asset(
-                                          "assets/images/Shopping icon.svg",
-                                          color: AppTheme.whiteColor,
+                                      child: Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                            color: AppTheme.appColor,
+                                            borderRadius:
+                                                BorderRadius.circular(25)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: SvgPicture.asset(
+                                            "assets/images/Shopping icon.svg",
+                                            color: AppTheme.whiteColor,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 10),
-                                favoriteTap == false
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            favoriteTap = true;
-                                          });
-                                          favoriteAPI(
-                                              recpieid: widget.recipeData["id"],
-                                              title: widget.recipeData["title"],
-                                              image: widget.recipeData["image"],
-                                              link: widget.recipeData[
-                                                  "spoonacularSourceUrl"]);
-                                        },
-                                        child: Card(
-                                          elevation: 6,
-                                          shadowColor: AppTheme.appColor,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(25)),
-                                          child: Container(
-                                              height: 40,
-                                              width: 40,
-                                              decoration: BoxDecoration(
-                                                  color: AppTheme.appColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(10.0),
-                                                child: SvgPicture.asset(
-                                                  "assets/images/Favorite Icon.svg",
-                                                  color: AppTheme.whiteColor,
-                                                ),
-                                              )),
+                                  const SizedBox(width: 10),
+                                  favoriteTap == false
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              favoriteTap = true;
+                                            });
+                                            favoriteAPI(
+                                                recpieid:
+                                                    widget.recipeData["id"],
+                                                title:
+                                                    widget.recipeData["title"],
+                                                image:
+                                                    widget.recipeData["image"],
+                                                link: widget.recipeData[
+                                                    "spoonacularSourceUrl"]);
+                                          },
+                                          child: Card(
+                                            elevation: 6,
+                                            shadowColor: AppTheme.appColor,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(25)),
+                                            child: Container(
+                                                height: 40,
+                                                width: 40,
+                                                decoration: BoxDecoration(
+                                                    color: AppTheme.appColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child: SvgPicture.asset(
+                                                    "assets/images/Favorite Icon.svg",
+                                                    color: AppTheme.whiteColor,
+                                                  ),
+                                                )),
+                                          ),
+                                        )
+                                      : GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              favoriteTap = false;
+                                            });
+                                            unFavoriteAPI(
+                                                recpieid:
+                                                    widget.recipeData["id"]);
+                                          },
+                                          child: Card(
+                                            elevation: 6,
+                                            shadowColor: AppTheme.appColor,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(25)),
+                                            child: Container(
+                                                height: 40,
+                                                width: 40,
+                                                decoration: BoxDecoration(
+                                                    color: AppTheme.appColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child: SvgPicture.asset(
+                                                    "assets/images/Fill heart icon.svg",
+                                                    color: AppTheme.whiteColor,
+                                                  ),
+                                                )),
+                                          ),
                                         ),
-                                      )
-                                    : GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            favoriteTap = false;
-                                          });
-                                          unFavoriteAPI(
-                                              recpieid:
-                                                  widget.recipeData["id"]);
-                                        },
-                                        child: Card(
-                                          elevation: 6,
-                                          shadowColor: AppTheme.appColor,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(25)),
-                                          child: Container(
-                                              height: 40,
-                                              width: 40,
-                                              decoration: BoxDecoration(
-                                                  color: AppTheme.appColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(10.0),
-                                                child: SvgPicture.asset(
-                                                  "assets/images/Fill heart icon.svg",
-                                                  color: AppTheme.whiteColor,
-                                                ),
-                                              )),
-                                        ),
-                                      ),
-                              ],
+                                ],
+                              ),
                             )
                           ],
                         ),
@@ -409,8 +417,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                                     .length,
                             itemBuilder: (context, index) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 8),
+                                padding: const EdgeInsets.only(
+                                    left: 20, top: 8, bottom: 8, right: 30),
                                 child: Column(
                                   children: [
                                     Row(
@@ -462,8 +470,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                             itemCount: ingredient.length,
                             itemBuilder: (context, index) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 8),
+                                padding: const EdgeInsets.only(
+                                    left: 20, top: 8, bottom: 8, right: 30),
                                 child: Column(
                                   children: [
                                     Container(

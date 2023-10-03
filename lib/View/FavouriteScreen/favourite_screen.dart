@@ -55,26 +55,33 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                 ),
               )
             : responseID == null
-                ?  Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          CupertinoIcons.heart,
-                          size: 105,
-                          color: AppTheme.appColor,
-                        ),
-                        const SizedBox(
-                          width: 250,
-                          child: Text(
-                            "You don't have any Favorite recipe yet.",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20,
+                ? Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage("assets/images/logo.png"),
+                            scale: 0.5,
+                            opacity: 0.10)),
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            CupertinoIcons.heart,
+                            size: 105,
+                            color: AppTheme.appColor,
+                          ),
+                          const SizedBox(
+                            width: 250,
+                            child: Text(
+                              "You don't have any Favorite recipe yet.",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   )
                 : Padding(
@@ -158,8 +165,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                                         width: 35,
                                                         decoration:
                                                             BoxDecoration(
-                                                          color:
-                                                              AppTheme.whiteColor,
+                                                          color: AppTheme
+                                                              .whiteColor,
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(
@@ -312,9 +319,10 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
   }
 
   getDataRecipe({ids}) async {
-
     String apiFinalUrl;
-
+    String apiFinalUrl2;
+    apiFinalUrl2 =
+        'https://api.spoonacular.com/recipes/informationBulk?ids=$ids&apiKey=$apiKey2';
     apiFinalUrl =
         'https://api.spoonacular.com/recipes/informationBulk?ids=$ids&apiKey=$apiKey';
 
@@ -328,7 +336,10 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
           print("jbefjbfkebfkbkfbe${responseID}");
         });
       } else if (response.statusCode == 402) {
+        response = await spoondio.get(path: apiFinalUrl2);
         setState(() {
+          _isLoading = false;
+          responseID = response.data;
           print("nkwkdn${response.data["message"]}");
         });
       } else {

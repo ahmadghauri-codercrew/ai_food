@@ -1,5 +1,3 @@
-
-
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
@@ -67,159 +65,166 @@ class _SettingScreenState extends State<SettingScreen> {
               fontSize: 24),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.only(left: 5.w, right: 5.w),
-        child: Column(children: [
-          const SizedBox(height: 30),
-          GestureDetector(
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const ProfileScreen(),
-            )),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    "assets/images/Profile icon.svg",
-                    color: AppTheme.appColor,
-                    width: 25,
-                    height: 25,
-                  ),
-                  SizedBox(width: 4.w),
-                  AppText.appText("Profile",
-                      fontSize: 20,
-                      textColor: AppTheme.appColor,
-                      fontWeight: FontWeight.w600),
-                ],
+      body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/logo.png"),
+                scale: 0.5,
+                opacity: 0.10)),
+        child: Padding(
+          padding: EdgeInsets.only(left: 5.w, right: 5.w),
+          child: Column(children: [
+            const SizedBox(height: 30),
+            GestureDetector(
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ProfileScreen(),
+              )),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/images/Profile icon.svg",
+                      color: AppTheme.appColor,
+                      width: 25,
+                      height: 25,
+                    ),
+                    SizedBox(width: 4.w),
+                    AppText.appText("Profile",
+                        fontSize: 20,
+                        textColor: AppTheme.appColor,
+                        fontWeight: FontWeight.w600),
+                  ],
+                ),
               ),
             ),
-          ),
-          Divider(
-            height: 12,
-            color: AppTheme.appColor,
-            thickness: 1.5,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const PrivacyPolicyScreen(),
-            )),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    "assets/images/Privacy icon.svg",
-                    color: AppTheme.appColor,
-                    width: 25,
-                    height: 25,
-                  ),
-                  SizedBox(width: 4.w),
-                  AppText.appText("Privacy Policy",
-                      fontSize: 20,
-                      textColor: AppTheme.appColor,
-                      fontWeight: FontWeight.w600),
-                ],
+            Divider(
+              height: 12,
+              color: AppTheme.appColor,
+              thickness: 1.5,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const PrivacyPolicyScreen(),
+              )),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/images/Privacy icon.svg",
+                      color: AppTheme.appColor,
+                      width: 25,
+                      height: 25,
+                    ),
+                    SizedBox(width: 4.w),
+                    AppText.appText("Privacy Policy",
+                        fontSize: 20,
+                        textColor: AppTheme.appColor,
+                        fontWeight: FontWeight.w600),
+                  ],
+                ),
               ),
             ),
-          ),
-          Divider(
-            height: 12,
-            color: AppTheme.appColor,
-            thickness: 1.5,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const TermsScreen(),
-            )),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    "assets/images/Terms Icon.svg",
-                    color: AppTheme.appColor,
-                    width: 25,
-                    height: 25,
-                  ),
-                  SizedBox(width: 4.w),
-                  AppText.appText("Terms of Use",
-                      fontSize: 20,
-                      textColor: AppTheme.appColor,
-                      fontWeight: FontWeight.w600),
-                ],
+            Divider(
+              height: 12,
+              color: AppTheme.appColor,
+              thickness: 1.5,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const TermsScreen(),
+              )),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/images/Terms Icon.svg",
+                      color: AppTheme.appColor,
+                      width: 25,
+                      height: 25,
+                    ),
+                    SizedBox(width: 4.w),
+                    AppText.appText("Terms of Use",
+                        fontSize: 20,
+                        textColor: AppTheme.appColor,
+                        fontWeight: FontWeight.w600),
+                  ],
+                ),
               ),
             ),
-          ),
-          Divider(
-            height: 12,
-            color: AppTheme.appColor,
-            thickness: 1.5,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            onTap: () {
-              showCustomAlert(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    "assets/images/Contact Icon.svg",
-                    color: AppTheme.appColor,
-                    width: 25,
-                    height: 25,
-                  ),
-                  SizedBox(width: 4.w),
-                  AppText.appText("Contact Us",
-                      fontSize: 20,
-                      textColor: AppTheme.appColor,
-                      fontWeight: FontWeight.w600),
-                ],
+            Divider(
+              height: 12,
+              color: AppTheme.appColor,
+              thickness: 1.5,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () {
+                showCustomAlert(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/images/Contact Icon.svg",
+                      color: AppTheme.appColor,
+                      width: 25,
+                      height: 25,
+                    ),
+                    SizedBox(width: 4.w),
+                    AppText.appText("Contact Us",
+                        fontSize: 20,
+                        textColor: AppTheme.appColor,
+                        fontWeight: FontWeight.w600),
+                  ],
+                ),
               ),
             ),
-          ),
-          Divider(
-            height: 12,
-            color: AppTheme.appColor,
-            thickness: 1.5,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            onTap: () {
-              // await Authentication.signOut(context: context);
-              showLogOutALert(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    "assets/images/Log out Icon.svg",
-                    color: AppTheme.appColor,
-                    width: 25,
-                    height: 25,
-                  ),
-                  SizedBox(width: 4.w),
-                  AppText.appText("Log out",
-                      fontSize: 20,
-                      textColor: AppTheme.appColor,
-                      fontWeight: FontWeight.w600),
-                ],
+            Divider(
+              height: 12,
+              color: AppTheme.appColor,
+              thickness: 1.5,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () {
+                // await Authentication.signOut(context: context);
+                showLogOutALert(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/images/Log out Icon.svg",
+                      color: AppTheme.appColor,
+                      width: 25,
+                      height: 25,
+                    ),
+                    SizedBox(width: 4.w),
+                    AppText.appText("Log out",
+                        fontSize: 20,
+                        textColor: AppTheme.appColor,
+                        fontWeight: FontWeight.w600),
+                  ],
+                ),
               ),
             ),
-          ),
-        ]),
+          ]),
+        ),
       ),
     );
   }
@@ -400,7 +405,7 @@ class _SettingScreenState extends State<SettingScreen> {
       builder: (BuildContext context) {
         return Dialog(
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
           child: SingleChildScrollView(
             child: Container(
               // width: 100,
@@ -456,7 +461,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               cursorColor: AppTheme.whiteColor,
                               decoration: InputDecoration(
                                   contentPadding:
-                                  EdgeInsets.only(top: 20, left: 10),
+                                      EdgeInsets.only(top: 20, left: 10),
                                   hintStyle: TextStyle(
                                       color: AppTheme.whiteColor,
                                       fontSize: 16,
@@ -554,7 +559,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide:
-                                BorderSide(color: AppTheme.whiteColor))),
+                                    BorderSide(color: AppTheme.whiteColor))),
                       ),
                     ),
                   ),
@@ -569,14 +574,14 @@ class _SettingScreenState extends State<SettingScreen> {
                         width: 44.w,
                         height: 40,
                         backgroundColor: AppTheme.whiteColor, onTap: () {
-                          if (_formKeyName.currentState!.validate() &&
-                              _formKeyEmail.currentState!.validate() &&
-                              _formKeyMessage.currentState!.validate()) {
-                            Navigator.pop(context);
-                          }
-                          // push(context, ForgotPasswordScreen());
-                          // push(context, const ForgotPasswordPage());
-                        }),
+                      if (_formKeyName.currentState!.validate() &&
+                          _formKeyEmail.currentState!.validate() &&
+                          _formKeyMessage.currentState!.validate()) {
+                        Navigator.pop(context);
+                      }
+                      // push(context, ForgotPasswordScreen());
+                      // push(context, const ForgotPasswordPage());
+                    }),
                   ),
                   const SizedBox(
                     height: 30,
@@ -593,7 +598,7 @@ class _SettingScreenState extends State<SettingScreen> {
   Future<void> logout(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(PrefKey.authorization);
-   // await prefs.remove(PrefKey.searchQueryParameter);
+    // await prefs.remove(PrefKey.searchQueryParameter);
     await Authentication.signOut(context: context);
   }
 }

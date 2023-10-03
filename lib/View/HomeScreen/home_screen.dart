@@ -215,6 +215,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               )
             : Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/logo.png"),
+                        scale: 0.5,
+                        opacity: 0.10)),
                 width: width,
                 // color: Colors.blueGrey,
                 child: SingleChildScrollView(
