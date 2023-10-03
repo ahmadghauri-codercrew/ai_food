@@ -146,14 +146,12 @@ class _HomeScreenState extends State<HomeScreen> {
         leadingWidth: 60,
         leading: InkWell(
           onTap: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => BottomNavView(),));
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => BottomNavView(),
+            ));
           },
           child: Padding(
-            padding: const EdgeInsets.only(
-              left: 15.0,
-              top: 20,
-              bottom: 11
-            ),
+            padding: const EdgeInsets.only(left: 15.0, top: 20, bottom: 11),
             child: Container(
                 height: 25,
                 width: 25,
@@ -177,6 +175,11 @@ class _HomeScreenState extends State<HomeScreen> {
           : Container(
               width: width,
               // color: Colors.blueGrey,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/logo.png"),
+                      scale: 0.5,
+                      opacity: 0.10)),
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -381,7 +384,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   //get recipes data api
 
-
 //////////////////////////////
 //Here is the function for regenrating recipes
   Future reGenerateRecipe(context) async {
@@ -515,7 +517,6 @@ class _HomeScreenState extends State<HomeScreen> {
       response = await dio.get(path: AppUrls.getFavouriteRecipes);
       var responseData = response.data;
       if (response.statusCode == responseCode400) {
-
         print("Bad Request.");
         showSnackBar(context, "${responseData["message"]}");
       } else if (response.statusCode == responseCode401) {
@@ -604,7 +605,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (isHiting == false) {
                             getSearchResult(
                                 id: "${data[index]["id"]}", index: index);
-
                           }
                         },
                         child: Container(
@@ -642,6 +642,4 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-
-
 }
