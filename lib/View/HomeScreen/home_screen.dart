@@ -152,9 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: Padding(
             padding: const EdgeInsets.only(
-              left: 20.0,
-              bottom: 10,
-              top: 10,
+                left: 23.0, top: 23, bottom: 16
             ),
             child: Container(
                 height: 25,
@@ -165,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Icon(Icons.arrow_back_ios,
-                      size: 25, color: AppTheme.whiteColor),
+                      size: 20, color: AppTheme.whiteColor),
                 )),
           ),
         ),
