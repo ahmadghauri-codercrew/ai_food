@@ -142,9 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         elevation: 0,
-
         toolbarHeight: 75,
-
         leadingWidth: 60,
         leading: InkWell(
           onTap: () {
