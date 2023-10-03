@@ -45,14 +45,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       initialDate: selectedDate ?? DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
-      initialEntryMode:DatePickerEntryMode.calendarOnly,
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
             primaryColor: AppTheme.appColor, // Change the primary color
             colorScheme: ColorScheme.light(
                 primary: AppTheme.appColor), // Change overall color scheme
-            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            buttonTheme:
+                const ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
         );
@@ -78,212 +79,222 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 220,
-
-              margin: const EdgeInsets.only(top: 23),
-              child: SvgPicture.asset(
-                AppAssetsImage.profile_updated_image,
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.fill,
-                // color: AppTheme.whiteColor,
+      body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/logo.png"),
+                scale: 0.5,
+                opacity: 0.10)),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 220,
+                margin: const EdgeInsets.only(top: 23),
+                child: SvgPicture.asset(
+                  AppAssetsImage.profile_updated_image,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.fill,
+                  // color: AppTheme.whiteColor,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 25.0, right: 25, top: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 40,
-                    child: TextFormField(
-                      cursorColor: AppTheme.appColor,
-                      style: TextStyle(color: AppTheme.appColor, fontWeight: FontWeight.w500),
-                      controller: _userNameController,
-                      decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding:
-                              const EdgeInsets.only(left: 12, bottom: 3),
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: AppTheme.appColor)),
-                          disabledBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide.none),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
+              Padding(
+                padding: const EdgeInsets.only(left: 25.0, right: 25, top: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 40,
+                      child: TextFormField(
+                        cursorColor: AppTheme.appColor,
+                        style: TextStyle(
                             color: AppTheme.appColor,
-                          )),
-                          border: UnderlineInputBorder(
-                              borderSide: BorderSide(color: AppTheme.appColor)),
-                          hintText: myName,
-                          hintStyle: TextStyle(
+                            fontWeight: FontWeight.w500),
+                        controller: _userNameController,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding:
+                                const EdgeInsets.only(left: 12, bottom: 3),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: AppTheme.appColor)),
+                            disabledBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide.none),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
                               color: AppTheme.appColor,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16)),
-                    ),
-                  ),
-                  // const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      _selectDate(context);
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width - 90,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 12.0, top: 4),
-                        child: AppText.appText(
-                            "DOB: ${selectedDate == null ? "MM-DD-YYYY" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            textColor: AppTheme.appColor),
+                            )),
+                            border: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: AppTheme.appColor)),
+                            hintText: myName,
+                            hintStyle: TextStyle(
+                                color: AppTheme.appColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16)),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 2),
-                    width: double.infinity,
-                    height: 1,
-                    color: AppTheme.appColor,
-                  ),
-                  Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          AppText.appText(
-                            "Allergies:",
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600,
-                            textColor: AppTheme.appColor,
-                          ),
-                          const SizedBox(height: 10),
-                          Wrap(
-                            runSpacing: 10,
-                            spacing: 10,
-                            children: allergies.entries.map((allergy) {
-                              String key = allergy.key;
-                              dynamic value = allergy.value;
-                              return CustomContainer(
-                                borderColor: addAllergies.containsKey(key)
-                                    ? AppTheme.whiteColor
-                                    : AppTheme.appColor,
-                                containerColor: addAllergies.containsKey(key)
-                                    ? AppTheme.appColor
-                                    : Colors.white,
-                                text: value.toString(),
-                                textColor: addAllergies.containsKey(key)
-                                    ? Colors.white
-                                    : AppTheme.appColor,
-                                onTap: () {
-                                  setState(() {
-                                    if (addAllergies.containsKey(key)) {
-                                      addAllergies.remove(key);
-                                    } else {
-                                      addAllergies[key] = value;
-                                    }
-                                  });
-                                },
-                              );
-                            }).toList(),
-                          ),
-                          const SizedBox(height: 30),
-                          AppText.appText(
-                            "Dietary restrictions:",
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600,
-                            textColor: AppTheme.appColor,
-                          ),
-                          const SizedBox(height: 10),
-                          Wrap(
-                            spacing: 10,
-                            runSpacing: 10,
-                            children:
-                                dietaryRestrictions.entries.map((restriction) {
-                              String key = restriction.key;
-                              dynamic value = restriction.value;
-                              return CustomContainer(
-                                borderColor:
-                                    addDietaryRestrictions.containsKey(key)
-                                        ? AppTheme.whiteColor
-                                        : AppTheme.appColor,
-                                containerColor:
-                                    addDietaryRestrictions.containsKey(key)
-                                        ? AppTheme.appColor
-                                        : Colors.white,
-                                textColor:
-                                    addDietaryRestrictions.containsKey(key)
-                                        ? Colors.white
-                                        : AppTheme.appColor,
-                                text: value.toString(),
-                                onTap: () {
-                                  setState(() {
-                                    if (addDietaryRestrictions
-                                        .containsKey(key)) {
-                                      addDietaryRestrictions.remove(key);
-                                    } else {
-                                      addDietaryRestrictions[key] = value;
-                                      print(
-                                          "how much data has been added here${addDietaryRestrictions[key] = value}");
-                                    }
-                                  });
-                                },
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            checkAPI == false
-                ? Center(
-                    child: AppButton.appButton(
-                      "Save",
-                      onTap: () async {
-                        setState(() {
-                          checkAPI = true;
-                        });
-                        /* where i am converting the map keys into list so that i can call them in
-                         profile screen to fetch the data from sharedpreference
-                          by calling the keys and match them */
-                        List<String> allergiesList = addAllergies.entries
-                            .map((value) => value.toString())
-                            .toList();
-
-                        List<String> dietaryRestrictionsList =
-                            addDietaryRestrictions.entries
-                                .map((value) => value.toString())
-                                .toList();
-                        await StoreDatainSharedPref(
-                            allergiesList, dietaryRestrictionsList);
-                        await UpdateSetupProfileOnUpdateAPI();
+                    // const SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () {
+                        _selectDate(context);
                       },
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
-                      textColor: Colors.white,
-                      width: 200,
-                      height: 48,
-                      backgroundColor: AppTheme.appColor,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width - 90,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12.0, top: 4),
+                          child: AppText.appText(
+                              "DOB: ${selectedDate == null ? "MM-DD-YYYY" : DateFormat('MM-dd-yyyy').format(selectedDate!)}",
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              textColor: AppTheme.appColor),
+                        ),
+                      ),
                     ),
-                  )
-                : Center(
-                    child: CircularProgressIndicator(
+                    Container(
+                      margin: const EdgeInsets.only(top: 2),
+                      width: double.infinity,
+                      height: 1,
                       color: AppTheme.appColor,
                     ),
-                  ),
-            const SizedBox(height: 30),
-          ],
+                    Stack(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            AppText.appText(
+                              "Allergies:",
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600,
+                              textColor: AppTheme.appColor,
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              runSpacing: 10,
+                              spacing: 10,
+                              children: allergies.entries.map((allergy) {
+                                String key = allergy.key;
+                                dynamic value = allergy.value;
+                                return CustomContainer(
+                                  borderColor: addAllergies.containsKey(key)
+                                      ? AppTheme.whiteColor
+                                      : AppTheme.appColor,
+                                  containerColor: addAllergies.containsKey(key)
+                                      ? AppTheme.appColor
+                                      : Colors.white,
+                                  text: value.toString(),
+                                  textColor: addAllergies.containsKey(key)
+                                      ? Colors.white
+                                      : AppTheme.appColor,
+                                  onTap: () {
+                                    setState(() {
+                                      if (addAllergies.containsKey(key)) {
+                                        addAllergies.remove(key);
+                                      } else {
+                                        addAllergies[key] = value;
+                                      }
+                                    });
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                            const SizedBox(height: 30),
+                            AppText.appText(
+                              "Dietary restrictions:",
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600,
+                              textColor: AppTheme.appColor,
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              spacing: 10,
+                              runSpacing: 10,
+                              children: dietaryRestrictions.entries
+                                  .map((restriction) {
+                                String key = restriction.key;
+                                dynamic value = restriction.value;
+                                return CustomContainer(
+                                  borderColor:
+                                      addDietaryRestrictions.containsKey(key)
+                                          ? AppTheme.whiteColor
+                                          : AppTheme.appColor,
+                                  containerColor:
+                                      addDietaryRestrictions.containsKey(key)
+                                          ? AppTheme.appColor
+                                          : Colors.white,
+                                  textColor:
+                                      addDietaryRestrictions.containsKey(key)
+                                          ? Colors.white
+                                          : AppTheme.appColor,
+                                  text: value.toString(),
+                                  onTap: () {
+                                    setState(() {
+                                      if (addDietaryRestrictions
+                                          .containsKey(key)) {
+                                        addDietaryRestrictions.remove(key);
+                                      } else {
+                                        addDietaryRestrictions[key] = value;
+                                        print(
+                                            "how much data has been added here${addDietaryRestrictions[key] = value}");
+                                      }
+                                    });
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              checkAPI == false
+                  ? Center(
+                      child: AppButton.appButton(
+                        "Save",
+                        onTap: () async {
+                          setState(() {
+                            checkAPI = true;
+                          });
+                          /* where i am converting the map keys into list so that i can call them in
+                           profile screen to fetch the data from sharedpreference
+                            by calling the keys and match them */
+                          List<String> allergiesList = addAllergies.entries
+                              .map((value) => value.toString())
+                              .toList();
+
+                          List<String> dietaryRestrictionsList =
+                              addDietaryRestrictions.entries
+                                  .map((value) => value.toString())
+                                  .toList();
+                          await StoreDatainSharedPref(
+                              allergiesList, dietaryRestrictionsList);
+                          await UpdateSetupProfileOnUpdateAPI();
+                        },
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        textColor: Colors.white,
+                        width: 200,
+                        height: 48,
+                        backgroundColor: AppTheme.appColor,
+                      ),
+                    )
+                  : Center(
+                      child: CircularProgressIndicator(
+                        color: AppTheme.appColor,
+                      ),
+                    ),
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );
@@ -300,9 +311,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     const int responseCode401 = 401; // For Unauthorized access.
     const int responseCode404 = 404; // For For data not found
     const int responseCode500 = 500; // Internal server error.
-    if(addAllergies.isEmpty){
+    if (addAllergies.isEmpty) {
       arrangeIndexParam["allergies[0]"] = "0";
-    }else {
+    } else {
       for (var data in addAllergies.entries) {
         String key = "allergies[${index}]";
         String key2 = data.key;
@@ -311,9 +322,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         index++;
       }
     }
-    if(addDietaryRestrictions.isEmpty){
+    if (addDietaryRestrictions.isEmpty) {
       arrangeIndexParam2["dietary_restrictions[0]"] = "0";
-    }else{
+    } else {
       for (var data in addDietaryRestrictions.entries) {
         String key = "dietary_restrictions[${index1}]";
         String key2 = data.key;
@@ -400,7 +411,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           // Handle other response codes here if needed.
           break;
       }
-
     } catch (e) {
       setState(() {
         checkAPI = false;
