@@ -151,14 +151,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ));
           },
           child: Padding(
-            padding: const EdgeInsets.only(
-              left: 20.0,
-              bottom: 10,
-              top: 10,
-            ),
+            padding: const EdgeInsets.only(left: 15.0, top: 20, bottom: 11),
             child: Container(
-                height: 25,
-                width: 25,
+                height: 20,
+                width: 20,
                 decoration: BoxDecoration(
                     color: AppTheme.appColor,
                     borderRadius: BorderRadius.circular(100)),
@@ -183,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   image: DecorationImage(
                       image: AssetImage("assets/images/logo.png"),
                       scale: 0.5,
-                      opacity: 0.10)),
+                      opacity: 0.11)),
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -318,10 +314,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final apiUrl =
         'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey';
+    final apiUrl2 =
+        'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey2';
 
     final response = await dio.get(path: apiUrl);
 
     if (response.statusCode == 200) {
+      print("kwbdbkwk${response.data}");
+      setState(() {
+        isHiting = false;
+        showProgressindicators[index] = false;
+        final idAsInt = int.tryParse(id.toString());
+        final bool isFav = apiRecipeIds!.contains(idAsInt);
+
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => RecipeInfo(
+              recipeData: response.data,
+              isFav: isFav ? 1 : 0,
+            ),
+          ),
+        );
+      });
+    } else if (response.statusCode == 402) {
+      final response = await dio.get(path: apiUrl2);
+
       print("kwbdbkwk${response.data}");
       setState(() {
         isHiting = false;
