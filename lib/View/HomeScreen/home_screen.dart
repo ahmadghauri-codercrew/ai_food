@@ -151,7 +151,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ));
           },
           child: Padding(
-            padding: const EdgeInsets.only(left: 15.0, top: 20, bottom: 11),
+            padding: const EdgeInsets.only(
+              left: 20.0,
+              bottom: 10,
+              top: 10,
+            ),
             child: Container(
                 height: 25,
                 width: 25,

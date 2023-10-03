@@ -30,6 +30,7 @@ class CustomRecipesSelection extends StatelessWidget {
         width: width,
         height: 55,
         decoration: BoxDecoration(
+            color: Colors.white,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(5),
               topRight: Radius.circular(5),
@@ -58,6 +59,7 @@ class CustomRecipesSelection extends StatelessWidget {
     ):Container(
       width: width,
       decoration: BoxDecoration(
+          color: Colors.white,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(5),
             topRight: Radius.circular(5),
