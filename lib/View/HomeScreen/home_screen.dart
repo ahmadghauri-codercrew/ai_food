@@ -49,9 +49,6 @@ class HomeScreen extends StatefulWidget {
       this.totalResults})
       : super(key: key);
 
-
-
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
