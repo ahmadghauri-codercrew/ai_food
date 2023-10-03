@@ -81,6 +81,7 @@ class _RecipeInfoState extends State<RecipeInfo>
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        toolbarHeight: 80,
         leading: InkWell(
           onTap: () {
             Navigator.pop(context);
@@ -88,8 +89,8 @@ class _RecipeInfoState extends State<RecipeInfo>
           child: Padding(
             padding: const EdgeInsets.only(
               left: 20.0,
-              bottom: 10,
-              top: 10,
+              bottom: 19,
+              top: 25,
             ),
             child: Container(
                 height: 20,
@@ -105,285 +106,277 @@ class _RecipeInfoState extends State<RecipeInfo>
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/logo.png"),
-                  opacity: 0.10,
-                  scale: 0.5)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20.0, right: 20, top: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 55.w,
-                              child: AppText.appText(
-                                  "${widget.recipeData["title"]}",
-                                  textColor: AppTheme.appColor,
-                                  fontSize: 18,
-                                  maxlines: 2,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ShoppingList(
-                                                    image: widget
-                                                        .recipeData["image"],
-                                                    name: widget
-                                                        .recipeData["title"],
-                                                    ingredient: widget
-                                                            .recipeData[
-                                                        "extendedIngredients"],
-                                                  )));
-                                    },
-                                    child: Card(
-                                      elevation: 6,
-                                      shadowColor: AppTheme.appColor,
-                                      shape: RoundedRectangleBorder(
+      body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/logo.png"),
+                opacity: 0.11,
+                scale: 0.5)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 20.0, right: 20, top: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 55.w,
+                            child: AppText.appText(
+                                "${widget.recipeData["title"]}",
+                                textColor: AppTheme.appColor,
+                                fontSize: 18,
+                                maxlines: 2,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            builder: (context) => ShoppingList(
+                                                  image: widget
+                                                      .recipeData["image"],
+                                                  name: widget
+                                                      .recipeData["title"],
+                                                  ingredient: widget.recipeData[
+                                                      "extendedIngredients"],
+                                                )));
+                                  },
+                                  child: Card(
+                                    elevation: 6,
+                                    shadowColor: AppTheme.appColor,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25)),
+                                    child: Container(
+                                      height: 45,
+                                      width: 45,
+                                      decoration: BoxDecoration(
+                                          color: AppTheme.appColor,
                                           borderRadius:
                                               BorderRadius.circular(25)),
-                                      child: Container(
-                                        height: 40,
-                                        width: 40,
-                                        decoration: BoxDecoration(
-                                            color: AppTheme.appColor,
-                                            borderRadius:
-                                                BorderRadius.circular(25)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: SvgPicture.asset(
-                                            "assets/images/Shopping icon.svg",
-                                            color: AppTheme.whiteColor,
-                                          ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: SvgPicture.asset(
+                                          "assets/images/Shopping icon.svg",
+                                          color: AppTheme.whiteColor,
                                         ),
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 10),
-                                  favoriteTap == false
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              favoriteTap = true;
-                                            });
-                                            favoriteAPI(
-                                                recpieid:
-                                                    widget.recipeData["id"],
-                                                title:
-                                                    widget.recipeData["title"],
-                                                image:
-                                                    widget.recipeData["image"],
-                                                link: widget.recipeData[
-                                                    "spoonacularSourceUrl"]);
-                                          },
-                                          child: Card(
-                                            elevation: 6,
-                                            shadowColor: AppTheme.appColor,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(25)),
-                                            child: Container(
-                                                height: 40,
-                                                width: 40,
-                                                decoration: BoxDecoration(
-                                                    color: AppTheme.appColor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25)),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      10.0),
-                                                  child: SvgPicture.asset(
-                                                    "assets/images/Favorite Icon.svg",
-                                                    color: AppTheme.whiteColor,
-                                                  ),
-                                                )),
-                                          ),
-                                        )
-                                      : GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              favoriteTap = false;
-                                            });
-                                            unFavoriteAPI(
-                                                recpieid:
-                                                    widget.recipeData["id"]);
-                                          },
-                                          child: Card(
-                                            elevation: 6,
-                                            shadowColor: AppTheme.appColor,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(25)),
-                                            child: Container(
-                                                height: 40,
-                                                width: 40,
-                                                decoration: BoxDecoration(
-                                                    color: AppTheme.appColor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25)),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      10.0),
-                                                  child: SvgPicture.asset(
-                                                    "assets/images/Fill heart icon.svg",
-                                                    color: AppTheme.whiteColor,
-                                                  ),
-                                                )),
-                                          ),
+                                ),
+                                const SizedBox(width: 10),
+                                favoriteTap == false
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            favoriteTap = true;
+                                          });
+                                          favoriteAPI(
+                                              recpieid: widget.recipeData["id"],
+                                              title: widget.recipeData["title"],
+                                              image: widget.recipeData["image"],
+                                              link: widget.recipeData[
+                                                  "spoonacularSourceUrl"]);
+                                        },
+                                        child: Card(
+                                          elevation: 6,
+                                          shadowColor: AppTheme.appColor,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(25)),
+                                          child: Container(
+                                              height: 45,
+                                              width: 45,
+                                              decoration: BoxDecoration(
+                                                  color: AppTheme.appColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25)),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: SvgPicture.asset(
+                                                  "assets/images/Favorite Icon.svg",
+                                                  color: AppTheme.whiteColor,
+                                                ),
+                                              )),
                                         ),
-                                ],
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            favoriteTap = false;
+                                          });
+                                          unFavoriteAPI(
+                                              recpieid:
+                                                  widget.recipeData["id"]);
+                                        },
+                                        child: Card(
+                                          elevation: 6,
+                                          shadowColor: AppTheme.appColor,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(25)),
+                                          child: Container(
+                                              height: 45,
+                                              width: 45,
+                                              decoration: BoxDecoration(
+                                                  color: AppTheme.appColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25)),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: SvgPicture.asset(
+                                                  "assets/images/Fill heart icon.svg",
+                                                  color: AppTheme.whiteColor,
+                                                ),
+                                              )),
+                                        ),
+                                      ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 300,
+                  // color: Colors.red,
+                  width: screenWidth,
+                  child: Stack(children: [
+                    Positioned(
+                      top: 60,
+                      child: Container(
+                        height: 228,
+                        width: 40.w,
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppTheme.appColor.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 0.5,
+                                offset: const Offset(-5, 8),
                               ),
-                            )
-                          ],
-                        ),
-                      ],
+                            ],
+                            color: AppTheme.appColor,
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                                bottomRight: Radius.circular(20))),
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 300,
-                    // color: Colors.red,
-                    width: screenWidth,
-                    child: Stack(children: [
-                      Positioned(
-                        top: 60,
-                        child: Container(
-                          height: 228,
-                          width: 40.w,
-                          decoration: BoxDecoration(
+                    Positioned(
+                      top: 10,
+                      left: 70,
+                      child: Hero(
+                        tag: "hero-shopping",
+                        transitionOnUserGestures: true,
+                        child: Card(
+                          elevation: 20,
+                          shadowColor: Colors.black.withOpacity(0.1),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Container(
+                            height: 210,
+                            width: 65.w,
+                            decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppTheme.appColor.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 0.5,
-                                  offset: const Offset(-5, 8),
+                                  color: Colors.black.withOpacity(0.15),
+                                  // spreadRadius: 3,
+                                  blurRadius: 1,
+                                  offset: const Offset(8,
+                                      8), // This controls the vertical offset (bottom)
                                 ),
                               ],
-                              color: AppTheme.appColor,
-                              borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                  bottomRight: Radius.circular(20))),
-                        ),
-                      ),
-                      Positioned(
-                        top: 10,
-                        left: 70,
-                        child: Hero(
-                          tag: "hero-shopping",
-                          transitionOnUserGestures: true,
-                          child: Card(
-                            elevation: 20,
-                            shadowColor: Colors.black.withOpacity(0.1),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Container(
-                              height: 193,
-                              width: 55.w,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.15),
-                                    // spreadRadius: 3,
-                                    blurRadius: 1,
-                                    offset: const Offset(5,
-                                        5), // This controls the vertical offset (bottom)
-                                  ),
-                                ],
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: CachedNetworkImage(
-                                  progressIndicatorBuilder:
-                                      (context, url, progress) {
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        color: AppTheme.appColor,
-                                      ),
-                                    );
-                                  },
-                                  imageUrl: "${widget.recipeData["image"]}",
-                                  fit: BoxFit.cover,
-                                ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: CachedNetworkImage(
+                                progressIndicatorBuilder:
+                                    (context, url, progress) {
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      color: AppTheme.appColor,
+                                    ),
+                                  );
+                                },
+                                imageUrl: "${widget.recipeData["image"]}",
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      Positioned(
-                        top: 225,
-                        left: 45.w,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                SvgPicture.asset("assets/images/Timer Icon.svg",
-                                    width: 20, height: 20),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                AppText.appText(
-                                    "${widget.recipeData["readyInMinutes"]} minutes",
-                                    textColor: AppTheme.appColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500)
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                SvgPicture.asset(
-                                    "assets/images/Persons Icon.svg",
-                                    width: 20,
-                                    height: 20),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                AppText.appText(
-                                    "${widget.recipeData["servings"]} persons",
-                                    textColor: AppTheme.appColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500)
-                              ],
-                            ),
-                          ],
-                        ),
+                    ),
+                    Positioned(
+                      top: 225,
+                      left: 45.w,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              SvgPicture.asset("assets/images/Timer Icon.svg",
+                                  width: 20, height: 20),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              AppText.appText(
+                                  "${widget.recipeData["readyInMinutes"]} minutes",
+                                  textColor: AppTheme.appColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500)
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              SvgPicture.asset("assets/images/Persons Icon.svg",
+                                  width: 20, height: 20),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              AppText.appText(
+                                  "${widget.recipeData["servings"]} persons",
+                                  textColor: AppTheme.appColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500)
+                            ],
+                          ),
+                        ],
                       ),
-                    ]),
-                  ),
-                ],
-              ),
-              Container(
-                height: (screenHeight / 100) * 50,
+                    ),
+                  ]),
+                ),
+              ],
+            ),
+            Expanded(
+              child: Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -406,7 +399,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                         controller: _tabController,
                         children: [
                           ListView.builder(
-                            physics: const ScrollPhysics(),
+                            // physics: const ScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: widget
                                     .recipeData["analyzedInstructions"].isEmpty
@@ -581,9 +574,9 @@ class _RecipeInfoState extends State<RecipeInfo>
                     )
                   ],
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
