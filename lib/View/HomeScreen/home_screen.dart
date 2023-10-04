@@ -55,7 +55,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late AppDio dio;
-  late SpoonAcularAppDio spoondio;
+  late SpoonAcularAppDio spoonDio;
 
   AppLogger logger = AppLogger();
   var responseData;
@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     dio = AppDio(context);
-    spoondio = SpoonAcularAppDio(context);
+    spoonDio = SpoonAcularAppDio(context);
     logger.init();
     getFavouriteRecipes();
     // getUserCredentials();
@@ -151,7 +151,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ));
           },
           child: Padding(
-            padding: const EdgeInsets.only(left: 15.0, top: 20, bottom: 11),
+            padding: const EdgeInsets.only(
+                left: 23.0, top: 23, bottom: 16
+            ),
             child: Container(
                 height: 25,
                 width: 25,
@@ -161,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Icon(Icons.arrow_back_ios,
-                      size: 25, color: AppTheme.whiteColor),
+                      size: 20, color: AppTheme.whiteColor),
                 )),
           ),
         ),
@@ -179,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   image: DecorationImage(
                       image: AssetImage("assets/images/logo.png"),
                       scale: 0.5,
-                      opacity: 0.11)),
+                      opacity: 0.10)),
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -305,28 +307,23 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   getSearchResult({id, index}) async {
+    var response;
     print("kjbjfejfbjefbefljeblf$id");
     setState(() {
       isHiting = true;
       showProgressindicators[index] = true;
-      print("jbjbdjsbdjbdjsb $showProgressindicators");
     });
-
     final apiUrl =
         'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey';
     final apiUrl2 =
         'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey2';
-
-    final response = await dio.get(path: apiUrl);
-
+     response = await spoonDio.get(path: apiUrl);
     if (response.statusCode == 200) {
-      print("kwbdbkwk${response.data}");
       setState(() {
         isHiting = false;
         showProgressindicators[index] = false;
         final idAsInt = int.tryParse(id.toString());
         final bool isFav = apiRecipeIds!.contains(idAsInt);
-
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => RecipeInfo(
@@ -337,15 +334,12 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       });
     } else if (response.statusCode == 402) {
-      final response = await dio.get(path: apiUrl2);
-
-      print("kwbdbkwk${response.data}");
+       response = await spoonDio.get(path: apiUrl2);
       setState(() {
         isHiting = false;
         showProgressindicators[index] = false;
         final idAsInt = int.tryParse(id.toString());
         final bool isFav = apiRecipeIds!.contains(idAsInt);
-
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => RecipeInfo(
@@ -359,7 +353,40 @@ class _HomeScreenState extends State<HomeScreen> {
       print('API request failed with status code: ${response.statusCode}');
     }
   }
-
+  // getSearchResult({id, index}) async {
+  //   print("kjbjfejfbjefbefljeblf$id");
+  //   setState(() {
+  //     isHiting = true;
+  //     showProgressindicators[index] = true;
+  //     print("jbjbdjsbdjbdjsb $showProgressindicators");
+  //   });
+  //
+  //   final apiUrl =
+  //       'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey';
+  //
+  //   final response = await dio.get(path: apiUrl);
+  //
+  //   if (response.statusCode == 200) {
+  //     print("kwbdbkwk${response.data}");
+  //     setState(() {
+  //       isHiting = false;
+  //       showProgressindicators[index] = false;
+  //       final idAsInt = int.tryParse(id.toString());
+  //       final bool isFav = apiRecipeIds!.contains(idAsInt);
+  //
+  //       Navigator.of(context).push(
+  //         MaterialPageRoute(
+  //           builder: (context) => RecipeInfo(
+  //             recipeData: response.data,
+  //             isFav: isFav ? 1 : 0,
+  //           ),
+  //         ),
+  //       );
+  //     });
+  //   } else {
+  //     print('API request failed with status code: ${response.statusCode}');
+  //   }
+  // }
   ////////////////////////////////////get suggested recipe////////////////////////////////////////////////////////////////////
 
   // getSuggestedRecipes({allergies, dietaryRestrictions}) async {
@@ -409,6 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //////////////////////////////
 //Here is the function for regenrating recipes
   Future reGenerateRecipe(context) async {
+    var response;
     setState(() {
       isLoading = true;
     });
@@ -447,11 +475,11 @@ class _HomeScreenState extends State<HomeScreen> {
     // Update the offset value in the API URL
     final apiUrl =
         'https://api.spoonacular.com/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&offset=$currentOffset&apiKey=$apiKey';
-
-    final response = await dio.get(path: apiUrl);
+    final apiUrl2 =
+        'https://api.spoonacular.com/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&offset=$currentOffset&apiKey=$apiKey2';
+     response = await spoonDio.get(path: apiUrl);
 
     if (response.statusCode == 200) {
-      print("response_data_is  ${response.data}");
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return BottomNavView(
           type: 1,
@@ -469,6 +497,19 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } else {
       if (response.statusCode == 402) {
+        response = await spoonDio.get(path: apiUrl2);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+          return BottomNavView(
+            type: 1,
+            data: response.data["results"],
+            offset: currentOffset,
+            totalResults: response.data["totalResults"],
+            foodStyle: widget.foodStyle,
+            searchList:
+            List.generate(response.data["results"].length, (index) => false),
+            searchType: 1,
+          );
+        }));
         setState(() {
           isLoading = false;
         });

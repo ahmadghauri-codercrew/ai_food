@@ -545,6 +545,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   }
 
   Future generateRecipe({style, allergy, dietary, regional, kitchen}) async {
+    var response;
     setState(() {
       isLoading = true;
     });
@@ -581,9 +582,9 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         : "";
     final apiUrl =
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey';
-    final apiUrlWithSecondKey =
+    final apiUrlTwo =
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey2';
-    final response = await spoonDio.get(path: apiUrl);
+     response = await spoonDio.get(path: apiUrl);
 
     if (response.statusCode == 200) {
       pushReplacement(
@@ -603,22 +604,20 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
       });
     } else {
       if (response.statusCode == 402) {
-        final responseWithSecondKey =
-            await spoonDio.get(path: apiUrlWithSecondKey);
-        if (responseWithSecondKey.statusCode == 200) {
+         response = await spoonDio.get(path: apiUrlTwo);
           // Handle successful response with the second API key
           pushReplacement(
             context,
             BottomNavView(
               type: 1,
-              offset: responseWithSecondKey.data["offset"],
-              totalResults: responseWithSecondKey.data["totalResults"],
+              offset: response.data["offset"],
+              totalResults: response.data["totalResults"],
               foodStyle: foodStyleProvider.foodStyle,
               searchList: List.generate(
-                  responseWithSecondKey.data["results"].length,
+                  response.data["results"].length,
                   (index) => false),
               searchType: 1,
-              data: responseWithSecondKey.data["results"],
+              data: response.data["results"],
             ),
           );
           setState(() {
@@ -628,49 +627,12 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
           setState(() {
             isLoading = false;
             print(
-                'API request with the second key failed with status code: ${responseWithSecondKey.statusCode}');
-            showSnackBar(context, "${responseWithSecondKey.statusMessage}");
+                'API request with the second key failed with status code: ${response.statusCode}');
+            showSnackBar(context, "${response.statusMessage}");
           });
           print('API request failed with status code: ${response.statusCode}');
           showSnackBar(context, "${response.statusMessage}");
         }
-      }
-    }
-
-    void setRecipesParameters() async {
-      var response;
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      const int responseCode200 = 200; // For successful request.
-      const int responseCode400 = 400; // For Bad Request.
-      const int responseCode401 = 401; // For Unauthorized access.
-      const int responseCode404 = 404; // For For data not found
-      const int responseCode405 = 405; // Method not allowed
-      const int responseCode500 = 500; // Internal server error.
-
-      try {
-        response = await dio.get(path: AppUrls.searchParameterUrl);
-        var responseData = response.data;
-        if (response.statusCode == responseCode405) {
-          // showSnackBar(context, "${responseData["message"]}");
-        } else if (response.statusCode == responseCode404) {
-          // showSnackBar(context, "${responseData["message"]}");
-        } else if (response.statusCode == responseCode400) {
-          // showSnackBar(context, "${responseData["message"]}");
-        } else if (response.statusCode == responseCode401) {
-          // showSnackBar(context, "${responseData["message"]}");
-        } else if (response.statusCode == responseCode500) {
-          // showSnackBar(context, "${responseData["message"]}");
-        } else if (response.statusCode == responseCode200) {
-          if (responseData["status"] == false) {
-            // showSnackBar(context, "${responseData["message"]}");
-          } else {
-            var encodeData = jsonEncode(responseData);
-            prefs.setString(PrefKey.parametersLists, encodeData);
-          }
-        }
-      } catch (e) {
-        print("Something went Wrong ${e}");
-        // showSnackBar(context, "Something went Wrong.");
       }
     }
   }
@@ -728,4 +690,3 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
       }),
     );
   }
-}

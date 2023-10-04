@@ -162,9 +162,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                                       onTap: () {
                                                         unFavoriteAPI(
                                                             recpieid:
-                                                                responseID[
-                                                                        index]
-                                                                    ["id"]);
+                                                                responseID[index]["id"]);
                                                       },
                                                       child: Align(
                                                         alignment:
@@ -309,8 +307,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
           return;
         } else {
           // alertDialogError(context: context, message: responseData["message"]);
-          var idBulk =
-              "${responseData["data"]["recipe_ids"].toString().substring(1, responseData["data"]["recipe_ids"].toString().length - 1)}";
+          var idBulk = "${responseData["data"]["recipe_ids"].toString().substring(1, responseData["data"]["recipe_ids"].toString().length - 1)}";
           if (idBulk.isNotEmpty) {
             getDataRecipe(ids: idBulk);
           } else {
@@ -352,13 +349,12 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
         setState(() {
           _isLoading = false;
           responseID = response.data;
-          print("nkwkdn${response.data["message"]}");
         });
       } else {
         showSnackBar(context, "Something Went Wrong!");
       }
     } catch (e) {
-      print(e);
+      print("jaklsjdklajsdkljaskldjaskldjlaksdjklajsdaskljdklajsdklj${e}");
     }
   }
 
