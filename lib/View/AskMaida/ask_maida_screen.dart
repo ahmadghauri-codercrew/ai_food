@@ -312,6 +312,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
   }
 
   chatBotTalk() async {
+    var response;
     final chatsProvider = Provider.of<ChatBotProvider>(context, listen: false);
     chatsProvider.messageLoading(true);
     final apiUrl2 =
@@ -319,7 +320,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
 
     final apiUrl =
         'https://api.spoonacular.com/food/converse?text=${queryText == null ? savePreviousQuery : queryText}&apiKey=$apiKey';
-    final response = await AppDio(context).get(path: apiUrl);
+     response = await spoonDio.get(path: apiUrl);
     if (response.statusCode == 200) {
       final resData = response.data;
 
@@ -403,10 +404,87 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
         chatsProvider.messageLoading(false);
       }
     } else if (response.statusCode == 402) {
-      final response = await AppDio(context).get(path: apiUrl2);
+       response = await spoonDio.get(path: apiUrl2);
+       final resData = response.data;
+       if (resData != null) {
+         setState(() {
+           visibilityContainer = false;
+         });
+
+         chatsProvider.displayChatWidgets(
+           Column(
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: [
+               Stack(
+                 alignment: Alignment.topRight,
+                 children: [
+                   Align(
+                     alignment: Alignment.topRight,
+                     child: Padding(
+                       padding: const EdgeInsets.symmetric(
+                           horizontal: 8.0, vertical: 8),
+                       child: Container(
+                         margin: const EdgeInsets.symmetric(
+                             vertical: 4, horizontal: 14),
+                         padding: const EdgeInsets.symmetric(
+                             vertical: 10, horizontal: 10),
+                         decoration: BoxDecoration(
+                           color: AppTheme.appColor,
+                           borderRadius: const BorderRadius.only(
+                             topLeft: Radius.circular(20),
+                             bottomLeft: Radius.circular(20),
+                             bottomRight: Radius.circular(10),
+                             topRight: Radius.circular(0),
+                           ),
+                         ),
+                         child: AppText.appText(
+                             "${queryText == null ? savePreviousQuery : queryText}",
+                             textColor: AppTheme.whiteColor),
+                       ),
+                     ),
+                   ),
+                 ],
+               ),
+               Padding(
+                 padding:
+                 const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                 child: Container(
+                   margin:
+                   const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+                   padding:
+                   const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                   decoration: BoxDecoration(
+                     color: AppTheme.whiteColor,
+                     borderRadius: const BorderRadius.only(
+                       topLeft: Radius.circular(0),
+                       bottomLeft: Radius.circular(10),
+                       bottomRight: Radius.circular(20),
+                       topRight: Radius.circular(20),
+                     ),
+                   ),
+                   child: AppText.appText(
+                     resData['answerText'],
+                     textColor: AppTheme.appColor,
+                   ),
+                 ),
+               ),
+               const SizedBox(width: 4),
+               resData['media'] == null || resData['media'].isEmpty
+                   ? const SizedBox.shrink()
+                   : Column(
+                 children: resData['media']
+                     .map<Widget>(
+                       (item) => resultContainer(data: item),
+                 )
+                     .toList(),
+               ),
+             ],
+           ),
+         );
     } else {
       print('API request failed with status code: ${response.statusCode}');
       chatsProvider.messageLoading(false);
     }
   }
+}
 }

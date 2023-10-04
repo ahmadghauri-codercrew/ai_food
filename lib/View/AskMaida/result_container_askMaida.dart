@@ -135,11 +135,12 @@ class _resultContainerState extends State<resultContainer> {
   }
 
   getRecipeInformation({id}) async {
+    var response;
     var url =
         "${AppUrls.spoonacularBaseUrl}/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";
     var url2 =
         "${AppUrls.spoonacularBaseUrl}/recipes/$id/information?includeNutrition=false&apiKey=$apiKey2";
-    final response = await spoonDio.get(path: url);
+     response = await spoonDio.get(path: url);
 
     if (response.statusCode == 200) {
       setState(() {
@@ -151,7 +152,7 @@ class _resultContainerState extends State<resultContainer> {
         ),
       ));
     } else if (response.statusCode == 402) {
-      final response = await spoonDio.get(path: url2);
+       response = await spoonDio.get(path: url2);
       setState(() {
         seeDetails = false;
       });
