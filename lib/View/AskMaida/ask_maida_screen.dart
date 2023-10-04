@@ -89,7 +89,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
               image: DecorationImage(
                   image: AssetImage("assets/images/logo.png"),
                   scale: 0.5,
-                  opacity: 0.11)),
+                  opacity: 0.25)),
           child: Column(
             children: [
               Visibility(

@@ -55,7 +55,7 @@ class _TermsScreenState extends State<TermsScreen> {
                   "assets/images/logo.png",
                 ),
                 scale: 0.5,
-                opacity: 0.11)),
+                opacity: 0.25)),
         child: SingleChildScrollView(
             child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),

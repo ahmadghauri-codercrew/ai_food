@@ -77,40 +77,50 @@ class _RecipeInfoState extends State<RecipeInfo>
     // print("njefbkjbfjk${favoriteTap}");
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
         elevation: 0,
-        toolbarHeight: 80,
+        toolbarHeight: 68,
+        leadingWidth: double.infinity,
         leading: InkWell(
           onTap: () {
-            Navigator.pop(context);
+            Navigator.of(context).pop();
           },
-          child: Padding(
-            padding: const EdgeInsets.only(
-              left: 20.0,
-              bottom: 19,
-              top: 25,
-            ),
-            child: Container(
-                height: 25,
-                width: 25,
-                decoration: BoxDecoration(
-                    color: AppTheme.appColor,
-                    borderRadius: BorderRadius.circular(20)),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Icon(Icons.arrow_back_ios,
-                      size: 20, color: AppTheme.whiteColor),
-                )),
+                  padding: const EdgeInsets.only(
+                    left: 20.0,
+                    // bottom: 19,
+                    top: 20,
+                  ),
+                  child: CircleAvatar(
+                    backgroundColor: AppTheme.appColor,
+                    radius: 18,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Icon(Icons.arrow_back_ios,
+                          size: 20, color: AppTheme.whiteColor),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ],
           ),
         ),
       ),
+      backgroundColor: Colors.white,
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage("assets/images/logo.png"),
-                opacity: 0.11,
+                opacity: 0.25,
                 scale: 0.5)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -119,7 +129,7 @@ class _RecipeInfoState extends State<RecipeInfo>
               children: [
                 Padding(
                   padding:
-                      const EdgeInsets.only(left: 20.0, right: 20, top: 10),
+                      const EdgeInsets.only(left: 20.0, right: 10, top: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -168,7 +178,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                                       child: Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: SvgPicture.asset(
-                                          "assets/images/Shopping icon.svg",
+                                          "assets/images/shopping_cart.svg",
                                           color: AppTheme.whiteColor,
                                         ),
                                       ),
@@ -258,15 +268,18 @@ class _RecipeInfoState extends State<RecipeInfo>
                   height: 10,
                 ),
                 Container(
-                  height: 300,
+                  height: 270,
                   // color: Colors.red,
                   width: screenWidth,
                   child: Stack(children: [
                     Positioned(
                       top: 60,
                       child: Container(
-                        height: 228,
-                        width: 40.w,
+                        height: screenHeight * 0.22,
+                        width: screenWidth * 0.35,
+                        // height: 180,
+
+                        // width: 140,
                         decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
@@ -278,14 +291,14 @@ class _RecipeInfoState extends State<RecipeInfo>
                             ],
                             color: AppTheme.appColor,
                             borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                                bottomRight: Radius.circular(20))),
+                                topLeft: Radius.circular(40),
+                                topRight: Radius.circular(40),
+                                bottomRight: Radius.circular(40))),
                       ),
                     ),
                     Positioned(
                       top: 10,
-                      left: 70,
+                      left: 90,
                       child: Hero(
                         tag: "hero-shopping",
                         transitionOnUserGestures: true,
@@ -295,8 +308,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                           child: Container(
-                            height: 210,
-                            width: 65.w,
+                            height: screenHeight * 0.20,
+                            width: screenWidth * 0.48,
                             decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
@@ -329,8 +342,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                       ),
                     ),
                     Positioned(
-                      top: 225,
-                      left: 45.w,
+                      top: screenHeight * 0.22,
+                      left: screenWidth * 0.4,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -340,14 +353,14 @@ class _RecipeInfoState extends State<RecipeInfo>
                           Row(
                             children: [
                               SvgPicture.asset("assets/images/Timer Icon.svg",
-                                  width: 20, height: 20),
+                                  width: 14, height: 14),
                               const SizedBox(
                                 width: 15,
                               ),
                               AppText.appText(
                                   "${widget.recipeData["readyInMinutes"]} minutes",
                                   textColor: AppTheme.appColor,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w500)
                             ],
                           ),
@@ -357,14 +370,14 @@ class _RecipeInfoState extends State<RecipeInfo>
                           Row(
                             children: [
                               SvgPicture.asset("assets/images/Persons Icon.svg",
-                                  width: 20, height: 20),
+                                  width: 14, height: 14),
                               const SizedBox(
                                 width: 10,
                               ),
                               AppText.appText(
                                   "${widget.recipeData["servings"]} persons",
                                   textColor: AppTheme.appColor,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w500)
                             ],
                           ),
@@ -399,7 +412,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                         controller: _tabController,
                         children: [
                           ListView.builder(
-                            // physics: const ScrollPhysics(),
+                            physics: const ScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: widget
                                     .recipeData["analyzedInstructions"].isEmpty

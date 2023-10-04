@@ -142,29 +142,98 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         elevation: 0,
-        toolbarHeight: 75,
-        leadingWidth: 60,
+        toolbarHeight: 120,
+        leadingWidth: double.infinity,
         leading: InkWell(
           onTap: () {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => BottomNavView(),
             ));
           },
-          child: Padding(
-            padding: const EdgeInsets.only(
-                left: 23.0, top: 23, bottom: 16
-            ),
-            child: Container(
-                height: 25,
-                width: 25,
-                decoration: BoxDecoration(
-                    color: AppTheme.appColor,
-                    borderRadius: BorderRadius.circular(100)),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Icon(Icons.arrow_back_ios,
-                      size: 20, color: AppTheme.whiteColor),
-                )),
+                  padding: const EdgeInsets.only(
+                    left: 20.0,
+                    // bottom: 19,
+                    top: 20,
+                  ),
+                  child: CircleAvatar(
+                    backgroundColor: AppTheme.appColor,
+                    radius: 18,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Icon(Icons.arrow_back_ios,
+                          size: 20, color: AppTheme.whiteColor),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 15.0,
+                  right: 15.0,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 13.0),
+                      child: AppText.appText(
+                          type == 0 ? "Recommended:" : "Search results:",
+                          fontSize: 20,
+                          textColor: AppTheme.appColor,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    // REGENERATE RECIPE BUTTON
+                    type == 1
+                        ? InkWell(
+                            onTap: () async {
+                              await reGenerateRecipe(context);
+                            },
+                            child: Container(
+                              height: 35,
+                              decoration: BoxDecoration(
+                                color: AppTheme.whiteColor,
+                                borderRadius: BorderRadius.circular(50),
+                                border: Border.all(color: AppTheme.appColor),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10.0, right: 10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(
+                                      Icons.autorenew,
+                                      color: AppTheme.appColor,
+                                      size: 18,
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    AppText.appText(
+                                      "Regenerate result",
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      textColor: AppTheme.appColor,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -181,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   image: DecorationImage(
                       image: AssetImage("assets/images/logo.png"),
                       scale: 0.5,
-                      opacity: 0.10)),
+                      opacity: 0.25)),
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -191,64 +260,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10.0, right: 10, bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              AppText.appText(
-                                  type == 0
-                                      ? "Recommended:"
-                                      : "Search results:",
-                                  fontSize: 20,
-                                  textColor: AppTheme.appColor,
-                                  fontWeight: FontWeight.w600),
-                              // REGENERATE RECIPE BUTTON
-                              type == 1
-                                  ? InkWell(
-                                      onTap: () async {
-                                        await reGenerateRecipe(context);
-                                      },
-                                      child: Container(
-                                        height: 35,
-                                        decoration: BoxDecoration(
-                                          color: AppTheme.whiteColor,
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          border: Border.all(
-                                              color: AppTheme.appColor),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10.0, right: 10),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Icon(
-                                                Icons.autorenew,
-                                                color: AppTheme.appColor,
-                                                size: 18,
-                                              ),
-                                              const SizedBox(
-                                                width: 4,
-                                              ),
-                                              AppText.appText(
-                                                "Regenerate result",
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                                textColor: AppTheme.appColor,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox.shrink(),
-                            ],
-                          ),
-                        ),
                         type == 0
                             ? responseData == null
                                 ? randomData == false
@@ -317,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey';
     final apiUrl2 =
         'https://api.spoonacular.com/recipes/$id/information?includeNutrition=&apiKey=$apiKey2';
-     response = await spoonDio.get(path: apiUrl);
+    response = await spoonDio.get(path: apiUrl);
     if (response.statusCode == 200) {
       setState(() {
         isHiting = false;
@@ -334,7 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       });
     } else if (response.statusCode == 402) {
-       response = await spoonDio.get(path: apiUrl2);
+      response = await spoonDio.get(path: apiUrl2);
       setState(() {
         isHiting = false;
         showProgressindicators[index] = false;
@@ -477,7 +488,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'https://api.spoonacular.com/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&offset=$currentOffset&apiKey=$apiKey';
     final apiUrl2 =
         'https://api.spoonacular.com/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&offset=$currentOffset&apiKey=$apiKey2';
-     response = await spoonDio.get(path: apiUrl);
+    response = await spoonDio.get(path: apiUrl);
 
     if (response.statusCode == 200) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
@@ -498,15 +509,16 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       if (response.statusCode == 402) {
         response = await spoonDio.get(path: apiUrl2);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) {
           return BottomNavView(
             type: 1,
             data: response.data["results"],
             offset: currentOffset,
             totalResults: response.data["totalResults"],
             foodStyle: widget.foodStyle,
-            searchList:
-            List.generate(response.data["results"].length, (index) => false),
+            searchList: List.generate(
+                response.data["results"].length, (index) => false),
             searchType: 1,
           );
         }));

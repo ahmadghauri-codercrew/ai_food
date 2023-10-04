@@ -60,7 +60,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                         image: DecorationImage(
                             image: AssetImage("assets/images/logo.png"),
                             scale: 0.5,
-                            opacity: 0.11)),
+                            opacity: 0.25)),
                     child: Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -90,7 +90,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                         image: DecorationImage(
                             image: AssetImage("assets/images/logo.png"),
                             scale: 0.5,
-                            opacity: 0.11)),
+                            opacity: 0.25)),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SingleChildScrollView(
@@ -162,7 +162,9 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                                       onTap: () {
                                                         unFavoriteAPI(
                                                             recpieid:
-                                                                responseID[index]["id"]);
+                                                                responseID[
+                                                                        index]
+                                                                    ["id"]);
                                                       },
                                                       child: Align(
                                                         alignment:
@@ -307,7 +309,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
           return;
         } else {
           // alertDialogError(context: context, message: responseData["message"]);
-          var idBulk = "${responseData["data"]["recipe_ids"].toString().substring(1, responseData["data"]["recipe_ids"].toString().length - 1)}";
+          var idBulk =
+              "${responseData["data"]["recipe_ids"].toString().substring(1, responseData["data"]["recipe_ids"].toString().length - 1)}";
           if (idBulk.isNotEmpty) {
             getDataRecipe(ids: idBulk);
           } else {

@@ -195,7 +195,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
               image: DecorationImage(
                   image: AssetImage("assets/images/logo.png"),
                   scale: 0.5,
-                  opacity: 0.11)),
+                  opacity: 0.25)),
           width: width,
           height: height,
           child: SingleChildScrollView(
@@ -584,7 +584,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey';
     final apiUrlTwo =
         '${AppUrls.spoonacularBaseUrl}/recipes/complexSearch?$regionalDelicacy$style$kitchenResources$preferredProtein$allergies$dietaryRestrictions&number=8&apiKey=$apiKey2';
-     response = await spoonDio.get(path: apiUrl);
+    response = await spoonDio.get(path: apiUrl);
 
     if (response.statusCode == 200) {
       pushReplacement(
@@ -604,89 +604,88 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
       });
     } else {
       if (response.statusCode == 402) {
-         response = await spoonDio.get(path: apiUrlTwo);
-          // Handle successful response with the second API key
-          pushReplacement(
-            context,
-            BottomNavView(
-              type: 1,
-              offset: response.data["offset"],
-              totalResults: response.data["totalResults"],
-              foodStyle: foodStyleProvider.foodStyle,
-              searchList: List.generate(
-                  response.data["results"].length,
-                  (index) => false),
-              searchType: 1,
-              data: response.data["results"],
-            ),
-          );
-          setState(() {
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            isLoading = false;
-            print(
-                'API request with the second key failed with status code: ${response.statusCode}');
-            showSnackBar(context, "${response.statusMessage}");
-          });
-          print('API request failed with status code: ${response.statusCode}');
+        response = await spoonDio.get(path: apiUrlTwo);
+        // Handle successful response with the second API key
+        pushReplacement(
+          context,
+          BottomNavView(
+            type: 1,
+            offset: response.data["offset"],
+            totalResults: response.data["totalResults"],
+            foodStyle: foodStyleProvider.foodStyle,
+            searchList: List.generate(
+                response.data["results"].length, (index) => false),
+            searchType: 1,
+            data: response.data["results"],
+          ),
+        );
+        setState(() {
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+          print(
+              'API request with the second key failed with status code: ${response.statusCode}');
           showSnackBar(context, "${response.statusMessage}");
-        }
+        });
+        print('API request failed with status code: ${response.statusCode}');
+        showSnackBar(context, "${response.statusMessage}");
       }
     }
   }
+}
 
-  chipWidget({details}) {
-    return Wrap(
-      spacing: 10,
-      runSpacing: 10,
-      children: List.generate(details.length, (index) {
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              height: 37,
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.horizontal(
-                    left: Radius.circular(20), right: Radius.circular(20)),
-                color: Color(0x7FB38ADE),
-              ),
-              child: Center(
-                  child: Text(
-                details[index],
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: "Roboto",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 17),
-              )),
+chipWidget({details}) {
+  return Wrap(
+    spacing: 10,
+    runSpacing: 10,
+    children: List.generate(details.length, (index) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 37,
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.horizontal(
+                  left: Radius.circular(20), right: Radius.circular(20)),
+              color: Color(0x7FB38ADE),
             ),
-            // GestureDetector(
-            //   onTap: (){
-            //     // allergiesProvider.listIndex.map((e) => allergiesProvider.toggleAllergiesRecipeState(e)).toList();
-            //     // for (int i = allergiesProvider.listIndex.length - 1; i >= 0; i--) {
-            //     //   allergiesProvider.removeAllergieslistIndex(i);
-            //     // }
-            //    // allergiesProvider.removeAllergiesValue(allergiesProvider.addAllergies[index], index);
-            //   },
-            //   //  allergiesProvider.removeAllergiesValue(allergiesProvider.preferredAllergiesRecipe[index].parameter);
-            //
-            //   child: Container(
-            //     height: 34,
-            //     width: 30,
-            //     decoration: BoxDecoration(
-            //       color: AppTheme.appColor,
-            //       borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),topRight: Radius.circular(20),),
-            //     ),
-            //     child: Center(
-            //         child: Icon(Icons.clear,color: AppTheme.whiteColor,)
-            //     ),
-            //   ),
-            // ),
-          ],
-        );
-      }),
-    );
-  }
+            child: Center(
+                child: Text(
+              details[index],
+              style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: "Roboto",
+                  fontWeight: FontWeight.w500,
+                  fontSize: 17),
+            )),
+          ),
+          // GestureDetector(
+          //   onTap: (){
+          //     // allergiesProvider.listIndex.map((e) => allergiesProvider.toggleAllergiesRecipeState(e)).toList();
+          //     // for (int i = allergiesProvider.listIndex.length - 1; i >= 0; i--) {
+          //     //   allergiesProvider.removeAllergieslistIndex(i);
+          //     // }
+          //    // allergiesProvider.removeAllergiesValue(allergiesProvider.addAllergies[index], index);
+          //   },
+          //   //  allergiesProvider.removeAllergiesValue(allergiesProvider.preferredAllergiesRecipe[index].parameter);
+          //
+          //   child: Container(
+          //     height: 34,
+          //     width: 30,
+          //     decoration: BoxDecoration(
+          //       color: AppTheme.appColor,
+          //       borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),topRight: Radius.circular(20),),
+          //     ),
+          //     child: Center(
+          //         child: Icon(Icons.clear,color: AppTheme.whiteColor,)
+          //     ),
+          //   ),
+          // ),
+        ],
+      );
+    }),
+  );
+}
