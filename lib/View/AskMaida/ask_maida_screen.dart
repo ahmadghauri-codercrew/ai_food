@@ -315,7 +315,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
     var response;
     final chatsProvider = Provider.of<ChatBotProvider>(context, listen: false);
     chatsProvider.messageLoading(true);
-    final apiUrl2 =
+    final apiUrlTwo =
         'https://api.spoonacular.com/food/converse?text=${queryText == null ? savePreviousQuery : queryText}&apiKey=$apiKey2';
 
     final apiUrl =
@@ -404,7 +404,7 @@ class _AskMaidaScreenState extends State<AskMaidaScreen> {
         chatsProvider.messageLoading(false);
       }
     } else if (response.statusCode == 402) {
-       response = await spoonDio.get(path: apiUrl2);
+       response = await spoonDio.get(path: apiUrlTwo);
        final resData = response.data;
        if (resData != null) {
          setState(() {
