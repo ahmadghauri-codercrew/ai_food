@@ -195,6 +195,7 @@ void login({
         var username = responseData['data']['user']['name'];
         var usermail = responseData['data']['user']['email'];
         var DOB = responseData['data']['user']['DOB'];
+        var measuringUnit = responseData['data']['user']['measuring_unit'];
         var dietary_restrictions =
             responseData['data']['user']['dietary_restrictions'];
         var allergies = responseData['data']['user']['allergies'];
@@ -210,6 +211,7 @@ void login({
         prefs.setString(PrefKey.authorization, token ?? '');
         prefs.setString(PrefKey.userName, username ?? name);
         prefs.setString(PrefKey.email, usermail ?? email);
+        prefs.setString(PrefKey.unit, measuringUnit);
 
         if (isNewUser) {
           pushReplacement(context, const UserProfileScreen());

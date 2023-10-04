@@ -816,7 +816,7 @@ class _AuthScreenState extends State<AuthScreen> {
           }
           return;
         } else {
-          print("responseData${responseData}");
+
           // alertDialogError(context: context, message: responseData["message"]);
           setState(() {
             _isLoading = false;
@@ -825,6 +825,7 @@ class _AuthScreenState extends State<AuthScreen> {
           var name = responseData['data']['user']['name'];
           var usermail = responseData['data']['user']['email'];
           var DOB = responseData['data']['user']['DOB'];
+          var measuringUnit = responseData["data"]["user"]["measuring_unit"];
           var dietary_restrictions =
               responseData['data']['user']['dietary_restrictions'];
           var allergies = responseData['data']['user']['allergies'];
@@ -842,6 +843,7 @@ class _AuthScreenState extends State<AuthScreen> {
           prefs.setString(PrefKey.authorization, token ?? '');
           prefs.setString(PrefKey.userName, name ?? '');
           prefs.setString(PrefKey.email, usermail);
+          prefs.setString(PrefKey.unit, measuringUnit);
           pushReplacement(
               context,
               BottomNavView(
@@ -951,6 +953,7 @@ class _AuthScreenState extends State<AuthScreen> {
           var DOB = responseData['data']['user']['DOB'];
           var username = responseData['data']['user']['name'];
           var usermail = responseData['data']['user']['email'];
+          var measuringUnit = responseData['data']['user']['measuring_unit'];
 
           var dietary_restrictions =
               responseData['data']['user']['dietary_restrictions'];
@@ -981,6 +984,7 @@ class _AuthScreenState extends State<AuthScreen> {
           prefs.setString(PrefKey.userName, username ?? name);
           prefs.setString(PrefKey.dateOfBirth, DOB ?? "");
           prefs.setString(PrefKey.email, usermail ?? email);
+          prefs.setString(PrefKey.unit, measuringUnit);
           print("responseData${responseData}");
           setState(() {
             _appleLoading = false;

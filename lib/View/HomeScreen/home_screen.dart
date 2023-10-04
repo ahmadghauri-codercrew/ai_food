@@ -84,41 +84,11 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  // void LoadingDataFromSharedPreffromProfile() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? value;
-  //   String? value2;
-  //   List<String> finalValue = [];
-  //   List<String> finalValue2 = [];
-  //   List<String>? storedData =
-  //       prefs.getStringList(PrefKey.dataonBoardScreenAllergies);
-  //   List<String>? storedData2 =
-  //       prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction);
-  //   if (storedData != null && storedData2 != null) {
-  //     for (String entry in storedData) {
-  //       String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
-  //       List<String> parts = result.split(':');
-  //       if (parts.length == 2) {
-  //         String key = parts[0].trim();
-  //         value = parts[1].trim();
-  //         finalValue.add(value);
-  //       }
-  //     }
-  //     for (String entry in storedData2) {
-  //       String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
-  //       List<String> parts = result.split(':');
-  //       if (parts.length == 2) {
-  //         String key = parts[0].trim();
-  //         value2 = parts[1].trim();
-  //         finalValue2.add(value2);
-  //       }
-  //     }
-  //   }
-  //   getSuggestedRecipes(
-  //     allergies: finalValue,
-  //     dietaryRestrictions: finalValue2,
-  //   );
-  // }
+  void LoadingDataFromSharedPreffromProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+
+  }
 
   void getUserCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -200,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               AppText.appText(
                                   type == 0
                                       ? "Recommended:"
-                                      : "Search results:",
+                                      : "Generated results:",
                                   fontSize: 20,
                                   textColor: AppTheme.appColor,
                                   fontWeight: FontWeight.w600),

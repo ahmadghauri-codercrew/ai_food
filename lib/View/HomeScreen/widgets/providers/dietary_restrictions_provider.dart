@@ -59,10 +59,20 @@ class DietaryRestrictionsProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+  void showDietaryRestrictionsParameterDetailsload(context, String parameter) {
+    if (parameter == "Dietary Restrictions") {
+      _dietaryRestrictionsRecipesParameters.addAll(preferredDietaryRestrictionsParametersRecipe);
+      notifyListeners();
+    }
+  }
 
   void toggleDietaryRestrictionsRecipeState(int index) {
     _dietaryRestrictionsRecipesParameters[index].isChecked =
         !_dietaryRestrictionsRecipesParameters[index].isChecked;
+    notifyListeners();
+  }
+  void toggleDietaryRestrictionsRecipeStatefalse(int index) {
+    _dietaryRestrictionsRecipesParameters[index].isChecked = false;
     notifyListeners();
   }
 

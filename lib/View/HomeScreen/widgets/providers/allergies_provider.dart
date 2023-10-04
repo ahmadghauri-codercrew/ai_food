@@ -57,10 +57,19 @@ class AllergiesProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
+  void showAllergiesParameterDetailsload(context, String parameter) {
+    if (parameter == "Allergies") {
+      _allergiesRecipesParameters.addAll(preferredAllergiesRecipe);
+      notifyListeners();
+    }
+  }
 
   void toggleAllergiesRecipeState(int index) {
     _allergiesRecipesParameters[index].isChecked = !_allergiesRecipesParameters[index].isChecked;
+    notifyListeners();
+  }
+  void toggleAllergiesRecipeStatefalse(int index) {
+    _allergiesRecipesParameters[index].isChecked = false;
     notifyListeners();
   }
 
