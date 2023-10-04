@@ -7,14 +7,18 @@ import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_field.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+
+import '../HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -75,7 +79,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     dio = AppDio(context);
     logger.init();
-
     loadselectParamsfromAPI();
     LoadingSelectedDataFromSetupProfileScreen();
 
@@ -136,6 +139,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final allergiesProvider = Provider.of<AllergiesProvider>(context, listen: false);
+    final dietaryRestrictionsProvider = Provider.of<DietaryRestrictionsProvider>(context, listen: false);
     return GestureDetector(
       onTap: () {
         Future.delayed(const Duration(milliseconds: 200), () {
@@ -398,6 +403,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             setState(() {
                               checkAPI = true;
                             });
+
+
+                            allergiesProvider.showAllergiesParameterDetailsload(context, "Allergies");
+                            allergiesProvider.removeAllergyParams();
+                            allergiesProvider.clearAllergiesAllCheckboxStates();
+                            addAllergies.forEach((key, value) {
+                              int intKey = int.parse(key) -1;
+                               //allergiesProvider.toggleAllergiesRecipeStatefalse(intKey);
+                              if (allergiesProvider.preferredAllergiesRecipe[intKey].isChecked == false) {
+                                allergiesProvider.toggleAllergiesRecipeState(intKey);
+                                allergiesProvider.addAllergiesValue(value, intKey);
+                              }
+                            });
+                            dietaryRestrictionsProvider.showDietaryRestrictionsParameterDetailsload(context, "Dietary Restrictions");
+                            dietaryRestrictionsProvider.removeDietaryRestrictions();
+                            dietaryRestrictionsProvider.clearDietaryRestrictionsAllCheckboxStates();
+                            addDietaryRestrictions.forEach((key, value) {
+                              int intKey = int.parse(key) -1;
+                              dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeStatefalse(intKey);
+                              if (dietaryRestrictionsProvider.preferredDietaryRestrictionsParametersRecipe[intKey].isChecked == false) {
+                                dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeState(intKey);
+                                dietaryRestrictionsProvider.addDietaryRestrictionsValue(value, intKey);
+                              }
+                            });
+                            allListsProviders();
                             SaveUnit();
                             List<String> allergiesList = addAllergies.entries
                                 .map((value) => value.toString())
@@ -497,6 +527,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
   }
+
+
+   allListsProviders() {
+     final allergiesProvider = Provider.of<AllergiesProvider>(context, listen: false);
+     final dietaryRestrictionsProvider = Provider.of<DietaryRestrictionsProvider>(context, listen: false);
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
 
   SaveUnit() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -634,6 +683,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         PrefKey.dataonBoardScreenDietryRestriction, dietryRestriction);
     // showSnackBar(context, "Data is saved in SharedPreference");
   }
+
+
 }
 
 class CustomContainer extends StatelessWidget {

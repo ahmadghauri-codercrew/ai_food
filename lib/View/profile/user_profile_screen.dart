@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/AppAssetsImage.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
 import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/View/HomeScreen/TestScreens/model_recipe.dart';
 import 'package:ai_food/View/NavigationBar/bottom_navigation.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
@@ -11,8 +14,15 @@ import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+
+import '../HomeScreen/widgets/providers/allergies_provider.dart';
+import '../HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
+import '../HomeScreen/widgets/providers/kitchenResources_provider.dart';
+import '../HomeScreen/widgets/providers/preferredProtein_provider.dart';
+import '../HomeScreen/widgets/providers/regionalDelicacy_provider.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -71,6 +81,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     //initializing DIO on initial state
     dio = AppDio(context);
     logger.init();
+    setRecipesParameters();
     getUserName();
     loadselectParamsfromAPI(); //-----------------//
     super.initState();
@@ -78,6 +89,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final allergiesProvider = Provider.of<AllergiesProvider>(context, listen: false);
+    final dietaryRestrictionsProvider = Provider.of<DietaryRestrictionsProvider>(context, listen: false);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -264,6 +277,28 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           setState(() {
                             checkAPI = true;
                           });
+                          allergiesProvider.showAllergiesParameterDetailsload(context, "Allergies");
+                          allergiesProvider.removeAllergyParams();
+                          allergiesProvider.clearAllergiesAllCheckboxStates();
+                          addAllergies.forEach((key, value) {
+                            int intKey = int.parse(key) -1;
+                            //allergiesProvider.toggleAllergiesRecipeStatefalse(intKey);
+                            if (allergiesProvider.preferredAllergiesRecipe[intKey].isChecked == false) {
+                              allergiesProvider.toggleAllergiesRecipeState(intKey);
+                              allergiesProvider.addAllergiesValue(value, intKey);
+                            }
+                          });
+                          dietaryRestrictionsProvider.showDietaryRestrictionsParameterDetailsload(context, "Dietary Restrictions");
+                          dietaryRestrictionsProvider.removeDietaryRestrictions();
+                          dietaryRestrictionsProvider.clearDietaryRestrictionsAllCheckboxStates();
+                          addDietaryRestrictions.forEach((key, value) {
+                            int intKey = int.parse(key) -1;
+                            //dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeStatefalse(intKey);
+                            if (dietaryRestrictionsProvider.preferredDietaryRestrictionsParametersRecipe[intKey].isChecked == false) {
+                              dietaryRestrictionsProvider.toggleDietaryRestrictionsRecipeState(intKey);
+                              dietaryRestrictionsProvider.addDietaryRestrictionsValue(value, intKey);
+                            }
+                          });
                           /* where i am converting the map keys into list so that i can call them in
                            profile screen to fetch the data from sharedpreference
                             by calling the keys and match them */
@@ -298,6 +333,104 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         ),
       ),
     );
+  }
+
+  void setRecipesParameters() async {
+    var response;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    const int responseCode200 = 200; // For successful request.
+    const int responseCode400 = 400; // For Bad Request.
+    const int responseCode401 = 401; // For Unauthorized access.
+    const int responseCode404 = 404; // For For data not found
+    const int responseCode405 = 405; // Method not allowed
+    const int responseCode500 = 500; // Internal server error.
+
+    try {
+      response = await dio.get(path: AppUrls.searchParameterUrl);
+      var responseData = response.data;
+      if (response.statusCode == responseCode405) {
+        // showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode404) {
+        // showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode400) {
+        // showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode401) {
+        // showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode500) {
+        // showSnackBar(context, "${responseData["message"]}");
+      } else if (response.statusCode == responseCode200) {
+        if (responseData["status"] == false) {
+          // showSnackBar(context, "${responseData["message"]}");
+        } else {
+          var encodeData = jsonEncode(responseData);
+          prefs.setString(PrefKey.parametersLists, encodeData);
+
+          final allergyProvider =
+              Provider.of<AllergiesProvider>(context, listen: false)
+                  .preferredAllergiesRecipe;
+          final dietaryRestrictionsProvider =
+              Provider.of<DietaryRestrictionsProvider>(context, listen: false)
+                  .preferredDietaryRestrictionsParametersRecipe;
+          final preferredProteinProvider =
+              Provider.of<PreferredProteinProvider>(context, listen: false)
+                  .preferredProteinRecipe;
+          final regionalDelicacyProvider =
+              Provider.of<RegionalDelicacyProvider>(context, listen: false)
+                  .preferredRegionalDelicacyParametersRecipe;
+          final kitchenResourcesProvider =
+              Provider.of<KitchenResourcesProvider>(context, listen: false)
+                  .preferredKitchenResourcesParametersRecipe;
+          var foodStyles = responseData["data"]["foodStyles"];
+          var allergies = responseData["data"]["allergies"];
+          var dietaryRestrictions = responseData["data"]["dietaryRestrictions"];
+          var preferredProteins = responseData["data"]["preferredProteins"];
+          var regionalDelicacies = responseData["data"]["regionalDelicacies"];
+          var kitchenResources = responseData["data"]["kitchenResources"];
+          //adding allergies list
+          if (allergyProvider.isEmpty) {
+            allergies.forEach((key, value) {
+              allergyProvider.add(RecipesParameterClass(parameter: value));
+            });
+          }
+
+          //adding dietary restrictions list
+          if (dietaryRestrictionsProvider.isEmpty) {
+            dietaryRestrictions.forEach((key, value) {
+              dietaryRestrictionsProvider
+                  .add(RecipesParameterClass(parameter: value));
+            });
+          }
+
+          //adding proteins list
+          if (preferredProteinProvider.isEmpty) {
+            preferredProteins.forEach((key, value) {
+              preferredProteinProvider
+                  .add(RecipesParameterClass(parameter: value));
+            });
+          }
+
+
+          //adding regional delicacy list
+          if (regionalDelicacyProvider.isEmpty) {
+            regionalDelicacies.forEach((key, value) {
+              regionalDelicacyProvider
+                  .add(RecipesParameterClass(parameter: value));
+            });
+          }
+
+          //adding kitchen resources list
+          if (kitchenResourcesProvider.isEmpty) {
+            kitchenResources.forEach((key, value) {
+              kitchenResourcesProvider
+                  .add(RecipesParameterClass(parameter: value));
+            });
+          }
+        }
+      }
+    } catch (e) {
+      print("Something went Wrong ${e}");
+      // showSnackBar(context, "Something went Wrong.");
+    }
   }
 
   UpdateSetupProfileOnUpdateAPI() async {

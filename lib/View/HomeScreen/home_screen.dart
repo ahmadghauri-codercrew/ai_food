@@ -84,41 +84,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  // void LoadingDataFromSharedPreffromProfile() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? value;
-  //   String? value2;
-  //   List<String> finalValue = [];
-  //   List<String> finalValue2 = [];
-  //   List<String>? storedData =
-  //       prefs.getStringList(PrefKey.dataonBoardScreenAllergies);
-  //   List<String>? storedData2 =
-  //       prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction);
-  //   if (storedData != null && storedData2 != null) {
-  //     for (String entry in storedData) {
-  //       String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
-  //       List<String> parts = result.split(':');
-  //       if (parts.length == 2) {
-  //         String key = parts[0].trim();
-  //         value = parts[1].trim();
-  //         finalValue.add(value);
-  //       }
-  //     }
-  //     for (String entry in storedData2) {
-  //       String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
-  //       List<String> parts = result.split(':');
-  //       if (parts.length == 2) {
-  //         String key = parts[0].trim();
-  //         value2 = parts[1].trim();
-  //         finalValue2.add(value2);
-  //       }
-  //     }
-  //   }
-  //   getSuggestedRecipes(
-  //     allergies: finalValue,
-  //     dietaryRestrictions: finalValue2,
-  //   );
-  // }
+  void LoadingDataFromSharedPreffromProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+  }
 
   void getUserCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -260,6 +228,64 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10.0, right: 10, bottom: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              AppText.appText(
+                                  type == 0
+                                      ? "Recommended:"
+                                      : "Generated results:",
+                                  fontSize: 20,
+                                  textColor: AppTheme.appColor,
+                                  fontWeight: FontWeight.w600),
+                              // REGENERATE RECIPE BUTTON
+                              type == 1
+                                  ? InkWell(
+                                      onTap: () async {
+                                        await reGenerateRecipe(context);
+                                      },
+                                      child: Container(
+                                        height: 35,
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.whiteColor,
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          border: Border.all(
+                                              color: AppTheme.appColor),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10.0, right: 10),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Icon(
+                                                Icons.autorenew,
+                                                color: AppTheme.appColor,
+                                                size: 18,
+                                              ),
+                                              const SizedBox(
+                                                width: 4,
+                                              ),
+                                              AppText.appText(
+                                                "Regenerate result",
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                                textColor: AppTheme.appColor,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox.shrink(),
+                            ],
+                          ),
+                        ),
                         type == 0
                             ? responseData == null
                                 ? randomData == false

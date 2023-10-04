@@ -56,6 +56,8 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
   }
 
   void setRecipesParameters() async {
+    final allergiesProvider = Provider.of<AllergiesProvider>(context, listen: false);
+    final dietaryRestrictionProvider = Provider.of<DietaryRestrictionsProvider>(context, listen: false);
     var response;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     const int responseCode200 = 200; // For successful request.
@@ -135,6 +137,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
             });
           }
 
+
           //adding regional delicacy list
           if (regionalDelicacyProvider.isEmpty) {
             regionalDelicacies.forEach((key, value) {
@@ -150,7 +153,40 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                   .add(RecipesParameterClass(parameter: value));
             });
           }
+          print("dkjasdkljaklsdjklasndklajsdklasjkdnjkasdklnaskldnlak");
+          List<String> storedData = prefs.getStringList(PrefKey.dataonBoardScreenAllergies)!;
+          allergiesProvider.showAllergiesParameterDetailsload(context, "Allergies");
+          for (String entry in storedData) {
+            String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+            List<String> parts = result.split(':');
+            if (parts.length == 2) {
+              int key = int.parse(parts[0].trim()) -1;
+              String value = parts[1].trim();
+              if (allergiesProvider.preferredAllergiesRecipe[key].isChecked == false) {
+                allergiesProvider.toggleAllergiesRecipeState(key);
+                allergiesProvider.addAllergiesValue(value, key);
+              }
+            }
+          }
+          print("dkjasdkljaklsdjklasndklajsdklasjkdnjkasdklnaskldnlak");
+          List<String> storedData2 = prefs.getStringList(PrefKey.dataonBoardScreenDietryRestriction)!;
+          dietaryRestrictionProvider.showDietaryRestrictionsParameterDetailsload(context, "Dietary Restrictions");
+          for (String entry in storedData2) {
+            String result = entry.replaceAll(RegExp(r'^MapEntry\(|\)'), '');
+            List<String> parts = result.split(':');
+            if (parts.length == 2) {
+              int key = int.parse(parts[0].trim()) -1;
+              String value = parts[1].trim();
+              if (dietaryRestrictionProvider.preferredDietaryRestrictionsParametersRecipe[key].isChecked == false) {
+                dietaryRestrictionProvider.toggleDietaryRestrictionsRecipeState(key);
+                dietaryRestrictionProvider.addDietaryRestrictionsValue(value, key);
+              }
+            }
+          }
+
+
         }
+
       }
     } catch (e) {
       print("Something went Wrong ${e}");
