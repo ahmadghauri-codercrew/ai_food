@@ -359,6 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print('API request failed with status code: ${response.statusCode}');
     }
   }
+
   ////////////////////////////////////get suggested recipe////////////////////////////////////////////////////////////////////
 
   // getSuggestedRecipes({allergies, dietaryRestrictions}) async {
