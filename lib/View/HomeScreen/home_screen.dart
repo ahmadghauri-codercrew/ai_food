@@ -112,22 +112,22 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         toolbarHeight: 120,
         leadingWidth: double.infinity,
-        leading: InkWell(
-          onTap: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => BottomNavView(),
-            ));
-          },
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 20.0,
-                    // bottom: 19,
-                    top: 20,
-                  ),
+        leading: Column(
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 20.0,
+                  // bottom: 19,
+                  top: 20,
+                ),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => BottomNavView(),
+                    ));
+                  },
                   child: CircleAvatar(
                     backgroundColor: AppTheme.appColor,
                     radius: 18,
@@ -139,70 +139,71 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 10,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 15.0,
+                right: 15.0,
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 15.0,
-                  right: 15.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 13.0),
-                      child: AppText.appText(
-                          type == 0 ? "Recommended:" : "Search results:",
-                          fontSize: 20,
-                          textColor: AppTheme.appColor,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    // REGENERATE RECIPE BUTTON
-                    type == 1
-                        ? InkWell(
-                            onTap: () async {
-                              await reGenerateRecipe(context);
-                            },
-                            child: Container(
-                              height: 35,
-                              decoration: BoxDecoration(
-                                color: AppTheme.whiteColor,
-                                borderRadius: BorderRadius.circular(50),
-                                border: Border.all(color: AppTheme.appColor),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 10.0, right: 10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Icon(
-                                      Icons.autorenew,
-                                      color: AppTheme.appColor,
-                                      size: 18,
-                                    ),
-                                    const SizedBox(
-                                      width: 4,
-                                    ),
-                                    AppText.appText(
-                                      "Regenerate result",
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      textColor: AppTheme.appColor,
-                                    ),
-                                  ],
-                                ),
+              child: Row(crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 13.0),
+                    child: AppText.appText(
+                        type == 0 ? "Recommended:" : "Generated result:",
+                        fontSize: 20,
+                        textColor: AppTheme.appColor,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  // REGENERATE RECIPE BUTTON
+                  type == 1
+                      ? InkWell(
+                          onTap: () async {
+                            await reGenerateRecipe(context);
+                          },
+
+                          child: Container(
+                            height: 35,
+                            decoration: BoxDecoration(
+                              color: AppTheme.whiteColor,
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(color: AppTheme.appColor),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10.0, right: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(
+                                    Icons.autorenew,
+                                    color: AppTheme.appColor,
+                                    size: 18,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  AppText.appText(
+                                    "Regenerate result",
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    textColor: AppTheme.appColor,
+                                  ),
+                                ],
                               ),
                             ),
-                          )
-                        : const SizedBox.shrink(),
-                  ],
-                ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       body: isLoading
@@ -228,64 +229,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10.0, right: 10, bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              AppText.appText(
-                                  type == 0
-                                      ? "Recommended:"
-                                      : "Generated results:",
-                                  fontSize: 20,
-                                  textColor: AppTheme.appColor,
-                                  fontWeight: FontWeight.w600),
-                              // REGENERATE RECIPE BUTTON
-                              type == 1
-                                  ? InkWell(
-                                      onTap: () async {
-                                        await reGenerateRecipe(context);
-                                      },
-                                      child: Container(
-                                        height: 35,
-                                        decoration: BoxDecoration(
-                                          color: AppTheme.whiteColor,
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          border: Border.all(
-                                              color: AppTheme.appColor),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10.0, right: 10),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Icon(
-                                                Icons.autorenew,
-                                                color: AppTheme.appColor,
-                                                size: 18,
-                                              ),
-                                              const SizedBox(
-                                                width: 4,
-                                              ),
-                                              AppText.appText(
-                                                "Regenerate result",
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                                textColor: AppTheme.appColor,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox.shrink(),
-                            ],
-                          ),
-                        ),
                         type == 0
                             ? responseData == null
                                 ? randomData == false

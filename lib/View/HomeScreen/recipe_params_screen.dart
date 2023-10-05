@@ -432,7 +432,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                         "Reset filters",
                         fontSize: 16,
                         underLine: true,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w600,
                         textColor: AppTheme.appColor,
                       ),
                     ),
