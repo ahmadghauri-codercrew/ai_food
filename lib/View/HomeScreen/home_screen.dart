@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
               alignment: Alignment.topLeft,
               child: Padding(
                 padding: const EdgeInsets.only(
-                  left: 20.0,
+                  left: 18.0,
                   // bottom: 19,
                   top: 20,
                 ),
@@ -145,16 +145,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                left: 15.0,
-                right: 15.0,
+                left: 20.0,
+                right: 20.0,
               ),
-              child: Row(crossAxisAlignment: CrossAxisAlignment.end,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 13.0),
                     child: AppText.appText(
-                        type == 0 ? "Recommended:" : "Generated result:",
+                        type == 0 ? "Recommended:" : "Generated results:",
                         fontSize: 20,
                         textColor: AppTheme.appColor,
                         fontWeight: FontWeight.w600),
@@ -165,7 +166,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () async {
                             await reGenerateRecipe(context);
                           },
-
                           child: Container(
                             height: 35,
                             decoration: BoxDecoration(
@@ -174,8 +174,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               border: Border.all(color: AppTheme.appColor),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10.0, right: 10),
+                              padding:
+                                  const EdgeInsets.only(left: 10.0, right: 10),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -213,8 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             )
           : Container(
-              width: width,
-              // color: Colors.blueGrey,
+              height: double.infinity,
+              // color: Colors.red,
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/images/logo.png"),
