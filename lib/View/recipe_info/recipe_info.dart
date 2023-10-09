@@ -109,9 +109,9 @@ class _RecipeInfoState extends State<RecipeInfo>
                 ),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            // SizedBox(
+            //   height: 10,
+            // ),
           ],
         ),
       ),
@@ -120,7 +120,7 @@ class _RecipeInfoState extends State<RecipeInfo>
         decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage("assets/images/logo.png"),
-                opacity: 0.25,
+                opacity: 0.20,
                 scale: 0.5)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -128,22 +128,27 @@ class _RecipeInfoState extends State<RecipeInfo>
             Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20.0, right: 10, top: 0),
+                  padding: const EdgeInsets.only(left: 20.0, right: 10, top: 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            width: 55.w,
-                            child: AppText.appText(
-                                "${widget.recipeData["title"]}",
-                                textColor: AppTheme.appColor,
-                                fontSize: 24,
-                                maxlines: 2,
-                                fontWeight: FontWeight.w700),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: Container(
+                              // color: Colors.deepPurple,
+                              width: 55.w,
+                              child: AppText.appText(
+                                  "${widget.recipeData["title"]}",
+                                  textColor: AppTheme.appColor,
+                                  fontSize: 18,
+                                  overflow: TextOverflow.ellipsis,
+                                  // maxlines: 2,
+                                  fontWeight: FontWeight.w700),
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 10.0),
@@ -169,8 +174,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                                         borderRadius:
                                             BorderRadius.circular(25)),
                                     child: Container(
-                                      height: 45,
-                                      width: 45,
+                                      height: 35,
+                                      width: 35,
                                       decoration: BoxDecoration(
                                           color: AppTheme.appColor,
                                           borderRadius:
@@ -185,7 +190,6 @@ class _RecipeInfoState extends State<RecipeInfo>
                                     ),
                                   ),
                                 ),
-
                                 favoriteTap == false
                                     ? GestureDetector(
                                         onTap: () {
@@ -206,8 +210,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                                               borderRadius:
                                                   BorderRadius.circular(25)),
                                           child: Container(
-                                              height: 45,
-                                              width: 45,
+                                              height: 35,
+                                              width: 35,
                                               decoration: BoxDecoration(
                                                   color: AppTheme.appColor,
                                                   borderRadius:
@@ -239,8 +243,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                                               borderRadius:
                                                   BorderRadius.circular(25)),
                                           child: Container(
-                                              height: 45,
-                                              width: 45,
+                                              height: 35,
+                                              width: 35,
                                               decoration: BoxDecoration(
                                                   color: AppTheme.appColor,
                                                   borderRadius:
@@ -264,19 +268,19 @@ class _RecipeInfoState extends State<RecipeInfo>
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
                 Container(
-                  height: 270,
+                  height: 230,
                   // color: Colors.red,
                   width: screenWidth,
                   child: Stack(children: [
                     Positioned(
                       top: 60,
                       child: Container(
-                        height: screenHeight * 0.22,
-                        width: screenWidth * 0.35,
+                        height: screenHeight * 0.18,
+                        width: screenWidth * 0.30,
                         // height: 180,
 
                         // width: 140,
@@ -286,19 +290,19 @@ class _RecipeInfoState extends State<RecipeInfo>
                                 color: AppTheme.appColor.withOpacity(0.2),
                                 spreadRadius: 2,
                                 blurRadius: 0.5,
-                                offset: const Offset(-5, 8),
+                                offset: const Offset(0, 5),
                               ),
                             ],
                             color: AppTheme.appColor,
                             borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(32),
-                                topRight: Radius.circular(32),
-                                bottomRight: Radius.circular(32))),
+                                topLeft: Radius.circular(22),
+                                topRight: Radius.circular(22),
+                                bottomRight: Radius.circular(22))),
                       ),
                     ),
                     Positioned(
                       top: 10,
-                      left: 90,
+                      left: 80,
                       child: Hero(
                         tag: "hero-shopping",
                         transitionOnUserGestures: true,
@@ -308,16 +312,16 @@ class _RecipeInfoState extends State<RecipeInfo>
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                           child: Container(
-                            height: screenHeight * 0.20,
-                            width: screenWidth * 0.52,
+                            height: screenHeight * 0.16,
+                            width: screenWidth * 0.42,
                             decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.15),
                                   // spreadRadius: 3,
                                   blurRadius: 1,
-                                  offset: const Offset(8,
-                                      8), // This controls the vertical offset (bottom)
+                                  offset: const Offset(4,
+                                      4), // This controls the vertical offset (bottom)
                                 ),
                               ],
                               borderRadius: BorderRadius.circular(20),
@@ -342,8 +346,8 @@ class _RecipeInfoState extends State<RecipeInfo>
                       ),
                     ),
                     Positioned(
-                      top: screenHeight * 0.22,
-                      left: screenWidth * 0.4,
+                      top: screenHeight * 0.18,
+                      left: screenWidth * 0.34,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -401,10 +405,9 @@ class _RecipeInfoState extends State<RecipeInfo>
                       indicatorColor: AppTheme.appColor,
                       indicatorWeight: 3,
                       labelColor: AppTheme.appColor,
-                      unselectedLabelColor:  AppTheme.appColor,
+                      unselectedLabelColor: AppTheme.appColor,
                       tabs: _tabs,
-                      labelPadding:
-                          const EdgeInsets.only(top: 0, bottom: 8.0),
+                      labelPadding: const EdgeInsets.only(top: 0, bottom: 8.0),
                       controller: _tabController,
                     ),
                     Expanded(
@@ -458,7 +461,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                                               textAlign: TextAlign.justify,
                                               style: TextStyle(
                                                   color: AppTheme.appColor,
-                                                  fontSize: 14,
+                                                  fontSize: 15,
                                                   fontWeight: FontWeight.w500),
                                               softWrap: true,
                                             ),
@@ -521,7 +524,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                                                       style: TextStyle(
                                                           color:
                                                               AppTheme.appColor,
-                                                          fontSize: 14,
+                                                          fontSize: 15,
                                                           fontWeight:
                                                               FontWeight.w500),
                                                     ),
