@@ -217,7 +217,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         elevation: 0,
-        toolbarHeight: 25,
+        toolbarHeight: 1,
         leading: SizedBox.shrink(),
       ),
       body: GestureDetector(
@@ -236,11 +236,11 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
           height: height,
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20, top: 20),
+              padding: const EdgeInsets.only(left: 20.0, right: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   AppText.appText(
                     "Food choices:",
                     fontSize: 20,
@@ -301,7 +301,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 16),
                           //here are the allergies
                           CustomRecipesSelection(
                             widget: chipWidget(
@@ -315,7 +315,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                       context, "Allergies");
                             },
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 16),
                           //ends allergies
 
                           //here are the Dietary restrictions
@@ -333,7 +333,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                       context, "Dietary Restrictions");
                             },
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 16),
                           //ends Dietary restrictions
 
                           //here are the Regional delicacy
@@ -349,7 +349,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                       context, "Preferred Protein");
                             },
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 16),
                           //ends Regional delicacy
 
                           //here are the Regional delicacy
@@ -366,7 +366,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                       context, "Regional Delicacy");
                             },
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 16),
                           //ends Regional delicacy
 
                           //here are the Kitchen resources
@@ -383,7 +383,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                                       context, "Kitchen Resources");
                             },
                           ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 16),
                           //ends Kitchen resources
                         ],
                       ),
@@ -438,7 +438,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                     ),
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: 80,
                   ),
                   isLoading
                       ? Center(
@@ -673,55 +673,13 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
 }
 
 chipWidget({details}) {
-  return Wrap(
-    spacing: 10,
-    runSpacing: 10,
-    children: List.generate(details.length, (index) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 37,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.horizontal(
-                  left: Radius.circular(20), right: Radius.circular(20)),
-              color: Color(0x7FB38ADE),
-            ),
-            child: Center(
-                child: Text(
-              details[index],
-              style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: "Roboto",
-                  fontWeight: FontWeight.w500,
-                  fontSize: 17),
-            )),
-          ),
-          // GestureDetector(
-          //   onTap: (){
-          //     // allergiesProvider.listIndex.map((e) => allergiesProvider.toggleAllergiesRecipeState(e)).toList();
-          //     // for (int i = allergiesProvider.listIndex.length - 1; i >= 0; i--) {
-          //     //   allergiesProvider.removeAllergieslistIndex(i);
-          //     // }
-          //    // allergiesProvider.removeAllergiesValue(allergiesProvider.addAllergies[index], index);
-          //   },
-          //   //  allergiesProvider.removeAllergiesValue(allergiesProvider.preferredAllergiesRecipe[index].parameter);
-          //
-          //   child: Container(
-          //     height: 34,
-          //     width: 30,
-          //     decoration: BoxDecoration(
-          //       color: AppTheme.appColor,
-          //       borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),topRight: Radius.circular(20),),
-          //     ),
-          //     child: Center(
-          //         child: Icon(Icons.clear,color: AppTheme.whiteColor,)
-          //     ),
-          //   ),
-          // ),
-        ],
-      );
-    }),
+  String itemsText = details.join(', ');
+  return Text(textAlign: TextAlign.left,
+        "${itemsText}",maxLines: 1,overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+        color: AppTheme.appColor,
+        fontFamily: "Roboto",
+        fontWeight: FontWeight.w400,
+        fontSize: 17,),
   );
 }

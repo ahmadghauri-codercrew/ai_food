@@ -594,7 +594,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
                       customerSupport();
                       Navigator.pop(context);
-                      messageController.clear();
+
                       // push(context, ForgotPasswordScreen());
                       // push(context, const ForgotPasswordPage());
                     }),
@@ -636,6 +636,7 @@ class _SettingScreenState extends State<SettingScreen> {
         setState(() {
           _isLoading = false;
         });
+        messageController.clear();
         showSnackBar(context, "${responseData['message']}");
       }
     } catch (e) {
