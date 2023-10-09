@@ -12,4 +12,5 @@ class AppUrls {
   static const String getFavouriteRecipes = "/api/favourite-recipe";
   static const String favouriteURl = "/api/favourite-recipe";
   static const String unFavouriteURl = "/api/unfavourite-recipe";
+  static const String customerSupport = "/api/customer-support";
 }

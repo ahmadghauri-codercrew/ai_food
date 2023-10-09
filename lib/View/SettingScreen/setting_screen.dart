@@ -1,6 +1,9 @@
+import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
+import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_button.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
+import 'package:ai_food/Utils/widgets/others/errordialogue.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/allergies_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/dietary_restrictions_provider.dart';
 import 'package:ai_food/View/HomeScreen/widgets/providers/food_style_provider.dart';
@@ -11,6 +14,8 @@ import 'package:ai_food/View/SettingScreen/privacypolicy_screen.dart';
 import 'package:ai_food/View/SettingScreen/profile_screen.dart';
 import 'package:ai_food/View/SettingScreen/termsofuse_screen.dart';
 import 'package:ai_food/View/auth/GoogleSignIn/authentication.dart';
+import 'package:ai_food/View/profile/user_profile_screen.dart';
+import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -21,6 +26,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../config/dio/app_dio.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -36,6 +43,10 @@ class _SettingScreenState extends State<SettingScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController messageController = TextEditingController();
+  bool _isLoading = false;
+  late AppDio dio;
+  AppLogger logger = AppLogger();
+  var responseData;
   var data;
   var getEmail;
   getDetails() async {
@@ -47,6 +58,8 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   void initState() {
+    dio = AppDio(context);
+    logger.init();
     getDetails();
     super.initState();
   }
@@ -466,7 +479,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                       color: AppTheme.whiteColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400),
-                                  hintText: "jessica hanson",
+                                  hintText: "${data}",
                                   focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
                                           color: AppTheme.whiteColor)),
@@ -574,11 +587,14 @@ class _SettingScreenState extends State<SettingScreen> {
                         width: 44.w,
                         height: 40,
                         backgroundColor: AppTheme.whiteColor, onTap: () {
-                      if (_formKeyName.currentState!.validate() &&
-                          _formKeyEmail.currentState!.validate() &&
-                          _formKeyMessage.currentState!.validate()) {
-                        Navigator.pop(context);
-                      }
+                      // if (_formKeyName.currentState!.validate() &&
+                      //     _formKeyEmail.currentState!.validate() &&
+                      //     _formKeyMessage.currentState!.validate()) {
+                      // }
+
+                      customerSupport();
+                      Navigator.pop(context);
+                      messageController.clear();
                       // push(context, ForgotPasswordScreen());
                       // push(context, const ForgotPasswordPage());
                     }),
@@ -601,4 +617,103 @@ class _SettingScreenState extends State<SettingScreen> {
     // await prefs.remove(PrefKey.searchQueryParameter);
     await Authentication.signOut(context: context);
   }
+
+  customerSupport() async {
+    setState(() {
+      _isLoading = true;
+    });
+    var response;
+    Map<String, dynamic> params = {
+      "message": messageController.text,
+      "name": data,
+      "email": getEmail,
+    };
+    try {
+      response = await dio.post(path: AppUrls.customerSupport, data: params);
+      responseData = response.data;
+      if (response.statusCode == 200) {
+        print(response);
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar(context, "${responseData['message']}");
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  // void CustomerSupport(context) async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //   var response;
+  //   int responseCode200 = 200; // For successful request.
+  //   int responseCode400 = 400; // For Bad Request.
+  //   int responseCode401 = 401; // For Unauthorized access.
+  //   int responseCode404 = 404; // For For data not found
+  //   int responseCode500 = 500; // Internal server error.
+  //   Map<String, dynamic> params = {"data": messageController.text};
+  //   try {
+  //     response = await dio.post(path: AppUrls.customerSupport, data: params);
+  //     var responseData = response.data;
+  //     if (response.statusCode == responseCode400) {
+  //       print("Bad Request.");
+  //       showSnackBar(context, "${responseData["message"]}");
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //     } else if (response.statusCode == responseCode401) {
+  //       print("Unauthorized access.");
+  //       showSnackBar(context, "${responseData["message"]}");
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //     } else if (response.statusCode == responseCode404) {
+  //       print(
+  //           "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
+  //       showSnackBar(context, "${responseData["message"]}");
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //     } else if (response.statusCode == responseCode500) {
+  //       print("Internal server error.");
+  //       showSnackBar(context, "${responseData["message"]}");
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //     } else if (response.statusCode == responseCode200) {
+  //       if (responseData["status"] == false) {
+  //         setState(() {
+  //           _isLoading = false;
+  //         });
+  //         Navigator.pop(context);
+  //         print("${responseData}");
+  //         // alertDialogError(context: context, message: responseData["message"]);
+  //         return;
+  //       } else {
+  //         print("responseData${responseData}");
+  //         // alertDialogError(context: context, message: responseData["message"]);
+  //         setState(() {
+  //           _isLoading = false;
+  //         });
+  //         var token = responseData['data']['token'];
+  //         var name = responseData['data']['user']['name'];
+  //         print("username_is $name");
+  //         SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  //         // prefs.setString(PrefKey.authorization, token ?? '');
+  //         // prefs.setString(PrefKey.userName, name ?? '');
+  //         // prefs.setString(PrefKey.email, _emailController.text);
+  //         // pushReplacement(context, const UserProfileScreen());
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print("Something went Wrong ${e}");
+  //     showSnackBar(context, "Something went Wrong.");
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
 }
