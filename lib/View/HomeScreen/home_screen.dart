@@ -18,6 +18,7 @@ import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
+import 'package:ai_food/providers/home_fav_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -66,7 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isHiting = false;
   bool recipeInfoLoader = false;
   List showProgressindicators = [];
-  List? apiRecipeIds;
+  List apiRecipeIds = [];
+  List apiRecipeIdsGet = [];
   @override
   void initState() {
     dio = AppDio(context);
@@ -559,28 +561,41 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       response = await dio.get(path: AppUrls.getFavouriteRecipes);
-      var responseData = response.data;
+      var responseDataapi = response.data;
       if (response.statusCode == responseCode400) {
         print("Bad Request.");
-        showSnackBar(context, "${responseData["message"]}");
+        showSnackBar(context, "${responseDataapi["message"]}");
       } else if (response.statusCode == responseCode401) {
         print("Unauthorized access.");
-        showSnackBar(context, "${responseData["message"]}");
+        showSnackBar(context, "${responseDataapi["message"]}");
       } else if (response.statusCode == responseCode404) {
         print(
             "The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.");
-        showSnackBar(context, "${responseData["message"]}");
+        showSnackBar(context, "${responseDataapi["message"]}");
       } else if (response.statusCode == responseCode500) {
         print("Internal server error.");
-        showSnackBar(context, "${responseData["message"]}");
+        showSnackBar(context, "${responseDataapi["message"]}");
       } else if (response.statusCode == responseCode200) {
-        if (responseData["status"] == false) {
-          alertDialogError(context: context, message: responseData["message"]);
+        if (responseDataapi["status"] == false) {
+          alertDialogError(
+              context: context, message: responseDataapi["message"]);
           return;
         } else {
+          for (var ids in responseDataapi["data"]["recipe_ids"]) {
+            apiRecipeIds.add(ids);
+            // print(
+            //     "id_get ${apiRecipeIds.toString().substring(1, apiRecipeIds.toString().length - 1)}");
+          }
+          // for (var ids in widget.data['id']) {
+          apiRecipeIdsGet.add(widget.data['id']);
+          print("id_get ${apiRecipeIdsGet}");
+          // }
+
           setState(() {
-            apiRecipeIds = responseData["data"]["recipe_ids"];
+            // apiRecipeIds = responseDataapi["data"]["recipe_ids"];
           });
+
+          // print("getting_recipes data ${apiRecipeIds}");
         }
       }
     } catch (e) {
@@ -591,6 +606,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget gridView({data}) {
     final width = MediaQuery.of(context).size.width;
+
+    final favProvider = Provider.of<HomeFavProvider>(context, listen: true);
 
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
@@ -617,16 +634,46 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                     padding: const EdgeInsets.only(top: 12, bottom: 8),
                     child: Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: "${data[index]["image"]}",
-                          height: 130,
-                          width: width,
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: "${data[index]["image"]}",
+                              height: 130,
+                              width: width,
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            ),
+                          ),
+                          apiRecipeIdsGet.toString().substring(1,
+                                      apiRecipeIdsGet.toString().length - 1) !=
+                                  apiRecipeIds.toString().substring(
+                                      1, apiRecipeIds.toString().length - 1)
+                              ? SizedBox.shrink()
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: Container(
+                                      height: 35,
+                                      width: 35,
+                                      decoration: BoxDecoration(
+                                        color: AppTheme.whiteColor,
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.favorite,
+                                          color: AppTheme.appColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                        ],
                       ),
                     )),
                 Padding(

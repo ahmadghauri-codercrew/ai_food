@@ -816,7 +816,6 @@ class _AuthScreenState extends State<AuthScreen> {
           }
           return;
         } else {
-
           // alertDialogError(context: context, message: responseData["message"]);
           setState(() {
             _isLoading = false;

@@ -9,6 +9,7 @@ import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provi
 import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/View/splash_screen.dart';
 import 'package:ai_food/providers/google_signin_provider.dart';
+import 'package:ai_food/providers/home_fav_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,6 +49,8 @@ class MyApp extends StatelessWidget {
               create: (_) => KitchenResourcesProvider()),
           ChangeNotifierProvider<ChatBotProvider>(
               create: (_) => ChatBotProvider()),
+              ChangeNotifierProvider<HomeFavProvider>(
+              create: (_) => HomeFavProvider()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

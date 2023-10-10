@@ -6,10 +6,12 @@ import 'package:ai_food/View/recipe_info/shopping_list.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/keys/pref_keys.dart';
+import 'package:ai_food/providers/home_fav_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -72,6 +74,8 @@ class _RecipeInfoState extends State<RecipeInfo>
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
+
+    final favProvider = Provider.of<HomeFavProvider>(context, listen: true);
 
     var ingredient = widget.recipeData["extendedIngredients"];
     // print("njefbkjbfjk${favoriteTap}");
@@ -190,12 +194,16 @@ class _RecipeInfoState extends State<RecipeInfo>
                                     ),
                                   ),
                                 ),
-                                favoriteTap == false
+                                favProvider.isFavourite == false
                                     ? GestureDetector(
                                         onTap: () {
-                                          setState(() {
-                                            favoriteTap = true;
-                                          });
+                                          // setState(() {
+                                          //   favoriteTap = true;
+                                          // });
+                                          favProvider.homeFavValue(
+                                              true, widget.recipeData["id"]);
+                                          favProvider.checkFavorite(
+                                              widget.recipeData["id"]);
                                           favoriteAPI(
                                               recpieid: widget.recipeData["id"],
                                               title: widget.recipeData["title"],
@@ -229,9 +237,13 @@ class _RecipeInfoState extends State<RecipeInfo>
                                       )
                                     : GestureDetector(
                                         onTap: () {
-                                          setState(() {
-                                            favoriteTap = false;
-                                          });
+                                          // setState(() {
+                                          //   favoriteTap = false;
+                                          // });
+                                          favProvider.homeFavValue(
+                                              false, widget.recipeData["id"]);
+                                          favProvider.removeFavorite(
+                                              widget.recipeData["id"]);
                                           unFavoriteAPI(
                                               recpieid:
                                                   widget.recipeData["id"]);
