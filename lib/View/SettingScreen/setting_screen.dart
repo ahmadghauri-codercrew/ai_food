@@ -608,7 +608,9 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
         );
       },
-    );
+    ).then((value) {
+      messageController.clear();
+    });
   }
 
   Future<void> logout(context) async {
@@ -632,7 +634,6 @@ class _SettingScreenState extends State<SettingScreen> {
       response = await dio.post(path: AppUrls.customerSupport, data: params);
       responseData = response.data;
       if (response.statusCode == 200) {
-        print(response);
         setState(() {
           _isLoading = false;
         });

@@ -231,7 +231,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
               image: DecorationImage(
                   image: AssetImage("assets/images/logo.png"),
                   scale: 0.5,
-                  opacity: 0.25)),
+                  opacity: 0.20)),
           width: width,
           height: height,
           child: SingleChildScrollView(
@@ -243,7 +243,7 @@ class _RecipeParamScreenState extends State<RecipeParamScreen> {
                   const SizedBox(height: 10),
                   AppText.appText(
                     "Food choices:",
-                    fontSize: 20,
+                    fontSize: 24,
                     fontWeight: FontWeight.w600,
                     textColor: AppTheme.appColor,
                   ),
