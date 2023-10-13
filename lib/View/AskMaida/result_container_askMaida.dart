@@ -11,8 +11,9 @@ import 'package:flutter/material.dart';
 
 class resultContainer extends StatefulWidget {
   final data;
+  final apiRecipeId;
 
-  const resultContainer({super.key, this.data});
+  const resultContainer({super.key, this.data, required this.apiRecipeId});
 
   @override
   State<resultContainer> createState() => _resultContainerState();
@@ -89,7 +90,7 @@ class _resultContainerState extends State<resultContainer> {
                       if (match != null) {
                         String? substring = match.group(1);
                         String? digits = match.group(2);
-                        getRecipeInformation(id: digits);
+                        getRecipeInformation(id: digits,link: inputString);
 
                         print("Substring: $substring");
                         print("Digits: $digits");
@@ -134,7 +135,7 @@ class _resultContainerState extends State<resultContainer> {
     );
   }
 
-  getRecipeInformation({id}) async {
+  getRecipeInformation({id,link}) async {
     var response;
     var url =
         "${AppUrls.spoonacularBaseUrl}/recipes/$id/information?includeNutrition=false&apiKey=$apiKey";
@@ -146,9 +147,13 @@ class _resultContainerState extends State<resultContainer> {
       setState(() {
         seeDetails = false;
       });
+      final idAsInt = int.tryParse(id.toString());
+      final bool isFav = widget.apiRecipeId!.contains(idAsInt);
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => RecipeInfo(
           recipeData: response.data,
+          isFav: isFav ? 1 : 0,
+          urlLinkFromAskMaida : link,
         ),
       ));
     } else if (response.statusCode == 402) {
@@ -156,9 +161,13 @@ class _resultContainerState extends State<resultContainer> {
       setState(() {
         seeDetails = false;
       });
+       final idAsInt = int.tryParse(id.toString());
+       final bool isFav = widget.apiRecipeId!.contains(idAsInt);
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => RecipeInfo(
           recipeData: response.data,
+          isFav: isFav ? 1 : 0,
+          urlLinkFromAskMaida : link,
         ),
       ));
     } else {

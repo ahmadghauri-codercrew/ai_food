@@ -9,6 +9,7 @@ import 'package:ai_food/View/HomeScreen/widgets/providers/regionalDelicacy_provi
 import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/View/splash_screen.dart';
 import 'package:ai_food/providers/google_signin_provider.dart';
+import 'package:ai_food/providers/home_screen_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +21,9 @@ Future<void> main() async {
   await Firebase.initializeApp();
   AppLogger logger = AppLogger();
   logger.init();
-  runApp(const MyApp());
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],).then((_) =>  runApp(const MyApp()));
+
 }
 
 class MyApp extends StatelessWidget {
@@ -46,8 +49,8 @@ class MyApp extends StatelessWidget {
               create: (_) => RegionalDelicacyProvider()),
           ChangeNotifierProvider<KitchenResourcesProvider>(
               create: (_) => KitchenResourcesProvider()),
-          ChangeNotifierProvider<ChatBotProvider>(
-              create: (_) => ChatBotProvider()),
+          ChangeNotifierProvider<ChatBotProvider>(create: (_) => ChatBotProvider()),
+          ChangeNotifierProvider<HomeScreenProvider>(create: (_) => HomeScreenProvider()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -56,7 +59,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           // home: BottomNavView(),
-          home: const SplashScreen(),
+          home:  SplashScreen(),
         ),
       );
     });

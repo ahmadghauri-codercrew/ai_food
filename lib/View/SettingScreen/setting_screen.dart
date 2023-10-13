@@ -51,6 +51,7 @@ class _SettingScreenState extends State<SettingScreen> {
   var getEmail;
   getDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt(PrefKey.conditiontoLoad, 0);
     data = prefs.getString(PrefKey.userName);
     getEmail = prefs.getString(PrefKey.email);
     print("getting_email ${getEmail}");
@@ -67,6 +68,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
@@ -437,7 +439,6 @@ class _SettingScreenState extends State<SettingScreen> {
           child: SingleChildScrollView(
             child: Container(
               width: 320,
-              height: 400,
               decoration: BoxDecoration(
                 color: const Color(0xFFB38ADE),
                 borderRadius: BorderRadius.circular(8),
@@ -561,7 +562,6 @@ class _SettingScreenState extends State<SettingScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Form(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       key: _formKeyMessage,
                       child: TextFormField(
                         controller: messageController,
@@ -612,13 +612,12 @@ class _SettingScreenState extends State<SettingScreen> {
                         width: 44.w,
                         height: 50,
                         backgroundColor: AppTheme.whiteColor, onTap: () {
-                      // if (_formKeyName.currentState!.validate() &&
-                      //     _formKeyEmail.currentState!.validate() &&
-                      //     _formKeyMessage.currentState!.validate()) {
-                      // }
+                      if (_formKeyMessage.currentState!.validate()) {
+                        customerSupport();
+                        Navigator.pop(context);
+                      }
 
-                      customerSupport();
-                      Navigator.pop(context);
+
 
                       // push(context, ForgotPasswordScreen());
                       // push(context, const ForgotPasswordPage());

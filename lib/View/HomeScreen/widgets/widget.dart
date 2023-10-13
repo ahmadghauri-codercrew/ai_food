@@ -43,7 +43,7 @@ class CustomRecipesSelection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               AppText.appText(recipeText,
-                  fontSize: 18,
+                  fontSize: 15,
                   fontWeight: FontWeight.w500,
                   textColor: AppTheme.appColor),
               Icon(
@@ -73,7 +73,7 @@ class CustomRecipesSelection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               AppText.appText("${recipeText}: ",
-                  fontSize: 18,
+                  fontSize: 15,
                   fontWeight: FontWeight.w500,
                   textColor: AppTheme.appColor),
               Expanded(child: widget,),

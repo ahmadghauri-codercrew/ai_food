@@ -8,9 +8,11 @@ import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/config/app_urls.dart';
 import 'package:ai_food/config/dio/app_dio.dart';
 import 'package:ai_food/config/dio/spoonacular_app_dio.dart';
+import 'package:ai_food/config/keys/pref_keys.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FavouriteScreen extends StatefulWidget {
   const FavouriteScreen({super.key});
@@ -31,6 +33,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
   void initState() {
     dio = AppDio(context);
     spoondio = SpoonAcularAppDio(context);
+    changeCondition();
     getFavouriteRecipes();
     logger.init();
     super.initState();
@@ -184,8 +187,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                                           child: Center(
                                                             child: Icon(
                                                               Icons.favorite,
-                                                              color: AppTheme
-                                                                  .appColor,
+                                                              color: AppTheme.appColor,
                                                             ),
                                                           ),
                                                         ),
@@ -342,19 +344,34 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
       var response;
       response = await spoondio.get(path: apiFinalUrl);
       if (response.statusCode == 200) {
+        if(mounted){
         setState(() {
           _isLoading = false;
           responseID = response.data;
           print("jbefjbfkebfkbkfbe${responseID}");
-        });
+        });}
       } else if (response.statusCode == 402) {
         response = await spoondio.get(path: apiFinalUrl2);
+        if(response.statusCode == 402){
+          setState(() {
+            _isLoading = false;
+          });
+          showSnackBar(context, "${response.statusMessage}");
+        }else{
+          if(mounted){
+            setState(() {
+              _isLoading = false;
+              responseID = response.data;
+            });
+          }
+
+        }
+
+      } else {
         setState(() {
           _isLoading = false;
-          responseID = response.data;
         });
-      } else {
-        showSnackBar(context, "Something Went Wrong!");
+        showSnackBar(context, response.statusMessage);
       }
     } catch (e) {
       print("jaklsjdklajsdkljaskldjaskldjlaksdjklajsdaskljdklajsdklj${e}");
@@ -406,5 +423,10 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
 
       print("Something went Wrong ${e}");
     }
+  }
+
+  void changeCondition() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt(PrefKey.conditiontoLoad, 0);
   }
 }
