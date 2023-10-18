@@ -1,6 +1,7 @@
 import 'package:ai_food/Constants/apikey.dart';
 import 'package:ai_food/Constants/app_logger.dart';
 import 'package:ai_food/Utils/resources/res/app_theme.dart';
+import 'package:ai_food/Utils/utils.dart';
 import 'package:ai_food/Utils/widgets/others/app_text.dart';
 import 'package:ai_food/View/recipe_info/recipe_info.dart';
 import 'package:ai_food/config/app_urls.dart';
@@ -158,18 +159,29 @@ class _resultContainerState extends State<resultContainer> {
       ));
     } else if (response.statusCode == 402) {
        response = await spoonDio.get(path: url2);
-      setState(() {
-        seeDetails = false;
-      });
-       final idAsInt = int.tryParse(id.toString());
-       final bool isFav = widget.apiRecipeId!.contains(idAsInt);
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => RecipeInfo(
-          recipeData: response.data,
-          isFav: isFav ? 1 : 0,
-          urlLinkFromAskMaida : link,
-        ),
-      ));
+       if(response.statusCode == 402){
+         setState(() {
+           seeDetails = false;
+         });
+         showSnackBar(context, "402");
+         setState(() {
+           seeDetails = false;
+         });
+       }else{
+         setState(() {
+           seeDetails = false;
+         });
+         final idAsInt = int.tryParse(id.toString());
+         final bool isFav = widget.apiRecipeId!.contains(idAsInt);
+         Navigator.of(context).push(MaterialPageRoute(
+           builder: (context) => RecipeInfo(
+             recipeData: response.data,
+             isFav: isFav ? 1 : 0,
+             urlLinkFromAskMaida : link,
+           ),
+         ));
+       }
+
     } else {
       print('API request failed with status code: ${response.statusCode}');
     }
