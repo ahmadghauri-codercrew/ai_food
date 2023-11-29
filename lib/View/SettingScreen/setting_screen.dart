@@ -51,11 +51,13 @@ class _SettingScreenState extends State<SettingScreen> {
   var responseData;
   var data;
   var getEmail;
+  var getsocialId;
   getDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt(PrefKey.conditiontoLoad, 0);
     data = prefs.getString(PrefKey.userName);
     getEmail = prefs.getString(PrefKey.email);
+    getsocialId = prefs.getString(PrefKey.socialId);
     print("getting_email ${getEmail}");
   }
 
@@ -618,10 +620,8 @@ class _SettingScreenState extends State<SettingScreen> {
                       if (_formKeyMessage.currentState!.validate()) {
                         customerSupport();
                         Navigator.pop(context);
+
                       }
-
-
-
                       // push(context, ForgotPasswordScreen());
                       // push(context, const ForgotPasswordPage());
                     }),
@@ -661,14 +661,12 @@ class _SettingScreenState extends State<SettingScreen> {
       "message": messageController.text,
       "name": data,
       "email": getEmail,
+      "socialAccountString" : getsocialId,
     };
     try {
       response = await dio.post(path: AppUrls.customerSupport, data: params);
       responseData = response.data;
       if (response.statusCode == 200) {
-        setState(() {
-          _isLoading = false;
-        });
         messageController.clear();
         showSnackBar(context, "${responseData['message']}");
       }

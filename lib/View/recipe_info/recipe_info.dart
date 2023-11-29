@@ -149,7 +149,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
+                              padding: const EdgeInsets.only(top: 5.0),
                               child: Container(
                                 // color: Colors.deepPurple,
                                 width: 55.w,
@@ -158,7 +158,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                                     textColor: AppTheme.appColor,
                                     fontSize: 18,
                                     overflow: TextOverflow.ellipsis,
-                                    // maxlines: 2,
+                                    maxlines: 2,
                                     fontWeight: FontWeight.w700),
                               ),
                             ),
@@ -172,7 +172,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                                           .push(MaterialPageRoute(
                                               builder: (context) => ShoppingList(
                                                     image: widget
-                                                        .recipeData["image"],
+                                                        .recipeData["image"]??"https://t4.ftcdn.net/jpg/02/51/95/53/360_F_251955356_FAQH0U1y1TZw3ZcdPGybwUkH90a3VAhb.jpg",
                                                     name: widget
                                                         .recipeData["title"],
                                                     ingredient: widget.recipeData[
@@ -212,12 +212,12 @@ class _RecipeInfoState extends State<RecipeInfo>
                                             favoriteAPI(
                                                 recpieid: widget.recipeData["id"],
                                                 title: widget.recipeData["title"],
-                                                image: widget.recipeData["image"],
+                                                image: widget.recipeData["image"]??"https://t4.ftcdn.net/jpg/02/51/95/53/360_F_251955356_FAQH0U1y1TZw3ZcdPGybwUkH90a3VAhb.jpg",
                                                 link: widget.urlLinkFromAskMaida):
                                             favoriteAPI(
                                                 recpieid: widget.recipeData["id"],
                                                 title: widget.recipeData["title"],
-                                                image: widget.recipeData["image"],
+                                                image: widget.recipeData["image"]??"https://t4.ftcdn.net/jpg/02/51/95/53/360_F_251955356_FAQH0U1y1TZw3ZcdPGybwUkH90a3VAhb.jpg",
                                                 link: widget.recipeData["spoonacularSourceUrl"]);
                                           },
                                           child: Card(
@@ -354,7 +354,7 @@ class _RecipeInfoState extends State<RecipeInfo>
                                       ),
                                     );
                                   },
-                                  imageUrl: "${widget.recipeData["image"]}",
+                                  imageUrl: "${widget.recipeData["image"]??"https://t4.ftcdn.net/jpg/02/51/95/53/360_F_251955356_FAQH0U1y1TZw3ZcdPGybwUkH90a3VAhb.jpg"}",
                                   fit: BoxFit.cover,
                                 ),
                               ),

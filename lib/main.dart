@@ -18,6 +18,7 @@ import 'package:sizer/sizer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
   AppLogger logger = AppLogger();
   logger.init();
@@ -25,7 +26,7 @@ Future<void> main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],).then((_) =>  runApp(const MyApp()));
 
 }
-
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<HomeScreenProvider>(create: (_) => HomeScreenProvider()),
         ],
         child: MaterialApp(
+          navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
           title: 'AIFood',
           theme: ThemeData(
